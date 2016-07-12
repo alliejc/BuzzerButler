@@ -36,6 +36,7 @@ public class PlaylistFragment extends RoboFragment {
 
     private PlaylistInteractionListener mListener;
     private static PlaylistAdapter mPlaylistAdapter;
+    private String playlistId = "";
 
 
     public PlaylistFragment() {
@@ -65,8 +66,11 @@ public class PlaylistFragment extends RoboFragment {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        mListView = (ListView) view.findViewById(R.id.playlistview);
-        listViewSetup();
+
+        if(savedInstanceState == null) {
+            mListView = (ListView) view.findViewById(R.id.playlistview);
+            listViewSetup();
+        }
 
     }
 
@@ -98,6 +102,10 @@ public class PlaylistFragment extends RoboFragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
+                Item mItem = (Item) parent.getAdapter().getItem(position);
+                String playlistId = mItem.getId();
+                mListener.onPlaylistSelected(playlistId);
+
                 Animation animation1 = new AlphaAnimation(0.1f, 0.3f);
                 animation1.setDuration(1000);
                 view.startAnimation(animation1);
@@ -126,7 +134,7 @@ public class PlaylistFragment extends RoboFragment {
             mListener = (PlaylistInteractionListener) context;
         } else {
             throw new RuntimeException(context.toString()
-                    + " must implement OnFragmentInteractionListener");
+                    + " must implement OnTracksInteractionListener");
         }
     }
 
@@ -142,8 +150,6 @@ public class PlaylistFragment extends RoboFragment {
     public interface PlaylistInteractionListener {
         void onPlaylistSelected(String playlistId);
     }
-
-
 
 }
 

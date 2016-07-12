@@ -18,11 +18,9 @@ public class SpotifyService {
     private String mUserId = "";
 
 
-
     public void setUserId(String userId) {
 
         mUserId = userId;
-
     }
 
 
@@ -44,13 +42,13 @@ public class SpotifyService {
     }
 
     public Call<UserPlaylists> getUserPlayLists(){
-        return mSpotifyService.getUserPlayLists("Bearer " + mToken, mUserId);
+        return mSpotifyService.getUserPlayLists(mToken, mUserId);
     }
 
     public Call<SpotifyUser> getCurrentUser(String token){
 
-        mToken = token;
-        return mSpotifyService.getCurrentUser("Bearer " + token);
+        mToken = "Bearer " + token;
+        return mSpotifyService.getCurrentUser(mToken);
     }
 
     public boolean isLoggedIn(){

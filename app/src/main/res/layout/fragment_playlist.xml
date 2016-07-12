@@ -12,13 +12,5 @@
             android:divider="@color/color_dark_gray"
             android:dividerHeight="0.5dp"/>
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceLarge"
-            android:text="WTF"
-            android:id="@+id/textView2"
-            android:layout_gravity="left|top"/>
-
 
 </FrameLayout>

@@ -4,11 +4,13 @@ import android.app.DialogFragment;
 import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.content.res.Configuration;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
@@ -29,7 +31,7 @@ import roboguice.inject.InjectView;
 
 @ContentView(R.layout.activity_main)
 public class MainActivity extends RoboActionBarActivity
-        implements NavigationView.OnNavigationItemSelectedListener, PlaylistFragment.PlaylistInteractionListener {
+        implements NavigationView.OnNavigationItemSelectedListener, PlaylistFragment.PlaylistInteractionListener, TracksFragment.OnTracksInteractionListener {
 
     @Inject
     SpotifyService mSpotifyService;
@@ -44,8 +46,7 @@ public class MainActivity extends RoboActionBarActivity
 
     private ActionBarDrawerToggle toggle;
 
-
-    FragmentManager mFragmentManager = getSupportFragmentManager();
+    private ActionBar actionBar;
 
 
     private static final int REQUEST_CODE = 1337;
@@ -55,8 +56,7 @@ public class MainActivity extends RoboActionBarActivity
         super.onCreate(savedInstanceState);
 
         navigationDrawerSetup();
-        setSupportActionBar(mToolbar);
-
+        toolbarSetup();
 
         if(mSpotifyService.isLoggedIn()){
             userLogin();
@@ -74,6 +74,8 @@ public class MainActivity extends RoboActionBarActivity
 
         mNavigationView = (NavigationView) findViewById(R.id.nav_view);
         mNavigationView.setNavigationItemSelectedListener(this);
+
+
 
     }
 
@@ -144,22 +146,36 @@ public class MainActivity extends RoboActionBarActivity
 
     private void selectItem(int position) {
 
+        FragmentManager fragmentManager = getSupportFragmentManager();
 
         switch (position) {
             case 0:
-//                PlaylistFragment playlistFragment = PlaylistFragment.newInstance();
-//                mFragmentManager.beginTransaction().replace(R.id.main_framelayout, playlistFragment).commit();
-//                fragmentTransaction.addToBackStack(null);
+                PlaylistFragment playlistFragment = PlaylistFragment.newInstance();
+                fragmentManager.beginTransaction().replace(R.id.main_framelayout, playlistFragment).addToBackStack(null).commit();
+                actionBar.setTitle(R.string.playlists_drawer);
                 break;
 
             case 1:
-//                SongsFragment songsFragment = SongsFragment.newInstance();
-//                mFragmentManager.beginTransaction().replace(R.id.main_framelayout, songsFragment).commit();
-//                fragmentTransaction.addToBackStack(null);
-//                break;
+                SongsFragment songsFragment = SongsFragment.newInstance();
+                fragmentManager.beginTransaction().replace(R.id.main_framelayout, songsFragment).addToBackStack(null).commit();
+                actionBar.setTitle(R.string.songs_drawer);
+                break;
 
         }
 
+    }
+
+    private void toolbarSetup() {
+
+        Toolbar myToolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(myToolbar);
+        actionBar = getSupportActionBar();
+        assert actionBar != null;
+        actionBar.setTitle(R.string.app_name);
+        actionBar.setSubtitle(R.string.app_subtitle);
+        actionBar.setDisplayShowTitleEnabled(true);
+        actionBar.setDisplayHomeAsUpEnabled(true);
+        //actionBar.setHomeAsUpIndicator(R.drawable.ic_action_music_white);
     }
 
 
@@ -184,8 +200,9 @@ public class MainActivity extends RoboActionBarActivity
                                 PlaylistFragment playlistFragment = new PlaylistFragment();
                                 FragmentManager fragmentManager = getSupportFragmentManager();
                                 fragmentManager.beginTransaction()
-                                        .replace(R.id.main_framelayout, playlistFragment)
+                                        .replace(R.id.main_framelayout, playlistFragment).addToBackStack(null)
                                         .commit();
+
                             }
                         }
 
@@ -210,10 +227,15 @@ public class MainActivity extends RoboActionBarActivity
 
     @Override
     public void onPlaylistSelected(String playlistId) {
-        //This is wehere you open the trackList Fragment and give it the playlistid
 
-        //TrackFragment = TrackFramgnet.newINstance(playlistId);
-        //mFragmentManager.with TrackFragment
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        TracksFragment tracksFragment = TracksFragment.newInstance(playlistId);
+        fragmentManager.beginTransaction().replace(R.id.main_framelayout, tracksFragment).addToBackStack(null).commit();
+    }
+
+    @Override
+    public void onTrackSelected(Uri uri) {
 
     }
+
 }

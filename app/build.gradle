@@ -34,6 +34,7 @@ dependencies {
 
     compile 'com.android.support:appcompat-v7:23.4.0'
     compile 'com.android.support:design:23.4.0'
+    compile 'com.android.support:support-v4:23.4.0'
     compile 'com.spotify.sdk:spotify-auth:1.0.0-beta12@aar'
     compile 'com.spotify.sdk:spotify-player:1.0.0-beta12@aar'
     compile 'com.squareup.retrofit2:retrofit:2.0.0-beta4'
@@ -42,5 +43,5 @@ dependencies {
     compile 'org.glassfish:javax.annotation:10.0-b28'
     compile 'com.squareup.okhttp3:logging-interceptor:3.0.1'
     compile 'org.roboguice:roboguice:3.0.1'
-    compile 'com.android.support:support-v4:23.4.0'
+    compile 'com.roughike:bottom-bar:1.4.0'
 }
