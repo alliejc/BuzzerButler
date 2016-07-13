@@ -15,6 +15,8 @@ public interface SpotifyServiceInterface {
     @GET("v1/me")
     Call<SpotifyUser> getCurrentUser(@Header("Authorization") String bearerToken);
 
+    
+
     //logged in users playlists
     @GET("v1/me/playlists")
     Call<UserPlaylists> getCurrentUserPlaylists(@Header("Authorization") String bearerToken);

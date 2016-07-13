@@ -40,7 +40,6 @@ public class PlaylistFragment extends RoboFragment {
     public PlaylistFragment() {
     }
 
-
     public static PlaylistFragment newInstance() {
         PlaylistFragment fragment = new PlaylistFragment();
 

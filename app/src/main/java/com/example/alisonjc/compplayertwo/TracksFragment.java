@@ -2,7 +2,6 @@ package com.example.alisonjc.compplayertwo;
 
 import android.content.Context;
 import android.media.MediaPlayer;
-import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
@@ -78,31 +77,32 @@ public class TracksFragment extends RoboFragment {
     private static TracksAdapter mTracksAdapter;
     private View rootView;
     private OnTracksInteractionListener mListener;
-    private String playlistId;
+    private String mPlaylistId;
     private int mItemPosition = 0;
     private int mPauseTimeAt = 90000;
     private boolean mBeepPlayed = false;
+    private Item mTrackItem;
+    private String mTrackName;
 
     public TracksFragment() {
     }
 
     public static TracksFragment newInstance(String playlistId) {
-        TracksFragment fragment = new TracksFragment();
 
-        Bundle args = new Bundle();
-        args.putString("playlistId", playlistId);
-        fragment.setArguments(args);
+        TracksFragment fragment = new TracksFragment();
+            Bundle args = new Bundle();
+            args.putString("playlistId", playlistId);
+            fragment.setArguments(args);
+
 
         return fragment;
     }
 
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        if (getArguments() != null) {
-            playlistId = getArguments().getString("playlistId");
-        }
+        mPlaylistId = getArguments().getString("playlistId");
     }
 
     @Override
@@ -117,17 +117,15 @@ public class TracksFragment extends RoboFragment {
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        if(savedInstanceState == null) {
-
             mSongLocationView.setText("0:00");
             mSongDurationView.setText(R.string.one_thirty_radio_button);
 
             mListView = (ListView) view.findViewById(R.id.tracksview);
 
             playerControlsSetup();
-            //toolbarPlayerSetup();
             listViewSetup();
             startTimerTask();
+
 
             mRadioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
                 @Override
@@ -156,7 +154,6 @@ public class TracksFragment extends RoboFragment {
                 }
             });
         }
-    }
 
 
     private void listViewSetup() {
@@ -165,7 +162,7 @@ public class TracksFragment extends RoboFragment {
         mListView.setAdapter(mTracksAdapter);
         mListView.setChoiceMode(AbsListView.CHOICE_MODE_SINGLE);
 
-        mSpotifyService.getPlaylistTracks(playlistId).enqueue(new Callback<PlaylistTracksList>() {
+        mSpotifyService.getPlaylistTracks(mPlaylistId).enqueue(new Callback<PlaylistTracksList>() {
             @Override
             public void onResponse(Call<PlaylistTracksList> call, Response<PlaylistTracksList> response) {
                 if (response.isSuccess() && response.body() != null) {
@@ -190,6 +187,7 @@ public class TracksFragment extends RoboFragment {
                 setCurrentPlayingSong(position);
                 playSong(position);
                 showPauseButton();
+
             }
         });
     }
@@ -201,8 +199,6 @@ public class TracksFragment extends RoboFragment {
         setCurrentPlayingSong(locationid);
         getPlayer().play("spotify:track:" + mTracksAdapter.getItem(locationid).getTrack().getId());
         setSeekBar();
-        getActivity().setTitle(mTracksAdapter.getItem(locationid).getTrack().getName());
-
     }
 
     private void startTimerTask() {
@@ -345,6 +341,8 @@ public class TracksFragment extends RoboFragment {
 
         this.mItemPosition = itemPosition;
         listviewSelector();
+
+
     }
 
     private void onPauseClicked() {
@@ -432,9 +430,9 @@ public class TracksFragment extends RoboFragment {
     }
 
     // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri) {
+    public void onButtonPressed(String trackId) {
         if (mListener != null) {
-            mListener.onTrackSelected(uri);
+            mListener.onTrackSelected(trackId);
         }
     }
 
@@ -456,11 +454,6 @@ public class TracksFragment extends RoboFragment {
         mListener = null;
     }
 
-    public interface OnTracksInteractionListener {
-        // TODO: Update argument type and name
-        void onTrackSelected(Uri uri);
-    }
-
     @Override
     public void onPause() {
 
@@ -471,5 +464,8 @@ public class TracksFragment extends RoboFragment {
         super.onPause();
     }
 
+    public interface OnTracksInteractionListener {
+        void onTrackSelected(String trackName);
+    }
 
 }

@@ -25,8 +25,9 @@ public class SpotifyService {
 
 
     public void setUserId(String userId) {
-
+        //getPreferences(Context.MODE_PRIVATE).edit().putString("user", userId).apply();
         mUserId = userId;
+
     }
 
 

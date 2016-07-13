@@ -5,7 +5,8 @@
         <item
             android:id="@+id/nav_playlists"
             android:icon="@drawable/ic_action_music_white"
-            android:title="@string/playlists_drawer"/>
+            android:title="@string/playlists_drawer"
+            android:checked="true"/>
         <item
             android:id="@+id/nav_songs"
             android:icon="@drawable/ic_action_music_white"
@@ -14,6 +15,10 @@
             android:id="@+id/nav_artists"
             android:icon="@drawable/ic_action_music_white"
             android:title="@string/artist_drawer"/>
+        <item
+            android:id="@+id/nav_logout"
+            android:icon="@drawable/ic_action_music_white"
+            android:title="@string/logout"/>
 
     </group>
 
