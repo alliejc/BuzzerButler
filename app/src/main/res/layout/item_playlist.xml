@@ -5,7 +5,6 @@
                 android:padding="6dip"
                 android:background="@color/color_default">
 
-
     <!-- Playlist Name -->
     <TextView
         android:id="@+id/playlisttitle"

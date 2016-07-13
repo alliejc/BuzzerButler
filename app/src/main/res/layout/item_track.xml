@@ -3,8 +3,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:padding="6dip"
-                android:background="@color/color_default">
-                <!--android:background="@drawable/list_item_selected"-->
+                android:background="@drawable/selector_list_item">
 
 
     <!-- Song Name -->

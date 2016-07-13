@@ -24,6 +24,7 @@
 
     <string name="two_minute_radio_button">2:00</string>
     <string name="one_thirty_radio_button">1:30</string>
+    <string name="start_time">0:00</string>
 
     <string name="login_Dialog_Fragment">Login Screen</string>
 

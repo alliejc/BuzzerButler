@@ -176,6 +176,7 @@ public class MainActivity extends RoboActionBarActivity
         actionBar.setDisplayShowTitleEnabled(true);
         actionBar.setDisplayHomeAsUpEnabled(true);
         //actionBar.setHomeAsUpIndicator(R.drawable.ic_action_music_white);
+
     }
 
 
@@ -195,7 +196,6 @@ public class MainActivity extends RoboActionBarActivity
                         public void onResponse(Call<SpotifyUser> call, Response<SpotifyUser> response) {
                             if (response.isSuccess()) {
                                 mSpotifyService.setUserId(response.body().getId());
-
 
                                 PlaylistFragment playlistFragment = new PlaylistFragment();
                                 FragmentManager fragmentManager = getSupportFragmentManager();
@@ -226,7 +226,9 @@ public class MainActivity extends RoboActionBarActivity
     }
 
     @Override
-    public void onPlaylistSelected(String playlistId) {
+    public void onPlaylistSelected(String playlistId, String playlistTitle) {
+
+        actionBar.setSubtitle(playlistTitle);
 
         FragmentManager fragmentManager = getSupportFragmentManager();
         TracksFragment tracksFragment = TracksFragment.newInstance(playlistId);

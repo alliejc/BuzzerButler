@@ -25,7 +25,6 @@ import retrofit2.Response;
 import roboguice.fragment.RoboFragment;
 import roboguice.inject.InjectView;
 
-
 public class PlaylistFragment extends RoboFragment {
 
     @InjectView(R.id.playlistview)
@@ -38,9 +37,7 @@ public class PlaylistFragment extends RoboFragment {
     private static PlaylistAdapter mPlaylistAdapter;
     private String playlistId = "";
 
-
     public PlaylistFragment() {
-        // Required empty public constructor
     }
 
 
@@ -59,7 +56,6 @@ public class PlaylistFragment extends RoboFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_playlist, container, false);
     }
 
@@ -67,7 +63,7 @@ public class PlaylistFragment extends RoboFragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        if(savedInstanceState == null) {
+        if (savedInstanceState == null) {
             mListView = (ListView) view.findViewById(R.id.playlistview);
             listViewSetup();
         }
@@ -85,7 +81,7 @@ public class PlaylistFragment extends RoboFragment {
             public void onResponse(Call<UserPlaylists> call, Response<UserPlaylists> response) {
                 if (response.isSuccess() && response.body() != null) {
                     updateListView(response.body().getItems());
-                } else if(response.code() == 401){
+                } else if (response.code() == 401) {
                     //add logout to interface
                     //userLogout();
                 }
@@ -104,7 +100,8 @@ public class PlaylistFragment extends RoboFragment {
 
                 Item mItem = (Item) parent.getAdapter().getItem(position);
                 String playlistId = mItem.getId();
-                mListener.onPlaylistSelected(playlistId);
+                String playlistTitle = mItem.getName();
+                mListener.onPlaylistSelected(playlistId,playlistTitle);
 
                 Animation animation1 = new AlphaAnimation(0.1f, 0.3f);
                 animation1.setDuration(1000);
@@ -123,7 +120,7 @@ public class PlaylistFragment extends RoboFragment {
     // TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed(String string) {
         if (mListener != null) {
-            mListener.onPlaylistSelected(string);
+            mListener.onPlaylistSelected(string, string);
         }
     }
 
@@ -138,7 +135,6 @@ public class PlaylistFragment extends RoboFragment {
         }
     }
 
-
     @Override
     public void onDetach() {
         super.onDetach();
@@ -146,9 +142,8 @@ public class PlaylistFragment extends RoboFragment {
     }
 
 
-
     public interface PlaylistInteractionListener {
-        void onPlaylistSelected(String playlistId);
+        void onPlaylistSelected(String playlistId, String playlistTitle);
     }
 
 }
