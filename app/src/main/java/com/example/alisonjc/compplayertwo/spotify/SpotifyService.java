@@ -4,9 +4,10 @@ package com.example.alisonjc.compplayertwo.spotify;
 import android.content.Context;
 
 import com.example.alisonjc.compplayertwo.BuildConfig;
+import com.example.alisonjc.compplayertwo.spotify.model.UserTracks.UserTracks;
+import com.example.alisonjc.compplayertwo.spotify.model.playlist_tracklists.PlaylistTracksList;
 import com.example.alisonjc.compplayertwo.spotify.model.playlists.SpotifyUser;
 import com.example.alisonjc.compplayertwo.spotify.model.playlists.UserPlaylists;
-import com.example.alisonjc.compplayertwo.spotify.model.tracklists.PlaylistTracksList;
 import com.spotify.sdk.android.player.Config;
 
 import javax.inject.Singleton;
@@ -56,6 +57,10 @@ public class SpotifyService {
 
         mToken = token;
         return mSpotifyService.getCurrentUser("Bearer " + mToken);
+    }
+
+    public Call<UserTracks> getUserTracks(){
+        return mSpotifyService.getUserTracks("Bearer " + mToken);
     }
 
     public boolean isLoggedIn(){

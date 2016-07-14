@@ -1,13 +1,12 @@
 
-package com.example.alisonjc.compplayertwo.spotify.model.tracklists;
+package com.example.alisonjc.compplayertwo.spotify.model.UserTracks;
 
+import javax.annotation.Generated;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-import javax.annotation.Generated;
-
 @Generated("org.jsonschema2pojo")
-public class TracklistImage {
+public class Image {
 
     @SerializedName("height")
     @Expose

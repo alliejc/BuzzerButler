@@ -1,9 +1,7 @@
 package com.example.alisonjc.compplayertwo;
 
-import android.annotation.TargetApi;
 import android.content.Context;
 import android.media.MediaPlayer;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
@@ -20,8 +18,8 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 
 import com.example.alisonjc.compplayertwo.spotify.SpotifyService;
-import com.example.alisonjc.compplayertwo.spotify.model.UserTracks.Item;
-import com.example.alisonjc.compplayertwo.spotify.model.UserTracks.UserTracks;
+import com.example.alisonjc.compplayertwo.spotify.model.playlist_tracklists.Item;
+import com.example.alisonjc.compplayertwo.spotify.model.playlist_tracklists.PlaylistTracksList;
 import com.google.inject.Inject;
 import com.spotify.sdk.android.player.Config;
 import com.spotify.sdk.android.player.Player;
@@ -33,7 +31,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
-import java.util.concurrent.TimeUnit;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -41,8 +38,7 @@ import retrofit2.Response;
 import roboguice.fragment.RoboFragment;
 import roboguice.inject.InjectView;
 
-
-public class TracksFragment extends RoboFragment {
+public class PlaylistTracksFragment extends RoboFragment {
 
     @Inject
     private SpotifyService mSpotifyService;
@@ -78,31 +74,35 @@ public class TracksFragment extends RoboFragment {
     private Timer mTimer;
     private Handler seekHandler = new Handler();
     private Player mPlayer;
-    private static TracksAdapter mTracksAdapter;
+    private static PlaylistTracksAdapter mPlaylistTracksAdapter;
     private View rootView;
+    private OnPlaylistTracksInteractionListener mListener;
     private String mPlaylistId;
     private int mItemPosition = 0;
     private int mPauseTimeAt = 90000;
     private boolean mBeepPlayed = false;
     private Item mTrackItem;
     private String mTrackName;
-    private int mCurrentViewCount;
 
-    private OnTracksInteractionListener mListener;
-
-    public TracksFragment() {
-        // Required empty public constructor
+    public PlaylistTracksFragment() {
     }
 
-    public static TracksFragment newInstance() {
-        TracksFragment fragment = new TracksFragment();
+    public static PlaylistTracksFragment newInstance(String playlistId) {
+
+        PlaylistTracksFragment fragment = new PlaylistTracksFragment();
+            Bundle args = new Bundle();
+            args.putString("playlistId", playlistId);
+            fragment.setArguments(args);
+
 
         return fragment;
     }
 
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        mPlaylistId = getArguments().getString("playlistId");
     }
 
     @Override
@@ -117,93 +117,54 @@ public class TracksFragment extends RoboFragment {
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        mSongLocationView.setText("0:00");
-        mSongDurationView.setText(R.string.one_thirty_radio_button);
+            mSongLocationView.setText("0:00");
+            mSongDurationView.setText(R.string.one_thirty_radio_button);
 
-        mListView = (ListView) view.findViewById(R.id.tracksview);
-        mCurrentViewCount = mListView.getChildCount();
+            mListView = (ListView) view.findViewById(R.id.tracksview);
 
-        listViewSetup();
-
-        mListView.setOnScrollListener(new EndlessScrollListener() {
-
-            @Override
-            public boolean onLoadMore(final int page, final int totalItemsCount) {
+            playerControlsSetup();
+            listViewSetup();
+            startTimerTask();
 
 
-                // Triggered only when new data needs to be appended to the list
-                // Add whatever code is needed to append new items to your AdapterView
-                customLoadMoreDataFromApi(page);
+            mRadioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(RadioGroup group, int checkedId) {
 
-                return true; // ONLY if more data is actually being loaded; false otherwise.
-            }
-        });
-
-        playerControlsSetup();
-        startTimerTask();
-
-
-        mRadioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(RadioGroup group, int checkedId) {
-
-                onRadioButtonClicked(checkedId);
-            }
-        });
-
-        mSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-
-            @Override
-            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                if (mPlayer != null && fromUser) {
-                    mPlayer.seekToPosition(progress);
-                    mSeekBar.setProgress(progress);
+                    onRadioButtonClicked(checkedId);
                 }
-            }
+            });
 
-            @Override
-            public void onStartTrackingTouch(SeekBar seekBar) {
-            }
+            mSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
 
-            @Override
-            public void onStopTrackingTouch(SeekBar seekBar) {
-            }
-        });
-    }
-
-    // Append more data into the adapter
-    public void customLoadMoreDataFromApi(final int offset) {
-        // This method probably sends out a network request and appends new data items to your adapter.
-        // Use the offset value and add it as a parameter to your API request to retrieve paginated data.
-        // Deserialize API response and then construct new objects to append to the adapter
-
-        mSpotifyService.getUserTracks().enqueue(new Callback<UserTracks>() {
-            @Override
-            public void onResponse(Call<UserTracks> call, Response<UserTracks> response) {
-                if (response.isSuccess() && response.body() != null) {
-                        response.body().setOffset(offset);
-                        mTracksAdapter.addAll(response.body().getItems());
-                        mTracksAdapter.notifyDataSetChanged();
+                @Override
+                public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                    if (mPlayer != null && fromUser) {
+                        mPlayer.seekToPosition(progress);
+                        mSeekBar.setProgress(progress);
+                    }
                 }
-            }
 
-            @Override
-            public void onFailure(Call<UserTracks> call, Throwable t) {
+                @Override
+                public void onStartTrackingTouch(SeekBar seekBar) {
+                }
 
-            }
-        });
-    }
+                @Override
+                public void onStopTrackingTouch(SeekBar seekBar) {
+                }
+            });
+        }
 
 
     private void listViewSetup() {
 
-        mTracksAdapter = new TracksAdapter(getActivity(), R.layout.item_track, new ArrayList<Item>());
-        mListView.setAdapter(mTracksAdapter);
+        mPlaylistTracksAdapter = new PlaylistTracksAdapter(getActivity(), R.layout.item_track, new ArrayList<Item>());
+        mListView.setAdapter(mPlaylistTracksAdapter);
         mListView.setChoiceMode(AbsListView.CHOICE_MODE_SINGLE);
 
-        mSpotifyService.getUserTracks().enqueue(new Callback<UserTracks>() {
+        mSpotifyService.getPlaylistTracks(mPlaylistId).enqueue(new Callback<PlaylistTracksList>() {
             @Override
-            public void onResponse(Call<UserTracks> call, Response<UserTracks> response) {
+            public void onResponse(Call<PlaylistTracksList> call, Response<PlaylistTracksList> response) {
                 if (response.isSuccess() && response.body() != null) {
                     updateListView(response.body().getItems());
 
@@ -214,10 +175,9 @@ public class TracksFragment extends RoboFragment {
             }
 
             @Override
-            public void onFailure(Call<UserTracks> call, Throwable t) {
+            public void onFailure(Call<PlaylistTracksList> call, Throwable t) {
 
             }
-
         });
 
         mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -237,7 +197,7 @@ public class TracksFragment extends RoboFragment {
         mBeepPlayed = false;
         showPauseButton();
         setCurrentPlayingSong(locationid);
-        getPlayer().play("spotify:track:" + mTracksAdapter.getItem(locationid).getTrack().getId());
+        getPlayer().play("spotify:track:" + mPlaylistTracksAdapter.getItem(locationid).getTrack().getId());
         setSeekBar();
     }
 
@@ -333,11 +293,6 @@ public class TracksFragment extends RoboFragment {
     private Player getPlayer() {
 
         if (mPlayer != null) {
-            try{
-                Spotify.awaitDestroyPlayer(this, 5000L, TimeUnit.MILLISECONDS);
-
-            } catch (InterruptedException ignored) {}
-
             return mPlayer;
         } else {
 
@@ -367,11 +322,11 @@ public class TracksFragment extends RoboFragment {
         mListView.setItemChecked(mItemPosition, true);
         mListView.smoothScrollToPosition(mItemPosition);
         mListView.setSelected(true);
-        mTracksAdapter.notifyDataSetChanged();
+        mPlaylistTracksAdapter.notifyDataSetChanged();
     }
 
-    @TargetApi(Build.VERSION_CODES.M)
     private void playBeep() {
+
         final MediaPlayer mediaPlayer = MediaPlayer.create(getContext(), R.raw.beep);
         mediaPlayer.start();
         mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
@@ -380,13 +335,14 @@ public class TracksFragment extends RoboFragment {
                 mediaPlayer.release();
             }
         });
-
     }
 
     private void setCurrentPlayingSong(int itemPosition) {
 
         this.mItemPosition = itemPosition;
         listviewSelector();
+
+
     }
 
     private void onPauseClicked() {
@@ -423,7 +379,7 @@ public class TracksFragment extends RoboFragment {
 
     private void onSkipNextClicked() {
 
-        if (mTracksAdapter.getCount() <= mItemPosition + 1) {
+        if (mPlaylistTracksAdapter.getCount() <= mItemPosition + 1) {
             mItemPosition = 0;
             playSong(mItemPosition);
             mListView.setSelection(mItemPosition);
@@ -466,29 +422,25 @@ public class TracksFragment extends RoboFragment {
         }
     }
 
-
-
-
     private void updateListView(List<Item> items) {
 
-        mTracksAdapter.clear();
-        mTracksAdapter.addAll(items);
-        mTracksAdapter.notifyDataSetChanged();
-
+        mPlaylistTracksAdapter.clear();
+        mPlaylistTracksAdapter.addAll(items);
+        mPlaylistTracksAdapter.notifyDataSetChanged();
     }
 
     // TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed(String trackId) {
         if (mListener != null) {
-            mListener.onTrackSelected(trackId);
+            mListener.onPlaylistTrackSelected(trackId);
         }
     }
 
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        if (context instanceof OnTracksInteractionListener) {
-            mListener = (OnTracksInteractionListener) context;
+        if (context instanceof OnPlaylistTracksInteractionListener) {
+            mListener = (OnPlaylistTracksInteractionListener) context;
         } else {
             throw new RuntimeException(context.toString()
                     + " must implement OnTracksInteractionListener");
@@ -496,6 +448,7 @@ public class TracksFragment extends RoboFragment {
     }
 
     @Override
+
     public void onDetach() {
         super.onDetach();
         Spotify.destroyPlayer(this);
@@ -513,8 +466,8 @@ public class TracksFragment extends RoboFragment {
         super.onPause();
     }
 
-    public interface OnTracksInteractionListener {
-        // TODO: Update argument type and name
-        void onTrackSelected(String trackId);
+    public interface OnPlaylistTracksInteractionListener {
+        void onPlaylistTrackSelected(String trackName);
     }
+
 }

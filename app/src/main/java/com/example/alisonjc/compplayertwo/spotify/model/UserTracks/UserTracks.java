@@ -1,5 +1,5 @@
 
-package com.example.alisonjc.compplayertwo.spotify.model.tracklists;
+package com.example.alisonjc.compplayertwo.spotify.model.UserTracks;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
@@ -10,7 +10,7 @@ import java.util.List;
 import javax.annotation.Generated;
 
 @Generated("org.jsonschema2pojo")
-public class PlaylistTracksList {
+public class UserTracks {
 
     @SerializedName("href")
     @Expose
@@ -23,7 +23,7 @@ public class PlaylistTracksList {
     private Integer limit;
     @SerializedName("next")
     @Expose
-    private Object next;
+    private String next;
     @SerializedName("offset")
     @Expose
     private Integer offset;
@@ -93,7 +93,7 @@ public class PlaylistTracksList {
      * @return
      *     The next
      */
-    public Object getNext() {
+    public String getNext() {
         return next;
     }
 
@@ -102,7 +102,7 @@ public class PlaylistTracksList {
      * @param next
      *     The next
      */
-    public void setNext(Object next) {
+    public void setNext(String next) {
         this.next = next;
     }
 

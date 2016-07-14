@@ -1,21 +1,18 @@
 
-package com.example.alisonjc.compplayertwo.spotify.model.tracklists;
-
-import com.example.alisonjc.compplayertwo.spotify.model.playlists.ExternalIds;
-import com.google.gson.annotations.Expose;
-import com.google.gson.annotations.SerializedName;
+package com.example.alisonjc.compplayertwo.spotify.model.UserTracks;
 
 import java.util.ArrayList;
 import java.util.List;
-
 import javax.annotation.Generated;
+import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
 
 @Generated("org.jsonschema2pojo")
 public class Track {
 
     @SerializedName("album")
     @Expose
-    private com.example.alisonjc.compplayertwo.spotify.model.tracklists.Album album;
+    private Album album;
     @SerializedName("artists")
     @Expose
     private List<Artist> artists = new ArrayList<Artist>();
@@ -36,7 +33,7 @@ public class Track {
     private ExternalIds externalIds;
     @SerializedName("external_urls")
     @Expose
-    private ExternalUrls___ externalUrls;
+    private ExternalUrls__ externalUrls;
     @SerializedName("href")
     @Expose
     private String href;
@@ -193,7 +190,7 @@ public class Track {
      * @return
      *     The externalUrls
      */
-    public ExternalUrls___ getExternalUrls() {
+    public ExternalUrls__ getExternalUrls() {
         return externalUrls;
     }
 
@@ -202,7 +199,7 @@ public class Track {
      * @param externalUrls
      *     The external_urls
      */
-    public void setExternalUrls(ExternalUrls___ externalUrls) {
+    public void setExternalUrls(ExternalUrls__ externalUrls) {
         this.externalUrls = externalUrls;
     }
 

@@ -1,8 +1,9 @@
 package com.example.alisonjc.compplayertwo.spotify;
 
+import com.example.alisonjc.compplayertwo.spotify.model.UserTracks.UserTracks;
+import com.example.alisonjc.compplayertwo.spotify.model.playlist_tracklists.PlaylistTracksList;
 import com.example.alisonjc.compplayertwo.spotify.model.playlists.SpotifyUser;
 import com.example.alisonjc.compplayertwo.spotify.model.playlists.UserPlaylists;
-import com.example.alisonjc.compplayertwo.spotify.model.tracklists.PlaylistTracksList;
 
 import retrofit2.Call;
 import retrofit2.http.GET;
@@ -15,7 +16,9 @@ public interface SpotifyServiceInterface {
     @GET("v1/me")
     Call<SpotifyUser> getCurrentUser(@Header("Authorization") String bearerToken);
 
-    
+    //logged in users saved tracks
+    @GET("v1/me/tracks")
+    Call<UserTracks> getUserTracks(@Header("Authorization") String bearerToken);
 
     //logged in users playlists
     @GET("v1/me/playlists")

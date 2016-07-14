@@ -1,5 +1,6 @@
 package com.example.alisonjc.compplayertwo;
 
+
 import android.app.DialogFragment;
 import android.app.FragmentTransaction;
 import android.content.Context;
@@ -31,7 +32,7 @@ import roboguice.inject.InjectView;
 
 @ContentView(R.layout.activity_main)
 public class MainActivity extends RoboActionBarActivity
-        implements NavigationView.OnNavigationItemSelectedListener, PlaylistFragment.PlaylistInteractionListener, TracksFragment.OnTracksInteractionListener {
+        implements NavigationView.OnNavigationItemSelectedListener, PlaylistFragment.PlaylistInteractionListener, PlaylistTracksFragment.OnPlaylistTracksInteractionListener, TracksFragment.OnTracksInteractionListener {
 
     @Inject
     SpotifyService mSpotifyService;
@@ -140,10 +141,10 @@ public class MainActivity extends RoboActionBarActivity
 
         } else if (id == R.id.nav_songs) {
 
-//            TracksFragment tracksFragment = TracksFragment.newInstance();
-//            fragmentManager.beginTransaction().replace(R.id.main_framelayout, tracksFragment, "songsTrackFragment").addToBackStack(null).commit();
-//            actionBar.setTitle(R.string.songs_drawer);
-//            toolbarSetup();
+            TracksFragment tracksFragment = TracksFragment.newInstance();
+            fragmentManager.beginTransaction().replace(R.id.main_framelayout, tracksFragment).addToBackStack(null).commit();
+            actionBar.setTitle(R.string.songs_drawer);
+            toolbarSetup();
 
         } else if (id == R.id.nav_artists) {
 
@@ -230,13 +231,17 @@ public class MainActivity extends RoboActionBarActivity
         actionBar.setSubtitle("Please select a song");
 
         FragmentManager fragmentManager = getSupportFragmentManager();
-        TracksFragment tracksFragment = TracksFragment.newInstance(playlistId);
-        fragmentManager.beginTransaction().replace(R.id.main_framelayout, tracksFragment, "playlistTracksFragment").addToBackStack(null).commit();
+        PlaylistTracksFragment playlistTracksFragment = PlaylistTracksFragment.newInstance(playlistId);
+        fragmentManager.beginTransaction().replace(R.id.main_framelayout, playlistTracksFragment, "playlistTracksFragment").addToBackStack(null).commit();
     }
 
-    @Override
-    public void onTrackSelected(String trackName) {
+    public void onPlaylistTrackSelected(String trackName) {
         actionBar.setSubtitle(trackName);
     }
 
+
+    @Override
+    public void onTrackSelected(String trackId) {
+        actionBar.setSubtitle(trackId);
+    }
 }

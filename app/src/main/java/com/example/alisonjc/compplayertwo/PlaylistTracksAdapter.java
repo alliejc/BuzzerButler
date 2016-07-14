@@ -7,16 +7,15 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
-import com.example.alisonjc.compplayertwo.spotify.model.UserTracks.Item;
+import com.example.alisonjc.compplayertwo.spotify.model.playlist_tracklists.Item;
 
 import java.util.List;
 
-
-public class TracksAdapter extends ArrayAdapter<Item> {
+public class PlaylistTracksAdapter extends ArrayAdapter<Item> {
 
     private final LayoutInflater mInflater;
 
-    public TracksAdapter(Context context, int textViewResourceId, List<Item> objects) {
+    public PlaylistTracksAdapter(Context context, int textViewResourceId, List<Item> objects) {
 
         super(context, textViewResourceId, objects);
         mInflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -47,6 +46,5 @@ public class TracksAdapter extends ArrayAdapter<Item> {
         }
         return v;
     }
-
 
 }
