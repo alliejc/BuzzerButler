@@ -4,7 +4,6 @@ import android.content.Context;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.Handler;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,11 +16,11 @@ import android.widget.RadioGroup;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
+import com.example.alisonjc.compplayertwo.spotify.SpotifyPlayer;
 import com.example.alisonjc.compplayertwo.spotify.SpotifyService;
 import com.example.alisonjc.compplayertwo.spotify.model.playlist_tracklists.Item;
 import com.example.alisonjc.compplayertwo.spotify.model.playlist_tracklists.PlaylistTracksList;
 import com.google.inject.Inject;
-import com.spotify.sdk.android.player.Config;
 import com.spotify.sdk.android.player.Player;
 import com.spotify.sdk.android.player.PlayerState;
 import com.spotify.sdk.android.player.PlayerStateCallback;
@@ -42,6 +41,9 @@ public class PlaylistTracksFragment extends RoboFragment {
 
     @Inject
     private SpotifyService mSpotifyService;
+
+    @Inject
+    private SpotifyPlayer mSpotifyPlayer;
 
     @InjectView(R.id.tracksview)
     private ListView mListView;
@@ -122,9 +124,23 @@ public class PlaylistTracksFragment extends RoboFragment {
 
             mListView = (ListView) view.findViewById(R.id.tracksview);
 
+            mPlayer = mSpotifyPlayer.getPlayer(getContext());
+
             playerControlsSetup();
             listViewSetup();
             startTimerTask();
+
+        mListView.setOnScrollListener(new EndlessScrollListener() {
+            @Override
+            public boolean onLoadMore(int page, int totalItemsCount) {
+
+                // Triggered only when new data needs to be appended to the list
+                // Add whatever code is needed to append new items to your AdapterView
+                customLoadMoreDataFromApi(page);
+
+                return true; // ONLY if more data is actually being loaded; false otherwise
+            }
+        });
 
 
             mRadioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
@@ -197,7 +213,7 @@ public class PlaylistTracksFragment extends RoboFragment {
         mBeepPlayed = false;
         showPauseButton();
         setCurrentPlayingSong(locationid);
-        getPlayer().play("spotify:track:" + mPlaylistTracksAdapter.getItem(locationid).getTrack().getId());
+        mPlayer.play("spotify:track:" + mPlaylistTracksAdapter.getItem(locationid).getTrack().getId());
         setSeekBar();
     }
 
@@ -206,7 +222,7 @@ public class PlaylistTracksFragment extends RoboFragment {
         TimerTask mTimerTask = new TimerTask() {
             @Override
             public void run() {
-                getPlayer().getPlayerState(new PlayerStateCallback() {
+                mPlayer.getPlayerState(new PlayerStateCallback() {
                     @Override
                     public void onPlayerState(PlayerState playerState) {
 
@@ -290,31 +306,31 @@ public class PlaylistTracksFragment extends RoboFragment {
         });
     }
 
-    private Player getPlayer() {
-
-        if (mPlayer != null) {
-            return mPlayer;
-        } else {
-
-            final Config playerConfig = mSpotifyService.getPlayerConfig(getContext());
-            playerConfig.useCache(false);
-
-            mPlayer = Spotify.getPlayer(playerConfig, this, new Player.InitializationObserver() {
-
-                @Override
-                public void onInitialized(Player player) {
-
-                }
-
-                @Override
-                public void onError(Throwable throwable) {
-                    Log.e("PlaylistActivity", "Could not initialize player: " + throwable.getMessage());
-                }
-            });
-            mPlayer.isInitialized();
-            return mPlayer;
-        }
-    }
+//    private Player getPlayer() {
+//
+//        if (mPlayer != null) {
+//            return mPlayer;
+//        } else {
+//
+//            final Config playerConfig = mSpotifyService.getPlayerConfig(getContext());
+//            playerConfig.useCache(false);
+//
+//            mPlayer = Spotify.getPlayer(playerConfig, this, new Player.InitializationObserver() {
+//
+//                @Override
+//                public void onInitialized(Player player) {
+//
+//                }
+//
+//                @Override
+//                public void onError(Throwable throwable) {
+//                    Log.e("PlaylistActivity", "Could not initialize player: " + throwable.getMessage());
+//                }
+//            });
+//            mPlayer.isInitialized();
+//            return mPlayer;
+//        }
+//    }
 
     private void listviewSelector() {
 
@@ -427,6 +443,30 @@ public class PlaylistTracksFragment extends RoboFragment {
         mPlaylistTracksAdapter.clear();
         mPlaylistTracksAdapter.addAll(items);
         mPlaylistTracksAdapter.notifyDataSetChanged();
+    }
+
+    // Append more data into the adapter
+    public void customLoadMoreDataFromApi(final int offset) {
+        // This method probably sends out a network request and appends new data items to your adapter.
+        // Use the offset value and add it as a parameter to your API request to retrieve paginated data.
+        // Deserialize API response and then construct new objects to append to the adapter
+
+        mSpotifyService.getPlaylistTracks(mPlaylistId).enqueue(new Callback<PlaylistTracksList>() {
+            @Override
+            public void onResponse(Call<PlaylistTracksList> call, Response<PlaylistTracksList> response) {
+                if (response.isSuccess() && response.body() != null) {
+                    response.body().setOffset(offset);
+                    mPlaylistTracksAdapter.addAll(response.body().getItems());
+                    mPlaylistTracksAdapter.notifyDataSetChanged();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<PlaylistTracksList> call, Throwable t) {
+
+            }
+        });
+
     }
 
     // TODO: Rename method, update argument and hook method into UI event

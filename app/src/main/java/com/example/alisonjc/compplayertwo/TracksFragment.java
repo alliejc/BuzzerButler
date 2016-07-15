@@ -6,7 +6,6 @@ import android.media.MediaPlayer;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,21 +18,19 @@ import android.widget.RadioGroup;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
+import com.example.alisonjc.compplayertwo.spotify.SpotifyPlayer;
 import com.example.alisonjc.compplayertwo.spotify.SpotifyService;
 import com.example.alisonjc.compplayertwo.spotify.model.UserTracks.Item;
 import com.example.alisonjc.compplayertwo.spotify.model.UserTracks.UserTracks;
 import com.google.inject.Inject;
-import com.spotify.sdk.android.player.Config;
 import com.spotify.sdk.android.player.Player;
 import com.spotify.sdk.android.player.PlayerState;
 import com.spotify.sdk.android.player.PlayerStateCallback;
-import com.spotify.sdk.android.player.Spotify;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
-import java.util.concurrent.TimeUnit;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -46,6 +43,9 @@ public class TracksFragment extends RoboFragment {
 
     @Inject
     private SpotifyService mSpotifyService;
+
+    @Inject
+    private SpotifyPlayer mSpotifyPlayer;
 
     @InjectView(R.id.tracksview)
     private ListView mListView;
@@ -76,8 +76,8 @@ public class TracksFragment extends RoboFragment {
 
     private int mSongLocation;
     private Timer mTimer;
-    private Handler seekHandler = new Handler();
     private Player mPlayer;
+    private Handler seekHandler = new Handler();
     private static TracksAdapter mTracksAdapter;
     private View rootView;
     private String mPlaylistId;
@@ -86,7 +86,6 @@ public class TracksFragment extends RoboFragment {
     private boolean mBeepPlayed = false;
     private Item mTrackItem;
     private String mTrackName;
-    private int mCurrentViewCount;
 
     private OnTracksInteractionListener mListener;
 
@@ -100,10 +99,6 @@ public class TracksFragment extends RoboFragment {
         return fragment;
     }
 
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -121,9 +116,10 @@ public class TracksFragment extends RoboFragment {
         mSongDurationView.setText(R.string.one_thirty_radio_button);
 
         mListView = (ListView) view.findViewById(R.id.tracksview);
-        mCurrentViewCount = mListView.getChildCount();
 
         listViewSetup();
+
+        mPlayer = mSpotifyPlayer.getPlayer(getContext());
 
         mListView.setOnScrollListener(new EndlessScrollListener() {
 
@@ -138,6 +134,8 @@ public class TracksFragment extends RoboFragment {
                 return true; // ONLY if more data is actually being loaded; false otherwise.
             }
         });
+
+
 
         playerControlsSetup();
         startTimerTask();
@@ -194,7 +192,6 @@ public class TracksFragment extends RoboFragment {
         });
     }
 
-
     private void listViewSetup() {
 
         mTracksAdapter = new TracksAdapter(getActivity(), R.layout.item_track, new ArrayList<Item>());
@@ -237,7 +234,7 @@ public class TracksFragment extends RoboFragment {
         mBeepPlayed = false;
         showPauseButton();
         setCurrentPlayingSong(locationid);
-        getPlayer().play("spotify:track:" + mTracksAdapter.getItem(locationid).getTrack().getId());
+        mPlayer.play("spotify:track:" + mTracksAdapter.getItem(locationid).getTrack().getId());
         setSeekBar();
     }
 
@@ -246,7 +243,7 @@ public class TracksFragment extends RoboFragment {
         TimerTask mTimerTask = new TimerTask() {
             @Override
             public void run() {
-                getPlayer().getPlayerState(new PlayerStateCallback() {
+                mPlayer.getPlayerState(new PlayerStateCallback() {
                     @Override
                     public void onPlayerState(PlayerState playerState) {
 
@@ -330,36 +327,32 @@ public class TracksFragment extends RoboFragment {
         });
     }
 
-    private Player getPlayer() {
-
-        if (mPlayer != null) {
-            try{
-                Spotify.awaitDestroyPlayer(this, 5000L, TimeUnit.MILLISECONDS);
-
-            } catch (InterruptedException ignored) {}
-
-            return mPlayer;
-        } else {
-
-            final Config playerConfig = mSpotifyService.getPlayerConfig(getContext());
-            playerConfig.useCache(false);
-
-            mPlayer = Spotify.getPlayer(playerConfig, this, new Player.InitializationObserver() {
-
-                @Override
-                public void onInitialized(Player player) {
-
-                }
-
-                @Override
-                public void onError(Throwable throwable) {
-                    Log.e("PlaylistActivity", "Could not initialize player: " + throwable.getMessage());
-                }
-            });
-            mPlayer.isInitialized();
-            return mPlayer;
-        }
-    }
+//    private Player getPlayer() {
+//
+//        if (mPlayer != null) {
+//
+//            return mPlayer;
+//        } else {
+//
+//            final Config playerConfig = mSpotifyService.getPlayerConfig(getContext());
+//            playerConfig.useCache(false);
+//
+//            mPlayer = Spotify.getPlayer(playerConfig, this, new Player.InitializationObserver() {
+//
+//                @Override
+//                public void onInitialized(Player player) {
+//
+//                }
+//
+//                @Override
+//                public void onError(Throwable throwable) {
+//                    Log.e("PlaylistActivity", "Could not initialize player: " + throwable.getMessage());
+//                }
+//            });
+//            mPlayer.isInitialized();
+//            return mPlayer;
+//        }
+//    }
 
     private void listviewSelector() {
 
@@ -466,9 +459,6 @@ public class TracksFragment extends RoboFragment {
         }
     }
 
-
-
-
     private void updateListView(List<Item> items) {
 
         mTracksAdapter.clear();
@@ -498,14 +488,13 @@ public class TracksFragment extends RoboFragment {
     @Override
     public void onDetach() {
         super.onDetach();
-        Spotify.destroyPlayer(this);
         mListener = null;
     }
 
     @Override
     public void onPause() {
 
-        Spotify.destroyPlayer(this);
+        //Spotify.destroyPlayer(this);
         mTimer.cancel();
         mTimer.purge();
         seekHandler.removeCallbacks(run);
