@@ -80,6 +80,7 @@ public class PlaylistTracksFragment extends RoboFragment {
     private View rootView;
     private OnPlaylistTracksInteractionListener mListener;
     private String mPlaylistId;
+    private String mUserId;
     private int mItemPosition = 0;
     private int mPauseTimeAt = 90000;
     private boolean mBeepPlayed = false;
@@ -89,10 +90,11 @@ public class PlaylistTracksFragment extends RoboFragment {
     public PlaylistTracksFragment() {
     }
 
-    public static PlaylistTracksFragment newInstance(String playlistId) {
+    public static PlaylistTracksFragment newInstance(String userId, String playlistId) {
 
         PlaylistTracksFragment fragment = new PlaylistTracksFragment();
             Bundle args = new Bundle();
+            args.putString("userId", userId);
             args.putString("playlistId", playlistId);
             fragment.setArguments(args);
 
@@ -105,6 +107,7 @@ public class PlaylistTracksFragment extends RoboFragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mPlaylistId = getArguments().getString("playlistId");
+        mUserId = getArguments().getString("userId");
     }
 
     @Override
@@ -178,11 +181,12 @@ public class PlaylistTracksFragment extends RoboFragment {
         mListView.setAdapter(mPlaylistTracksAdapter);
         mListView.setChoiceMode(AbsListView.CHOICE_MODE_SINGLE);
 
-        mSpotifyService.getPlaylistTracks(mPlaylistId).enqueue(new Callback<PlaylistTracksList>() {
+        mSpotifyService.getPlaylistTracks(mUserId, mPlaylistId).enqueue(new Callback<PlaylistTracksList>() {
             @Override
             public void onResponse(Call<PlaylistTracksList> call, Response<PlaylistTracksList> response) {
                 if (response.isSuccess() && response.body() != null) {
                     updateListView(response.body().getItems());
+
 
                 } else if (response.code() == 401) {
                     //add logout to interface
@@ -306,32 +310,6 @@ public class PlaylistTracksFragment extends RoboFragment {
         });
     }
 
-//    private Player getPlayer() {
-//
-//        if (mPlayer != null) {
-//            return mPlayer;
-//        } else {
-//
-//            final Config playerConfig = mSpotifyService.getPlayerConfig(getContext());
-//            playerConfig.useCache(false);
-//
-//            mPlayer = Spotify.getPlayer(playerConfig, this, new Player.InitializationObserver() {
-//
-//                @Override
-//                public void onInitialized(Player player) {
-//
-//                }
-//
-//                @Override
-//                public void onError(Throwable throwable) {
-//                    Log.e("PlaylistActivity", "Could not initialize player: " + throwable.getMessage());
-//                }
-//            });
-//            mPlayer.isInitialized();
-//            return mPlayer;
-//        }
-//    }
-
     private void listviewSelector() {
 
         mListView.clearChoices();
@@ -451,7 +429,7 @@ public class PlaylistTracksFragment extends RoboFragment {
         // Use the offset value and add it as a parameter to your API request to retrieve paginated data.
         // Deserialize API response and then construct new objects to append to the adapter
 
-        mSpotifyService.getPlaylistTracks(mPlaylistId).enqueue(new Callback<PlaylistTracksList>() {
+        mSpotifyService.getPlaylistTracks(mUserId, mPlaylistId).enqueue(new Callback<PlaylistTracksList>() {
             @Override
             public void onResponse(Call<PlaylistTracksList> call, Response<PlaylistTracksList> response) {
                 if (response.isSuccess() && response.body() != null) {

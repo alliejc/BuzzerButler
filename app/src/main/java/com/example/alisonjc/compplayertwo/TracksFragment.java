@@ -169,11 +169,7 @@ public class TracksFragment extends RoboFragment {
         });
     }
 
-    // Append more data into the adapter
     public void customLoadMoreDataFromApi(final int offset) {
-        // This method probably sends out a network request and appends new data items to your adapter.
-        // Use the offset value and add it as a parameter to your API request to retrieve paginated data.
-        // Deserialize API response and then construct new objects to append to the adapter
 
         mSpotifyService.getUserTracks().enqueue(new Callback<UserTracks>() {
             @Override
@@ -326,33 +322,6 @@ public class TracksFragment extends RoboFragment {
             }
         });
     }
-
-//    private Player getPlayer() {
-//
-//        if (mPlayer != null) {
-//
-//            return mPlayer;
-//        } else {
-//
-//            final Config playerConfig = mSpotifyService.getPlayerConfig(getContext());
-//            playerConfig.useCache(false);
-//
-//            mPlayer = Spotify.getPlayer(playerConfig, this, new Player.InitializationObserver() {
-//
-//                @Override
-//                public void onInitialized(Player player) {
-//
-//                }
-//
-//                @Override
-//                public void onError(Throwable throwable) {
-//                    Log.e("PlaylistActivity", "Could not initialize player: " + throwable.getMessage());
-//                }
-//            });
-//            mPlayer.isInitialized();
-//            return mPlayer;
-//        }
-//    }
 
     private void listviewSelector() {
 

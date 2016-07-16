@@ -36,6 +36,7 @@ public class PlaylistFragment extends RoboFragment {
     private PlaylistInteractionListener mListener;
     private static PlaylistAdapter mPlaylistAdapter;
     private String playlistId = "";
+    private String userId = "";
 
     public PlaylistFragment() {
     }
@@ -98,9 +99,10 @@ public class PlaylistFragment extends RoboFragment {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
                 Item mItem = (Item) parent.getAdapter().getItem(position);
+                String userId = mItem.getOwner().getId();
                 String playlistId = mItem.getId();
                 String playlistTitle = mItem.getName();
-                mListener.onPlaylistSelected(playlistId,playlistTitle);
+                mListener.onPlaylistSelected(userId, playlistId,playlistTitle);
 
                 Animation animation1 = new AlphaAnimation(0.1f, 0.3f);
                 animation1.setDuration(1000);
@@ -119,7 +121,7 @@ public class PlaylistFragment extends RoboFragment {
     // TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed(String string) {
         if (mListener != null) {
-            mListener.onPlaylistSelected(string, string);
+            mListener.onPlaylistSelected(string, string, string);
         }
     }
 
@@ -142,7 +144,7 @@ public class PlaylistFragment extends RoboFragment {
 
 
     public interface PlaylistInteractionListener {
-        void onPlaylistSelected(String playlistId, String playlistTitle);
+        void onPlaylistSelected(String userId, String playlistId, String playlistTitle);
     }
 
 }

@@ -150,7 +150,7 @@ public class MainActivity extends RoboActionBarActivity
 
         } else if (id == R.id.nav_logout) {
 
-            //userLogout();
+            mSpotifyService.userLogout();
 
         } else if (id == R.id.nav_send) {
 
@@ -191,6 +191,7 @@ public class MainActivity extends RoboActionBarActivity
 
                                 mSpotifyService.setUserId(response.body().getId());
 
+                                mSpotifyService.setPref(getBaseContext());
                                 getPreferences(Context.MODE_PRIVATE).edit().putString("user", response.body().getId()).apply();
                                 getPreferences(Context.MODE_PRIVATE).edit().putString("token", mToken).apply();
 
@@ -224,14 +225,14 @@ public class MainActivity extends RoboActionBarActivity
     }
 
     @Override
-    public void onPlaylistSelected(String playlistId, String playlistTitle) {
+    public void onPlaylistSelected(String userId, String playlistId, String playlistTitle) {
 
         mPlaylistTitle = playlistTitle;
         actionBar.setTitle(mPlaylistTitle);
         actionBar.setSubtitle("Please select a song");
 
         FragmentManager fragmentManager = getSupportFragmentManager();
-        PlaylistTracksFragment playlistTracksFragment = PlaylistTracksFragment.newInstance(playlistId);
+        PlaylistTracksFragment playlistTracksFragment = PlaylistTracksFragment.newInstance(userId, playlistId);
         fragmentManager.beginTransaction().replace(R.id.main_framelayout, playlistTracksFragment, "playlistTracksFragment").addToBackStack(null).commit();
     }
 
