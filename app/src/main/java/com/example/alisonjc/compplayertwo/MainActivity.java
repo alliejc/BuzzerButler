@@ -3,7 +3,6 @@ package com.example.alisonjc.compplayertwo;
 
 import android.app.DialogFragment;
 import android.app.FragmentTransaction;
-import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
@@ -60,7 +59,7 @@ public class MainActivity extends RoboActionBarActivity
         navigationDrawerSetup();
         toolbarSetup();
 
-        if(mSpotifyService.isLoggedIn()){
+        if (mSpotifyService.isLoggedIn()) {
             userLogin();
         }
     }
@@ -76,16 +75,40 @@ public class MainActivity extends RoboActionBarActivity
         mNavigationView.setNavigationItemSelectedListener(this);
     }
 
+
     @Override
     public void onBackPressed() {
-
-        toolbarSetup();
         if (mDrawerLayout.isDrawerOpen(GravityCompat.START)) {
             mDrawerLayout.closeDrawer(GravityCompat.START);
+        }
+        if (getSupportFragmentManager().getBackStackEntryCount() > 1) {
+            getSupportFragmentManager().popBackStackImmediate();
+        }
+
+        if (getSupportFragmentManager().getBackStackEntryCount() <= 1){
+            mDrawerLayout.openDrawer(GravityCompat.START);
         } else {
             super.onBackPressed();
         }
     }
+
+//    @Override
+//    public void onBackPressed() {
+//
+//        //toolbarSetup();
+//
+//        if (mDrawerLayout.isDrawerOpen(GravityCompat.START)) {
+//            mDrawerLayout.closeDrawer(GravityCompat.START);
+////            if (getSupportFragmentManager().getBackStackEntryCount() > 0) {
+//                //getSupportFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+//
+//            } else if(getSupportFragmentManager().getBackStackEntryCount() == 0) {
+//            mDrawerLayout.openDrawer(GravityCompat.START);
+//        } else {
+//            super.onBackPressed();
+//            }
+//        }
+
 
     private void userLogin() {
 
@@ -96,8 +119,8 @@ public class MainActivity extends RoboActionBarActivity
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.main, menu);
+
+        getMenuInflater().inflate(R.menu.main_overflow, menu);
         return true;
     }
 
@@ -108,13 +131,7 @@ public class MainActivity extends RoboActionBarActivity
 
         switch (item.getItemId()) {
 
-            case R.id.sort_a_z:
-
-                return true;
-
-            case R.id.sort_z_a:
-
-                return true;
+            case R.id.nav_logout:
 
             case android.R.id.home:
                 mDrawerLayout.openDrawer(GravityCompat.START);
@@ -132,7 +149,6 @@ public class MainActivity extends RoboActionBarActivity
         int id = item.getItemId();
         FragmentManager fragmentManager = getSupportFragmentManager();
 
-
         if (id == R.id.nav_playlists) {
 
             PlaylistFragment playlistFragment = PlaylistFragment.newInstance();
@@ -142,17 +158,10 @@ public class MainActivity extends RoboActionBarActivity
         } else if (id == R.id.nav_songs) {
 
             TracksFragment tracksFragment = TracksFragment.newInstance();
-            fragmentManager.beginTransaction().replace(R.id.main_framelayout, tracksFragment).addToBackStack(null).commit();
+            fragmentManager.beginTransaction().replace(R.id.main_framelayout, tracksFragment, "tracksFragment").addToBackStack(null).commit();
             actionBar.setTitle(R.string.songs_drawer);
             toolbarSetup();
 
-        } else if (id == R.id.nav_artists) {
-
-        } else if (id == R.id.nav_logout) {
-
-            mSpotifyService.userLogout();
-
-        } else if (id == R.id.nav_send) {
 
         }
 
@@ -189,11 +198,8 @@ public class MainActivity extends RoboActionBarActivity
                         public void onResponse(Call<SpotifyUser> call, Response<SpotifyUser> response) {
                             if (response.isSuccess()) {
 
-                                mSpotifyService.setUserId(response.body().getId());
-
-                                mSpotifyService.setPref(getBaseContext());
-                                getPreferences(Context.MODE_PRIVATE).edit().putString("user", response.body().getId()).apply();
-                                getPreferences(Context.MODE_PRIVATE).edit().putString("token", mToken).apply();
+                                mSpotifyService.setUserId(response.body().getId(), getBaseContext());
+                                mSpotifyService.setToken(mToken, getBaseContext());
 
                                 FragmentManager fragmentManager = getSupportFragmentManager();
                                 PlaylistFragment playlistFragment = PlaylistFragment.newInstance();

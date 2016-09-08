@@ -23,28 +23,28 @@ public class PlaylistTracksAdapter extends ArrayAdapter<Item> {
 
     public View getView(int position, View convertView, ViewGroup parent) {
 
-        View v = convertView;
+        View view = convertView;
 
-        if (v == null) {
-            v = this.mInflater.inflate(R.layout.item_track, parent, false);
+        if (view == null) {
+            view = this.mInflater.inflate(R.layout.item_track, parent, false);
         }
 
-        Item i = this.getItem(position);
+        Item item = this.getItem(position);
 
-        if (i != null) {
+        if (item != null) {
 
-            TextView sn = (TextView) v.findViewById(R.id.songname);
-            TextView an = (TextView) v.findViewById(R.id.artistname);
+            TextView songName = (TextView) view.findViewById(R.id.songname);
+            TextView artistName = (TextView) view.findViewById(R.id.artistname);
 
-            if (sn != null) {
-                sn.setText(i.getTrack().getName());
+            if (songName != null) {
+                songName.setText(item.getTrack().getName());
             }
-            if (an != null) {
-                an.setText(i.getTrack().getArtists().get(0).getName());
+            if (artistName != null) {
+                artistName.setText(item.getTrack().getArtists().get(0).getName());
             }
 
         }
-        return v;
+        return view;
     }
 
 }

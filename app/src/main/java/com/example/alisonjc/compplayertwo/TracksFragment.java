@@ -136,7 +136,6 @@ public class TracksFragment extends RoboFragment {
         });
 
 
-
         playerControlsSetup();
         startTimerTask();
 
@@ -175,9 +174,9 @@ public class TracksFragment extends RoboFragment {
             @Override
             public void onResponse(Call<UserTracks> call, Response<UserTracks> response) {
                 if (response.isSuccess() && response.body() != null) {
-                        response.body().setOffset(offset);
-                        mTracksAdapter.addAll(response.body().getItems());
-                        mTracksAdapter.notifyDataSetChanged();
+                    response.body().setOffset(offset);
+                    mTracksAdapter.addAll(response.body().getItems());
+                    mTracksAdapter.notifyDataSetChanged();
                 }
             }
 

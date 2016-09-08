@@ -3,7 +3,6 @@ package com.example.alisonjc.compplayertwo.spotify;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.preference.PreferenceManager;
 
 import com.example.alisonjc.compplayertwo.BuildConfig;
 import com.example.alisonjc.compplayertwo.spotify.model.UserTracks.UserTracks;
@@ -25,11 +24,35 @@ public class SpotifyService {
 
     private String mToken = "";
     private String mUserId = "";
-    public SharedPreferences settings;
+    public SharedPreferences myPrefs;
 
 
-    public void setUserId(String userId) {
+    public void setUserId(String userId, Context context) {
+
         mUserId = userId;
+        myPrefs = context.getSharedPreferences("myPrefs", Context.MODE_PRIVATE);
+        myPrefs.edit().putString("userId", mUserId).apply();
+
+//        context.getSharedPreferences("userId", Context.MODE_PRIVATE).edit().putString("userId", mUserId).apply();
+//        settings = PreferenceManager.getDefaultSharedPreferences(context);
+//        SharedPreferences.Editor editor = settings.edit();
+//        editor.putString("userId", mUserId);
+//        editor.apply();
+
+    }
+
+    public void setToken(String token, Context context) {
+
+        mToken = token;
+        myPrefs = context.getSharedPreferences("myPrefs", Context.MODE_PRIVATE);
+        myPrefs.edit().putString("token", mToken).apply();
+
+//        context.getSharedPreferences("token", Context.MODE_PRIVATE).edit().putString("token", mToken).apply();
+//        settings = PreferenceManager.getDefaultSharedPreferences(context);
+//        SharedPreferences.Editor editor = settings.edit();
+//        editor.putString("token", mToken);
+//        editor.apply();
+
     }
 
     private final SpotifyServiceInterface mSpotifyService;
@@ -49,44 +72,37 @@ public class SpotifyService {
         return mSpotifyService.getPlaylistTracks("Bearer " + mToken, userId, playlistId);
     }
 
-    public Call<UserPlaylists> getUserPlayLists(){
+    public Call<UserPlaylists> getUserPlayLists() {
         return mSpotifyService.getUserPlayLists("Bearer " + mToken, mUserId);
     }
 
-    public Call<SpotifyUser> getCurrentUser(String token){
-
+    public Call<SpotifyUser> getCurrentUser(String token) {
         mToken = token;
         return mSpotifyService.getCurrentUser("Bearer " + mToken);
     }
 
-    public Call<UserTracks> getUserTracks(){
+    public Call<UserTracks> getUserTracks() {
         return mSpotifyService.getUserTracks("Bearer " + mToken);
     }
 
-    public boolean isLoggedIn(){
+    public boolean isLoggedIn() {
         return (mUserId.equals("") || mToken.equals(""));
     }
 
 
-    public Config getPlayerConfig(Context context){
+    public Config getPlayerConfig(Context context) {
         return new Config(context, mToken, CLIENT_ID);
     }
 
-    public void userLogout(){
-        SharedPreferences.Editor editor = settings.edit();
-        editor.remove("userId");
-        editor.remove("token");
-        editor.clear();
-        editor.apply();
+    public void userLogout(Context context) {
+        this.setToken("", context);
+        this.setUserId("", context);
+        context.getSharedPreferences("myPrefs", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = myPrefs.edit();
+        editor.remove("userId").apply();
+        editor.remove("token").apply();
+
     }
 
-    public void setPref(Context context){
-
-        settings = PreferenceManager.getDefaultSharedPreferences(context);
-        SharedPreferences.Editor editor = settings.edit();
-        editor.putString("userId", mUserId);
-        editor.putString("token", mToken);
-        editor.apply();;
-    }
 }
 

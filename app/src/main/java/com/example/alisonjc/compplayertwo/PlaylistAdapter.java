@@ -22,20 +22,20 @@ public class PlaylistAdapter extends ArrayAdapter<Item> {
 
     public View getView(int position, View convertView, ViewGroup parent) {
 
-        View v = convertView;
+        View view = convertView;
 
-        if (v == null) {
-            v = this.mInflater.inflate(R.layout.item_playlist, parent, false);
+        if (view == null) {
+            view = this.mInflater.inflate(R.layout.item_playlist, parent, false);
         }
-        Item i = getItem(position);
+        Item item = getItem(position);
 
-        if (i != null) {
-            TextView pt = (TextView) v.findViewById(R.id.playlisttitle);
+        if (item != null) {
+            TextView playlistTitle = (TextView) view.findViewById(R.id.playlisttitle);
 
-            if (pt != null) {
-                pt.setText(i.getName());
+            if (playlistTitle != null) {
+                playlistTitle.setText(item.getName());
             }
         }
-        return v;
+        return view;
     }
 }

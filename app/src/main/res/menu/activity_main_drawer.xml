@@ -4,35 +4,14 @@
     <group android:checkableBehavior="single">
         <item
             android:id="@+id/nav_playlists"
+            android:checked="true"
             android:icon="@drawable/ic_action_music_white"
-            android:title="@string/playlists_drawer"
-            android:checked="true"/>
+            android:title="@string/playlists_drawer"/>
         <item
             android:id="@+id/nav_songs"
             android:icon="@drawable/ic_action_music_white"
             android:title="@string/songs_drawer"/>
-        <item
-            android:id="@+id/nav_artists"
-            android:icon="@drawable/ic_action_music_white"
-            android:title="@string/artist_drawer"/>
-        <item
-            android:id="@+id/nav_logout"
-            android:icon="@drawable/ic_action_music_white"
-            android:title="@string/logout"/>
 
     </group>
-
-    <item android:title="Communicate">
-        <menu>
-            <item
-                android:id="@+id/nav_share"
-                android:icon="@drawable/ic_menu_share"
-                android:title="Share"/>
-            <item
-                android:id="@+id/nav_send"
-                android:icon="@drawable/ic_menu_send"
-                android:title="Send"/>
-        </menu>
-    </item>
 
 </menu>

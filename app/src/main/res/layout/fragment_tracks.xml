@@ -2,7 +2,7 @@
              xmlns:tools="http://schemas.android.com/tools"
              android:layout_width="match_parent"
              android:layout_height="match_parent"
-             >
+    >
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -11,36 +11,36 @@
         android:orientation="vertical">
 
         <include
-            layout="@layout/toolbar"
             android:id="@+id/toolbar"
-            android:layout_height="0dp"
+            layout="@layout/toolbar"
             android:layout_width="match_parent"
+            android:layout_height="0dp"
             android:layout_weight="15"/>
 
-    <ListView
-        android:id="@+id/tracksview"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:divider="@color/color_dark_gray"
-        android:dividerHeight="0.5dp"
-        android:background="@color/color_default"
-        android:choiceMode="singleChoice"
-        android:listSelector="@color/pressed_color"
-        android:layout_weight="55"/>
+        <ListView
+            android:id="@+id/tracksview"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="55"
+            android:background="@color/color_default"
+            android:choiceMode="singleChoice"
+            android:divider="@color/color_dark_gray"
+            android:dividerHeight="0.5dp"
+            android:listSelector="@color/pressed_color"/>
 
-    <include
-        android:id="@+id/music_player"
-        layout="@layout/music_player"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="15"/>
+        <include
+            android:id="@+id/music_player"
+            layout="@layout/music_player"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="15"/>
 
-    <include
-        android:id="@+id/seeker_bar"
-        layout="@layout/seeker_bar"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="15"/>
+        <include
+            android:id="@+id/seeker_bar"
+            layout="@layout/seeker_bar"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="15"/>
 
     </LinearLayout>
 </FrameLayout>

@@ -93,11 +93,10 @@ public class PlaylistTracksFragment extends RoboFragment {
     public static PlaylistTracksFragment newInstance(String userId, String playlistId) {
 
         PlaylistTracksFragment fragment = new PlaylistTracksFragment();
-            Bundle args = new Bundle();
-            args.putString("userId", userId);
-            args.putString("playlistId", playlistId);
-            fragment.setArguments(args);
-
+        Bundle args = new Bundle();
+        args.putString("userId", userId);
+        args.putString("playlistId", playlistId);
+        fragment.setArguments(args);
 
         return fragment;
     }
@@ -108,6 +107,7 @@ public class PlaylistTracksFragment extends RoboFragment {
         super.onCreate(savedInstanceState);
         mPlaylistId = getArguments().getString("playlistId");
         mUserId = getArguments().getString("userId");
+        //setHasOptionsMenu(true);
     }
 
     @Override
@@ -122,16 +122,16 @@ public class PlaylistTracksFragment extends RoboFragment {
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-            mSongLocationView.setText("0:00");
-            mSongDurationView.setText(R.string.one_thirty_radio_button);
+        mSongLocationView.setText("0:00");
+        mSongDurationView.setText(R.string.one_thirty_radio_button);
 
-            mListView = (ListView) view.findViewById(R.id.tracksview);
+        mListView = (ListView) view.findViewById(R.id.tracksview);
 
-            mPlayer = mSpotifyPlayer.getPlayer(getContext());
+        mPlayer = mSpotifyPlayer.getPlayer(getContext());
 
-            playerControlsSetup();
-            listViewSetup();
-            startTimerTask();
+        playerControlsSetup();
+        listViewSetup();
+        startTimerTask();
 
         mListView.setOnScrollListener(new EndlessScrollListener() {
             @Override
@@ -146,33 +146,69 @@ public class PlaylistTracksFragment extends RoboFragment {
         });
 
 
-            mRadioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
-                @Override
-                public void onCheckedChanged(RadioGroup group, int checkedId) {
+        mRadioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
 
-                    onRadioButtonClicked(checkedId);
+                onRadioButtonClicked(checkedId);
+            }
+        });
+
+        mSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                if (mPlayer != null && fromUser) {
+                    mPlayer.seekToPosition(progress);
+                    mSeekBar.setProgress(progress);
                 }
-            });
+            }
 
-            mSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+            }
 
-                @Override
-                public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                    if (mPlayer != null && fromUser) {
-                        mPlayer.seekToPosition(progress);
-                        mSeekBar.setProgress(progress);
-                    }
-                }
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+            }
+        });
+    }
 
-                @Override
-                public void onStartTrackingTouch(SeekBar seekBar) {
-                }
+//    @Override
+//    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+//        super.onCreateOptionsMenu(menu, inflater);
+//    }
 
-                @Override
-                public void onStopTrackingTouch(SeekBar seekBar) {
-                }
-            });
-        }
+//    @Override
+//    public boolean onOptionsItemSelected(MenuItem item) {
+//
+//        super.onOptionsItemSelected(item);
+//
+//        switch (item.getItemId()) {
+//
+//            case R.menu.fragment_overflow:
+//
+//                MenuItem.OnMenuItemClickListener menuListener = new MenuItem.OnMenuItemClickListener() {
+//                    @Override
+//                    public boolean onMenuItemClick(MenuItem item) {
+//
+//                        return false;
+//                    }
+//                };
+//
+//                return true;
+//
+//            case R.menu.main_overflow:
+//
+//                return false;
+//
+//            case android.R.id.home:
+//
+//                return true;
+//        }
+//
+//        return super.onOptionsItemSelected(item);
+//    }
 
 
     private void listViewSetup() {

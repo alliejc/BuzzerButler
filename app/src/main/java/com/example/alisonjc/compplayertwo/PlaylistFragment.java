@@ -102,7 +102,7 @@ public class PlaylistFragment extends RoboFragment {
                 String userId = mItem.getOwner().getId();
                 String playlistId = mItem.getId();
                 String playlistTitle = mItem.getName();
-                mListener.onPlaylistSelected(userId, playlistId,playlistTitle);
+                mListener.onPlaylistSelected(userId, playlistId, playlistTitle);
 
                 Animation animation1 = new AlphaAnimation(0.1f, 0.3f);
                 animation1.setDuration(1000);

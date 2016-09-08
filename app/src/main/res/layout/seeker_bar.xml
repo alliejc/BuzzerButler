@@ -6,7 +6,8 @@
     android:layout_height="wrap_content"
     android:background="@color/color_default"
     android:orientation="vertical"
-    android:weightSum="100">
+    android:weightSum="100"
+    >
 
     <SeekBar
         android:id="@+id/seekerBarView"
@@ -22,9 +23,9 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_weight="50"
         android:orientation="horizontal"
         android:padding="10dp"
-        android:layout_weight="50"
         android:weightSum="100"
         >
 
@@ -36,9 +37,9 @@
             android:gravity="start"
             android:paddingEnd="10dp"
             android:paddingStart="10dp"
+            android:text="0:00"
             android:textColor="@color/color_light_gray"
-            android:textSize="18sp"
-            android:text="0:00">
+            android:textSize="18sp">
         </TextView>
 
         <TextView
@@ -49,9 +50,9 @@
             android:gravity="end"
             android:paddingEnd="10dp"
             android:paddingStart="10dp"
+            android:text="1:30"
             android:textColor="@color/color_light_gray"
-            android:textSize="18sp"
-            android:text="1:30">
+            android:textSize="18sp">
 
         </TextView>
     </LinearLayout>
