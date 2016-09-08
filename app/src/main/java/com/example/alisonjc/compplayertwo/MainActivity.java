@@ -22,12 +22,13 @@ import com.google.inject.Inject;
 import com.spotify.sdk.android.authentication.AuthenticationClient;
 import com.spotify.sdk.android.authentication.AuthenticationResponse;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 import roboguice.activity.RoboActionBarActivity;
 import roboguice.inject.ContentView;
-import roboguice.inject.InjectView;
 
 @ContentView(R.layout.activity_main)
 public class MainActivity extends RoboActionBarActivity
@@ -36,10 +37,10 @@ public class MainActivity extends RoboActionBarActivity
     @Inject
     SpotifyService mSpotifyService;
 
-    @InjectView(R.id.toolbar)
-    private Toolbar mToolbar;
+    @BindView (R.id.toolbar)
+    Toolbar mToolbar;
 
-    @InjectView(R.id.drawer_layout)
+    @BindView (R.id.drawer_layout)
     DrawerLayout mDrawerLayout;
 
     NavigationView mNavigationView;
@@ -55,6 +56,7 @@ public class MainActivity extends RoboActionBarActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        ButterKnife.bind(this);
 
         navigationDrawerSetup();
         toolbarSetup();
@@ -78,37 +80,19 @@ public class MainActivity extends RoboActionBarActivity
 
     @Override
     public void onBackPressed() {
+        
         if (mDrawerLayout.isDrawerOpen(GravityCompat.START)) {
-            mDrawerLayout.closeDrawer(GravityCompat.START);
-        }
-        if (getSupportFragmentManager().getBackStackEntryCount() > 1) {
+            moveTaskToBack(true);
+        } else if (getSupportFragmentManager().getBackStackEntryCount() > 1) {
             getSupportFragmentManager().popBackStackImmediate();
-        }
-
-        if (getSupportFragmentManager().getBackStackEntryCount() <= 1){
+        } else if (getSupportFragmentManager().getBackStackEntryCount() <= 1){
             mDrawerLayout.openDrawer(GravityCompat.START);
+            getSupportFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+
         } else {
             super.onBackPressed();
         }
     }
-
-//    @Override
-//    public void onBackPressed() {
-//
-//        //toolbarSetup();
-//
-//        if (mDrawerLayout.isDrawerOpen(GravityCompat.START)) {
-//            mDrawerLayout.closeDrawer(GravityCompat.START);
-////            if (getSupportFragmentManager().getBackStackEntryCount() > 0) {
-//                //getSupportFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
-//
-//            } else if(getSupportFragmentManager().getBackStackEntryCount() == 0) {
-//            mDrawerLayout.openDrawer(GravityCompat.START);
-//        } else {
-//            super.onBackPressed();
-//            }
-//        }
-
 
     private void userLogin() {
 

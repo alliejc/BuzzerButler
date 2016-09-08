@@ -19,16 +19,17 @@ import com.google.inject.Inject;
 import java.util.ArrayList;
 import java.util.List;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 import roboguice.fragment.RoboFragment;
-import roboguice.inject.InjectView;
 
 public class PlaylistFragment extends RoboFragment {
 
-    @InjectView(R.id.playlistview)
-    private ListView mListView;
+    @BindView(R.id.playlistview)
+    ListView mListView;
 
     @Inject
     private SpotifyService mSpotifyService;
@@ -56,7 +57,10 @@ public class PlaylistFragment extends RoboFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_playlist, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_playlist, container, false);
+        ButterKnife.bind(this, rootView);
+        return rootView;
+
     }
 
     @Override

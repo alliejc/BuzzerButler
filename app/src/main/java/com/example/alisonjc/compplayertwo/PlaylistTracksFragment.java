@@ -31,11 +31,12 @@ import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 import roboguice.fragment.RoboFragment;
-import roboguice.inject.InjectView;
 
 public class PlaylistTracksFragment extends RoboFragment {
 
@@ -45,32 +46,32 @@ public class PlaylistTracksFragment extends RoboFragment {
     @Inject
     private SpotifyPlayer mSpotifyPlayer;
 
-    @InjectView(R.id.tracksview)
-    private ListView mListView;
+    @BindView (R.id.tracksview)
+     ListView mListView;
 
-    @InjectView(R.id.play)
-    private ImageButton mPlayButton;
+    @BindView (R.id.play)
+     ImageButton mPlayButton;
 
-    @InjectView(R.id.pause)
-    private ImageButton mPauseButton;
+    @BindView (R.id.pause)
+     ImageButton mPauseButton;
 
-    @InjectView(R.id.seekerBarView)
-    private SeekBar mSeekBar;
+    @BindView (R.id.seekerBarView)
+     SeekBar mSeekBar;
 
-    @InjectView(R.id.musicCurrentLoc)
-    private TextView mSongLocationView;
+    @BindView (R.id.musicCurrentLoc)
+     TextView mSongLocationView;
 
-    @InjectView(R.id.musicDuration)
-    private TextView mSongDurationView;
+    @BindView(R.id.musicDuration)
+     TextView mSongDurationView;
 
-    @InjectView(R.id.radio_group)
-    private RadioGroup mRadioGroup;
+    @BindView(R.id.radio_group)
+     RadioGroup mRadioGroup;
 
-    @InjectView(R.id.one_minute_thirty)
-    private RadioButton mOneThirtyMin;
+    @BindView(R.id.one_minute_thirty)
+     RadioButton mOneThirtyMin;
 
-    @InjectView(R.id.two_minutes)
-    private RadioButton mTwoMin;
+    @BindView(R.id.two_minutes)
+     RadioButton mTwoMin;
 
     private int mSongLocation;
     private Timer mTimer;
@@ -114,6 +115,8 @@ public class PlaylistTracksFragment extends RoboFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.fragment_tracks, container, false);
+        ButterKnife.bind(this, rootView);
+
 
         return rootView;
     }
