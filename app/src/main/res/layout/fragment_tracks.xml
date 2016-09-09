@@ -29,15 +29,16 @@
             android:listSelector="@color/pressed_color"/>
 
         <include
-            android:id="@+id/music_player"
-            layout="@layout/music_player"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="15"/>
-
-        <include
             android:id="@+id/seeker_bar"
             layout="@layout/seeker_bar"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="15"
+            />
+
+        <include
+            android:id="@+id/music_player"
+            layout="@layout/music_player"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="15"/>

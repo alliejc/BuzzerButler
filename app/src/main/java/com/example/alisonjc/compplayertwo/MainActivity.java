@@ -80,15 +80,15 @@ public class MainActivity extends RoboActionBarActivity
 
     @Override
     public void onBackPressed() {
-        
-        if (mDrawerLayout.isDrawerOpen(GravityCompat.START)) {
-            moveTaskToBack(true);
-        } else if (getSupportFragmentManager().getBackStackEntryCount() > 1) {
-            getSupportFragmentManager().popBackStackImmediate();
-        } else if (getSupportFragmentManager().getBackStackEntryCount() <= 1){
-            mDrawerLayout.openDrawer(GravityCompat.START);
-            getSupportFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
 
+        FragmentManager fragmentManager = getSupportFragmentManager();
+
+        if (mDrawerLayout.isDrawerOpen(GravityCompat.START)) {
+            mDrawerLayout.closeDrawer(GravityCompat.START);
+        } else if (fragmentManager.getBackStackEntryCount() > 1) {
+            fragmentManager.popBackStackImmediate();
+        } else if (fragmentManager.getBackStackEntryCount() <= 1){
+            moveTaskToBack(true);
         } else {
             super.onBackPressed();
         }
@@ -110,17 +110,16 @@ public class MainActivity extends RoboActionBarActivity
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-
-        super.onOptionsItemSelected(item);
-
         switch (item.getItemId()) {
 
             case R.id.nav_logout:
+                mSpotifyService.userLogout(getApplicationContext());
+                userLogin();
+                break;
 
             case android.R.id.home:
                 mDrawerLayout.openDrawer(GravityCompat.START);
-
-                return true;
+                break;
         }
 
         return super.onOptionsItemSelected(item);
@@ -129,24 +128,25 @@ public class MainActivity extends RoboActionBarActivity
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(final MenuItem item) {
-        // Handle navigation view item clicks here.
         int id = item.getItemId();
         FragmentManager fragmentManager = getSupportFragmentManager();
 
         if (id == R.id.nav_playlists) {
 
+            fragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
             PlaylistFragment playlistFragment = PlaylistFragment.newInstance();
             fragmentManager.beginTransaction().replace(R.id.main_framelayout, playlistFragment, "playlistFragment").addToBackStack(null).commit();
             actionBar.setTitle(R.string.playlists_drawer);
+            actionBar.setSubtitle(R.string.app_subtitle);
+
 
         } else if (id == R.id.nav_songs) {
 
+            fragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
             TracksFragment tracksFragment = TracksFragment.newInstance();
             fragmentManager.beginTransaction().replace(R.id.main_framelayout, tracksFragment, "tracksFragment").addToBackStack(null).commit();
             actionBar.setTitle(R.string.songs_drawer);
-            toolbarSetup();
-
-
+            actionBar.setSubtitle("Please select a song");
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

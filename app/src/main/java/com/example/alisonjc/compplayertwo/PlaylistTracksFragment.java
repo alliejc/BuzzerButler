@@ -108,7 +108,6 @@ public class PlaylistTracksFragment extends RoboFragment {
         super.onCreate(savedInstanceState);
         mPlaylistId = getArguments().getString("playlistId");
         mUserId = getArguments().getString("userId");
-        //setHasOptionsMenu(true);
     }
 
     @Override
@@ -116,7 +115,6 @@ public class PlaylistTracksFragment extends RoboFragment {
                              Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.fragment_tracks, container, false);
         ButterKnife.bind(this, rootView);
-
 
         return rootView;
     }
@@ -177,43 +175,6 @@ public class PlaylistTracksFragment extends RoboFragment {
         });
     }
 
-//    @Override
-//    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-//        super.onCreateOptionsMenu(menu, inflater);
-//    }
-
-//    @Override
-//    public boolean onOptionsItemSelected(MenuItem item) {
-//
-//        super.onOptionsItemSelected(item);
-//
-//        switch (item.getItemId()) {
-//
-//            case R.menu.fragment_overflow:
-//
-//                MenuItem.OnMenuItemClickListener menuListener = new MenuItem.OnMenuItemClickListener() {
-//                    @Override
-//                    public boolean onMenuItemClick(MenuItem item) {
-//
-//                        return false;
-//                    }
-//                };
-//
-//                return true;
-//
-//            case R.menu.main_overflow:
-//
-//                return false;
-//
-//            case android.R.id.home:
-//
-//                return true;
-//        }
-//
-//        return super.onOptionsItemSelected(item);
-//    }
-
-
     private void listViewSetup() {
 
         mPlaylistTracksAdapter = new PlaylistTracksAdapter(getActivity(), R.layout.item_track, new ArrayList<Item>());
@@ -246,7 +207,6 @@ public class PlaylistTracksFragment extends RoboFragment {
                 setCurrentPlayingSong(position);
                 playSong(position);
                 showPauseButton();
-
             }
         });
     }
@@ -257,6 +217,7 @@ public class PlaylistTracksFragment extends RoboFragment {
         showPauseButton();
         setCurrentPlayingSong(locationid);
         mPlayer.play("spotify:track:" + mPlaylistTracksAdapter.getItem(locationid).getTrack().getId());
+        onButtonPressed(mPlaylistTracksAdapter.getItem(locationid).getTrack().getName());
         setSeekBar();
     }
 
@@ -374,8 +335,6 @@ public class PlaylistTracksFragment extends RoboFragment {
 
         this.mItemPosition = itemPosition;
         listviewSelector();
-
-
     }
 
     private void onPauseClicked() {
@@ -480,13 +439,11 @@ public class PlaylistTracksFragment extends RoboFragment {
 
             @Override
             public void onFailure(Call<PlaylistTracksList> call, Throwable t) {
-
             }
         });
 
     }
 
-    // TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed(String trackId) {
         if (mListener != null) {
             mListener.onPlaylistTrackSelected(trackId);

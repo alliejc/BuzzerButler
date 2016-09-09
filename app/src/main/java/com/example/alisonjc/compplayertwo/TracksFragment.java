@@ -233,6 +233,7 @@ public class TracksFragment extends RoboFragment {
         showPauseButton();
         setCurrentPlayingSong(locationid);
         mPlayer.play("spotify:track:" + mTracksAdapter.getItem(locationid).getTrack().getId());
+        onButtonPressed(mTracksAdapter.getItem(locationid).getTrack().getName());
         setSeekBar();
     }
 
@@ -438,7 +439,6 @@ public class TracksFragment extends RoboFragment {
 
     }
 
-    // TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed(String trackId) {
         if (mListener != null) {
             mListener.onTrackSelected(trackId);
@@ -474,7 +474,6 @@ public class TracksFragment extends RoboFragment {
     }
 
     public interface OnTracksInteractionListener {
-        // TODO: Update argument type and name
         void onTrackSelected(String trackId);
     }
 }
