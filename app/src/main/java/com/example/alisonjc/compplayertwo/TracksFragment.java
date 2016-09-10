@@ -91,7 +91,6 @@ public class TracksFragment extends RoboFragment {
     private OnTracksInteractionListener mListener;
 
     public TracksFragment() {
-        // Required empty public constructor
     }
 
     public static TracksFragment newInstance() {
@@ -106,7 +105,6 @@ public class TracksFragment extends RoboFragment {
                              Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.fragment_tracks, container, false);
         ButterKnife.bind(this, rootView);
-
 
         return rootView;
     }
@@ -129,7 +127,6 @@ public class TracksFragment extends RoboFragment {
             @Override
             public boolean onLoadMore(final int page, final int totalItemsCount) {
 
-
                 // Triggered only when new data needs to be appended to the list
                 // Add whatever code is needed to append new items to your AdapterView
                 customLoadMoreDataFromApi(page);
@@ -138,10 +135,8 @@ public class TracksFragment extends RoboFragment {
             }
         });
 
-
         playerControlsSetup();
         startTimerTask();
-
 
         mRadioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
@@ -203,14 +198,12 @@ public class TracksFragment extends RoboFragment {
                     updateListView(response.body().getItems());
 
                 } else if (response.code() == 401) {
-                    //add logout to interface
-                    //userLogout();
+
                 }
             }
 
             @Override
             public void onFailure(Call<UserTracks> call, Throwable t) {
-
             }
 
         });
