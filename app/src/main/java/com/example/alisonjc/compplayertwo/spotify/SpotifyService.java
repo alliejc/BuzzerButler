@@ -26,7 +26,6 @@ public class SpotifyService {
     private String mUserId = "";
     public SharedPreferences myPrefs;
 
-
     public void setUserId(String userId, Context context) {
 
         mUserId = userId;
@@ -58,7 +57,6 @@ public class SpotifyService {
     private final SpotifyServiceInterface mSpotifyService;
 
     public SpotifyService() {
-
 
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl("https://api.spotify.com")
