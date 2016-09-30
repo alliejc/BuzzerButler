@@ -46,32 +46,32 @@ public class PlaylistTracksFragment extends RoboFragment {
     @Inject
     private SpotifyPlayer mSpotifyPlayer;
 
-    @BindView (R.id.tracksview)
-     ListView mListView;
+    @BindView(R.id.tracksview)
+    ListView mListView;
 
-    @BindView (R.id.play)
-     ImageButton mPlayButton;
+    @BindView(R.id.play)
+    ImageButton mPlayButton;
 
-    @BindView (R.id.pause)
-     ImageButton mPauseButton;
+    @BindView(R.id.pause)
+    ImageButton mPauseButton;
 
-    @BindView (R.id.seekerBarView)
-     SeekBar mSeekBar;
+    @BindView(R.id.seekerBarView)
+    SeekBar mSeekBar;
 
-    @BindView (R.id.musicCurrentLoc)
-     TextView mSongLocationView;
+    @BindView(R.id.musicCurrentLoc)
+    TextView mSongLocationView;
 
     @BindView(R.id.musicDuration)
-     TextView mSongDurationView;
+    TextView mSongDurationView;
 
     @BindView(R.id.radio_group)
-     RadioGroup mRadioGroup;
+    RadioGroup mRadioGroup;
 
     @BindView(R.id.one_minute_thirty)
-     RadioButton mOneThirtyMin;
+    RadioButton mOneThirtyMin;
 
     @BindView(R.id.two_minutes)
-     RadioButton mTwoMin;
+    RadioButton mTwoMin;
 
     private int mSongLocation;
     private Timer mTimer;

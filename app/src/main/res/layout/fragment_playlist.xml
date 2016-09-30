@@ -2,27 +2,27 @@
               xmlns:tools="http://schemas.android.com/tools"
               android:layout_width="match_parent"
               android:layout_height="match_parent"
-              android:orientation="vertical"
               android:background="@drawable/selector_list_item"
+              android:orientation="vertical"
+              android:layout_weight="100"
               tools:context="com.example.alisonjc.compplayertwo.PlaylistFragment">
 
-    <!--<include-->
-        <!--android:id="@+id/toolbar"-->
-        <!--layout="@layout/toolbar"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="0dp"-->
-        <!--android:layout_weight="15"-->
-        <!--/>-->
+    <include
+    android:id="@+id/toolbar"
+    layout="@layout/toolbar"
+    android:layout_width="match_parent"
+    android:layout_height="0dp"
+    android:layout_weight="20"
+    />
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recycler_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="@color/color_default"
         android:choiceMode="singleChoice"
         android:listSelector="@color/pressed_color"
-        android:background="@color/color_default"
-        android:scrollbars="vertical"/>
-
-
+        android:scrollbars="vertical"
+        android:layout_weight="80"/>
 </LinearLayout>
 

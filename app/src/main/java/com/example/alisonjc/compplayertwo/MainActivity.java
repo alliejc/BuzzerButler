@@ -37,10 +37,10 @@ public class MainActivity extends RoboActionBarActivity
     @Inject
     SpotifyService mSpotifyService;
 
-    @BindView (R.id.toolbar)
+    @BindView(R.id.toolbar)
     Toolbar mToolbar;
 
-    @BindView (R.id.drawer_layout)
+    @BindView(R.id.drawer_layout)
     DrawerLayout mDrawerLayout;
 
     NavigationView mNavigationView;
@@ -87,7 +87,7 @@ public class MainActivity extends RoboActionBarActivity
             mDrawerLayout.closeDrawer(GravityCompat.START);
         } else if (fragmentManager.getBackStackEntryCount() > 1) {
             fragmentManager.popBackStackImmediate();
-        } else if (fragmentManager.getBackStackEntryCount() <= 1){
+        } else if (fragmentManager.getBackStackEntryCount() <= 1) {
             moveTaskToBack(true);
         } else {
             super.onBackPressed();
@@ -164,7 +164,6 @@ public class MainActivity extends RoboActionBarActivity
         actionBar.setDisplayShowTitleEnabled(true);
         actionBar.setDisplayHomeAsUpEnabled(true);
     }
-
 
     @Override
     protected void onActivityResult(final int requestCode, int resultCode, Intent intent) {
