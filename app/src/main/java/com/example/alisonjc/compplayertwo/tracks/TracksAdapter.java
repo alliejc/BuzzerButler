@@ -1,4 +1,4 @@
-package com.example.alisonjc.compplayertwo;
+package com.example.alisonjc.compplayertwo.tracks;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
+import com.example.alisonjc.compplayertwo.R;
 import com.example.alisonjc.compplayertwo.spotify.model.UserTracks.Item;
 
 import java.util.List;

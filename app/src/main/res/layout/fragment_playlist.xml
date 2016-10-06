@@ -5,7 +5,7 @@
               android:background="@drawable/selector_list_item"
               android:orientation="vertical"
               android:layout_weight="100"
-              tools:context="com.example.alisonjc.compplayertwo.PlaylistFragment">
+              tools:context="com.example.alisonjc.compplayertwo.playlists.PlaylistFragment">
 
     <include
     android:id="@+id/toolbar"

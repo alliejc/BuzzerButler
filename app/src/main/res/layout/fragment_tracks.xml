@@ -17,16 +17,13 @@
             android:layout_height="0dp"
             android:layout_weight="15"/>
 
-        <ListView
-            android:id="@+id/tracksview"
+        <android.support.v7.widget.RecyclerView
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="55"
-            android:background="@color/color_default"
-            android:choiceMode="singleChoice"
-            android:divider="@color/color_dark_gray"
-            android:dividerHeight="0.5dp"
-            android:listSelector="@color/pressed_color"/>
+            android:id="@+id/tracks_recycler_view"
+            android:layout_weight="55">
+        </android.support.v7.widget.RecyclerView>
+
 
         <include
             android:id="@+id/seeker_bar"

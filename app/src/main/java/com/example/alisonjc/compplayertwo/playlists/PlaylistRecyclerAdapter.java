@@ -1,4 +1,4 @@
-package com.example.alisonjc.compplayertwo;
+package com.example.alisonjc.compplayertwo.playlists;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.example.alisonjc.compplayertwo.R;
 import com.example.alisonjc.compplayertwo.spotify.model.playlists.Item;
 
 import java.util.List;

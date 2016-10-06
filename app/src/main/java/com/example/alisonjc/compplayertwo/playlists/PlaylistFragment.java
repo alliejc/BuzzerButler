@@ -1,13 +1,17 @@
-package com.example.alisonjc.compplayertwo;
+package com.example.alisonjc.compplayertwo.playlists;
 
 import android.content.Context;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.example.alisonjc.compplayertwo.DividerItemDecoration;
+import com.example.alisonjc.compplayertwo.R;
 import com.example.alisonjc.compplayertwo.spotify.SpotifyService;
 import com.example.alisonjc.compplayertwo.spotify.model.playlists.Item;
 import com.example.alisonjc.compplayertwo.spotify.model.playlists.UserPlaylists;
@@ -32,6 +36,8 @@ public class PlaylistFragment extends RoboFragment {
     private PlaylistRecyclerAdapter mAdapter;
     private List<Item> mPlaylistItemList;
     private PlaylistInteractionListener mListener;
+    private Drawable dividerDrawable;
+
 
     public PlaylistFragment() {
     }
@@ -59,9 +65,12 @@ public class PlaylistFragment extends RoboFragment {
         super.onViewCreated(view, savedInstanceState);
 
         if (savedInstanceState == null) {
+            dividerDrawable = ContextCompat.getDrawable(getContext(), R.drawable.recycler_view_divider);
             mPlaylistItemList = new ArrayList<>();
             mLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
             mRecyclerView.setLayoutManager(mLayoutManager);
+            RecyclerView.ItemDecoration dividerItemDecoration = new DividerItemDecoration(dividerDrawable);
+            mRecyclerView.addItemDecoration(dividerItemDecoration);
 
             mAdapter = new PlaylistRecyclerAdapter(getContext(), mPlaylistItemList, new PlaylistRecyclerAdapter.onItemClickListener() {
                 @Override
@@ -101,8 +110,6 @@ public class PlaylistFragment extends RoboFragment {
             }
         });
     }
-
-    ;
 
     private void updateListView(List<Item> items) {
         mAdapter.updateAdapter(items);

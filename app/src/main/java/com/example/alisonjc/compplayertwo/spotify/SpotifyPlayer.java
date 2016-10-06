@@ -20,6 +20,7 @@ public class SpotifyPlayer {
     private Player mPlayer;
 
 
+
     public Player getPlayer(Context context) {
 
         if (mPlayer != null) {

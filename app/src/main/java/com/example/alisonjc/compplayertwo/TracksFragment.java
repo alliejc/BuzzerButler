@@ -9,10 +9,7 @@ import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AbsListView;
-import android.widget.AdapterView;
 import android.widget.ImageButton;
-import android.widget.ListView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.SeekBar;
@@ -22,6 +19,7 @@ import com.example.alisonjc.compplayertwo.spotify.SpotifyPlayer;
 import com.example.alisonjc.compplayertwo.spotify.SpotifyService;
 import com.example.alisonjc.compplayertwo.spotify.model.UserTracks.Item;
 import com.example.alisonjc.compplayertwo.spotify.model.UserTracks.UserTracks;
+import com.example.alisonjc.compplayertwo.tracks.TracksAdapter;
 import com.google.inject.Inject;
 import com.spotify.sdk.android.player.Player;
 import com.spotify.sdk.android.player.PlayerState;
@@ -48,8 +46,6 @@ public class TracksFragment extends RoboFragment {
     @Inject
     private SpotifyPlayer mSpotifyPlayer;
 
-    @BindView (R.id.tracksview)
-     ListView mListView;
 
     @BindView (R.id.play)
      ImageButton mPlayButton;
@@ -116,24 +112,24 @@ public class TracksFragment extends RoboFragment {
         mSongLocationView.setText("0:00");
         mSongDurationView.setText(R.string.one_thirty_radio_button);
 
-        mListView = (ListView) view.findViewById(R.id.tracksview);
+        //mListView = (ListView) view.findViewById(R.id.tracksview);
 
         listViewSetup();
 
         mPlayer = mSpotifyPlayer.getPlayer(getContext());
 
-        mListView.setOnScrollListener(new EndlessScrollListener() {
-
-            @Override
-            public boolean onLoadMore(final int page, final int totalItemsCount) {
-
-                // Triggered only when new data needs to be appended to the list
-                // Add whatever code is needed to append new items to your AdapterView
-                customLoadMoreDataFromApi(page);
-
-                return true; // ONLY if more data is actually being loaded; false otherwise.
-            }
-        });
+//        mListView.setOnScrollListener(new EndlessScrollListener() {
+//
+//            @Override
+//            public boolean onLoadMore(final int page, final int totalItemsCount) {
+//
+//                // Triggered only when new data needs to be appended to the list
+//                // Add whatever code is needed to append new items to your AdapterView
+//                customLoadMoreDataFromApi(page);
+//
+//                return true; // ONLY if more data is actually being loaded; false otherwise.
+//            }
+//        });
 
         playerControlsSetup();
         startTimerTask();
@@ -188,8 +184,8 @@ public class TracksFragment extends RoboFragment {
     private void listViewSetup() {
 
         mTracksAdapter = new TracksAdapter(getActivity(), R.layout.item_track, new ArrayList<Item>());
-        mListView.setAdapter(mTracksAdapter);
-        mListView.setChoiceMode(AbsListView.CHOICE_MODE_SINGLE);
+        //mListView.setAdapter(mTracksAdapter);
+        //mListView.setChoiceMode(AbsListView.CHOICE_MODE_SINGLE);
 
         mSpotifyService.getUserTracks().enqueue(new Callback<UserTracks>() {
             @Override
@@ -208,16 +204,16 @@ public class TracksFragment extends RoboFragment {
 
         });
 
-        mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
-                setCurrentPlayingSong(position);
-                playSong(position);
-                showPauseButton();
-
-            }
-        });
+//        mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+//            @Override
+//            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+//
+//                setCurrentPlayingSong(position);
+//                playSong(position);
+//                showPauseButton();
+//
+//            }
+//        });
     }
 
     private void playSong(int locationid) {
@@ -319,14 +315,14 @@ public class TracksFragment extends RoboFragment {
         });
     }
 
-    private void listviewSelector() {
-
-        mListView.clearChoices();
-        mListView.setItemChecked(mItemPosition, true);
-        mListView.smoothScrollToPosition(mItemPosition);
-        mListView.setSelected(true);
-        mTracksAdapter.notifyDataSetChanged();
-    }
+//    private void listviewSelector() {
+//
+//        mListView.clearChoices();
+//        mListView.setItemChecked(mItemPosition, true);
+//        mListView.smoothScrollToPosition(mItemPosition);
+//        mListView.setSelected(true);
+//        mTracksAdapter.notifyDataSetChanged();
+//    }
 
     @TargetApi(Build.VERSION_CODES.M)
     private void playBeep() {
@@ -344,7 +340,7 @@ public class TracksFragment extends RoboFragment {
     private void setCurrentPlayingSong(int itemPosition) {
 
         this.mItemPosition = itemPosition;
-        listviewSelector();
+        //listviewSelector();
     }
 
     private void onPauseClicked() {
@@ -384,7 +380,7 @@ public class TracksFragment extends RoboFragment {
         if (mTracksAdapter.getCount() <= mItemPosition + 1) {
             mItemPosition = 0;
             playSong(mItemPosition);
-            mListView.setSelection(mItemPosition);
+            //mListView.setSelection(mItemPosition);
         } else {
             playSong(mItemPosition + 1);
         }
