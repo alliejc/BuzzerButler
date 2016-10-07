@@ -19,6 +19,8 @@ import android.view.MenuItem;
 import com.example.alisonjc.compplayertwo.playlists.PlaylistFragment;
 import com.example.alisonjc.compplayertwo.spotify.SpotifyService;
 import com.example.alisonjc.compplayertwo.spotify.model.playlists.SpotifyUser;
+import com.example.alisonjc.compplayertwo.tracks.PlaylistTracksFragment;
+import com.example.alisonjc.compplayertwo.tracks.TracksFragment;
 import com.google.inject.Inject;
 import com.spotify.sdk.android.authentication.AuthenticationClient;
 import com.spotify.sdk.android.authentication.AuthenticationResponse;

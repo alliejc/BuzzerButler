@@ -1,6 +1,5 @@
 package com.example.alisonjc.compplayertwo.tracks;
 
-
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -9,56 +8,59 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.example.alisonjc.compplayertwo.R;
-import com.example.alisonjc.compplayertwo.spotify.model.playlist_tracklists.Item;
+import com.example.alisonjc.compplayertwo.spotify.model.UserTracks.Item;
 
 import java.util.List;
 
-public class PlaylistTracksRecyclerAdapter extends RecyclerView.Adapter<PlaylistTracksRecyclerAdapter.PlaylistTracksViewHolder> {
 
-    private List<Item> mPlaylistTracksList;
-    private Context mContext;
-    private final OnItemClickListener listener;
-    private int selectedItem = 0;
 
-    public interface OnItemClickListener {
+public class TracksRecyclerAdapter extends RecyclerView.Adapter<TracksRecyclerAdapter.TracksViewHolder> {
+
+    public interface onItemClickListener {
         void onItemClick(Item item, int position);
     }
 
-    public PlaylistTracksRecyclerAdapter(Context context, List<Item> list, OnItemClickListener listener) {
-        this.mContext = context;
-        this.mPlaylistTracksList = list;
-        this.listener = listener;
+    private List<Item> mTracksList;
+    private Context mContext;
+    private onItemClickListener mListener;
+    private int selectedItem = 0;
+
+    public TracksRecyclerAdapter(Context context, List<Item> tracksList, onItemClickListener listener) {
+        mContext = context;
+        mTracksList = tracksList;
+        mListener = listener;
     }
 
     @Override
-    public PlaylistTracksViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-
+    public TracksViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         mContext = parent.getContext();
         LayoutInflater layoutInflater = LayoutInflater.from(mContext);
         View v = layoutInflater.inflate(R.layout.item_track, parent, false);
 
-        return new PlaylistTracksViewHolder(v);
+        return new TracksViewHolder(v);
     }
 
     @Override
-    public void onBindViewHolder(final PlaylistTracksViewHolder holder, final int position) {
+    public void onBindViewHolder(TracksViewHolder holder, int position) {
 
-        final Item item = mPlaylistTracksList.get(position);
+        final Item item = mTracksList.get(position);
         TextView songName = holder.songName;
         TextView artistName = holder.artistName;
-        artistName.setText(item.getTrack().getArtists().get(0).getName());
         songName.setText(item.getTrack().getName());
+        artistName.setText(item.getTrack().getArtists().get(0).getName());
         holder.itemView.setSelected(selectedItem == position);
-        holder.bind(item, listener);
-
+        holder.onBind(item, mListener);
     }
 
-    public void updateAdapter(List<Item> items) {
+    @Override
+    public int getItemCount() {
+        return mTracksList.size();
+    }
 
-        mPlaylistTracksList.addAll(items);
+    public void updateAdapter(List<Item> list){
+        mTracksList.addAll(list);
         notifyDataSetChanged();
     }
-
 
     public void recyclerViewSelector(int position) {
 
@@ -67,47 +69,38 @@ public class PlaylistTracksRecyclerAdapter extends RecyclerView.Adapter<Playlist
         notifyItemChanged(selectedItem);
     }
 
-
     @Override
     public void onAttachedToRecyclerView(RecyclerView recyclerView) {
         super.onAttachedToRecyclerView(recyclerView);
     }
 
-    @Override
-    public int getItemCount() {
-        return mPlaylistTracksList.size();
-    }
-
-
-    public class PlaylistTracksViewHolder extends RecyclerView.ViewHolder {
+    public class TracksViewHolder extends RecyclerView.ViewHolder {
 
         private TextView songName;
         private TextView artistName;
 
-        public PlaylistTracksViewHolder(View itemView) {
+        public TracksViewHolder(View itemView) {
             super(itemView);
 
             songName = (TextView) itemView.findViewById(R.id.songname);
             artistName = (TextView) itemView.findViewById(R.id.artistname);
         }
-
-        public void bind(final Item item, final PlaylistTracksRecyclerAdapter.OnItemClickListener listener) {
-
+        public void onBind(final Item item, final TracksRecyclerAdapter.onItemClickListener listener){
             itemView.setOnClickListener(new View.OnClickListener() {
-
                 @Override
                 public void onClick(View v) {
-
                     listener.onItemClick(item, getAdapterPosition());
 
                     notifyItemChanged(selectedItem);
                     selectedItem = getLayoutPosition();
                     notifyItemChanged(selectedItem);
                     notifyDataSetChanged();
-
-
                 }
             });
+
         }
     }
 }
+
+
+
