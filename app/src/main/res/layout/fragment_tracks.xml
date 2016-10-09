@@ -27,7 +27,7 @@
 
         <include
             android:id="@+id/seeker_bar"
-            layout="@layout/seeker_bar"
+            layout="@layout/seekbar"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="15"

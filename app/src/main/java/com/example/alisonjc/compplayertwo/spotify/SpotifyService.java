@@ -25,6 +25,7 @@ public class SpotifyService {
     private String mToken = "";
     private String mUserId = "";
     public SharedPreferences myPrefs;
+    private int mTotalTracks = 0;
 
     public void setUserId(String userId, Context context) {
 
@@ -79,8 +80,8 @@ public class SpotifyService {
         return mSpotifyService.getCurrentUser("Bearer " + mToken);
     }
 
-    public Call<UserTracks> getUserTracks() {
-        return mSpotifyService.getUserTracks("Bearer " + mToken);
+    public Call<UserTracks> getUserTracks(int offset) {
+        return mSpotifyService.getUserTracks("Bearer " + mToken, offset);
     }
 
     public boolean isLoggedIn() {

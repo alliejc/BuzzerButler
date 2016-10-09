@@ -18,7 +18,6 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 
 import com.example.alisonjc.compplayertwo.DividerItemDecoration;
-import com.example.alisonjc.compplayertwo.EndlessScrollListener;
 import com.example.alisonjc.compplayertwo.R;
 import com.example.alisonjc.compplayertwo.spotify.SpotifyPlayer;
 import com.example.alisonjc.compplayertwo.spotify.SpotifyService;
@@ -80,7 +79,7 @@ public class PlaylistTracksFragment extends RoboFragment {
     private Player mPlayer;
     private PlaylistTracksRecyclerAdapter mAdapter;
     private RecyclerView mRecyclerView;
-    private RecyclerView.LayoutManager mLayoutManager;
+    private LinearLayoutManager mLayoutManager;
     private List<Item> mPlaylistTracksList;
     private View rootView;
     private OnPlaylistTracksInteractionListener mListener;
@@ -89,7 +88,7 @@ public class PlaylistTracksFragment extends RoboFragment {
     private int mItemPosition = 0;
     private int mPauseTimeAt = 90000;
     private boolean mBeepPlayed = false;
-    private Drawable dividerDrawable;
+    private int mPageNumber = 0;
 
     public PlaylistTracksFragment() {
     }
@@ -129,10 +128,10 @@ public class PlaylistTracksFragment extends RoboFragment {
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-            mSongLocationView.setText("0:00");
-            mSongDurationView.setText(R.string.one_thirty_radio_button);
+        mSongLocationView.setText("0:00");
+        mSongDurationView.setText(R.string.one_thirty_radio_button);
 
-        dividerDrawable = ContextCompat.getDrawable(getContext(), R.drawable.recycler_view_divider);
+        Drawable dividerDrawable = ContextCompat.getDrawable(getContext(), R.drawable.recycler_view_divider);
 
         playerControlsSetup();
         setSeekBar();
@@ -172,43 +171,60 @@ public class PlaylistTracksFragment extends RoboFragment {
             }
         });
 
-        mRecyclerView.addOnScrollListener(new EndlessScrollListener(){
-                @Override
-                public boolean onLoadMore(int page, int totalItemsCount) {
-                    customLoadMoreDataFromApi(page);
-                    return true;
+//        mRecyclerView.addOnScrollListener(new EndlessScrollListener2(mLayoutManager) {
+//            @Override
+//            public void onLoadMore(int page) {
+//                loadMoreDataFromApi(page);
+//            }
+//        });
+
+        mRadioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
+
+                onRadioButtonClicked(checkedId);
+            }
+        });
+
+        mSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                if (mPlayer != null && fromUser) {
+                    mPlayer.seekToPosition(progress);
+                    mSeekBar.setProgress(progress);
                 }
-            });
+            }
 
-            mRadioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
-                @Override
-                public void onCheckedChanged(RadioGroup group, int checkedId) {
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+            }
 
-                    onRadioButtonClicked(checkedId);
-                }
-            });
-
-            mSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-
-                @Override
-                public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                    if (mPlayer != null && fromUser) {
-                        mPlayer.seekToPosition(progress);
-                        mSeekBar.setProgress(progress);
-                    }
-                }
-
-                @Override
-                public void onStartTrackingTouch(SeekBar seekBar) {
-                }
-
-                @Override
-                public void onStopTrackingTouch(SeekBar seekBar) {
-                }
-            });
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+            }
+        });
     }
 
-    private void smoothScroll(int position){
+    public void loadMoreDataFromApi(final int offset) {
+
+        mSpotifyService.getPlaylistTracks(mUserId, mPlaylistId).enqueue(new Callback<PlaylistTracksList>() {
+            @Override
+            public void onResponse(Call<PlaylistTracksList> call, Response<PlaylistTracksList> response) {
+                if (response.isSuccess() && response.body() != null) {
+                    response.body().setOffset(offset);
+                    mAdapter.updateAdapter(response.body().getItems());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<PlaylistTracksList> call, Throwable t) {
+            }
+        });
+
+    }
+
+    private void smoothScroll(int position) {
         mRecyclerView.smoothScrollToPosition(position);
     }
 
@@ -311,7 +327,6 @@ public class PlaylistTracksFragment extends RoboFragment {
         });
     }
 
-
     private void playBeep() {
 
         final MediaPlayer mediaPlayer = MediaPlayer.create(getContext(), R.raw.beep);
@@ -364,7 +379,7 @@ public class PlaylistTracksFragment extends RoboFragment {
 
     private void onSkipNextClicked() {
 
-        if (mAdapter.getItemCount() <= mItemPosition +1) {
+        if (mAdapter.getItemCount() <= mItemPosition + 1) {
             mItemPosition = 0;
             playSong(mItemPosition);
         } else {
@@ -404,28 +419,6 @@ public class PlaylistTracksFragment extends RoboFragment {
                 }
                 break;
         }
-    }
-
-    // Append more data into the adapter
-    public void customLoadMoreDataFromApi(final int offset) {
-        // This method probably sends out a network request and appends new data items to your adapter.
-        // Use the offset value and add it as a parameter to your API request to retrieve paginated data.
-        // Deserialize API response and then construct new objects to append to the adapter
-
-        mSpotifyService.getPlaylistTracks(mUserId, mPlaylistId).enqueue(new Callback<PlaylistTracksList>() {
-            @Override
-            public void onResponse(Call<PlaylistTracksList> call, Response<PlaylistTracksList> response) {
-                if (response.isSuccess() && response.body() != null) {
-                    response.body().setOffset(offset);
-                    mAdapter.updateAdapter(response.body().getItems());
-                }
-            }
-
-            @Override
-            public void onFailure(Call<PlaylistTracksList> call, Throwable t) {
-            }
-        });
-
     }
 
     public void onButtonPressed(String trackName) {

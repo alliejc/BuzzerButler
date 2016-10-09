@@ -9,6 +9,7 @@ import retrofit2.Call;
 import retrofit2.http.GET;
 import retrofit2.http.Header;
 import retrofit2.http.Path;
+import retrofit2.http.Query;
 
 public interface SpotifyServiceInterface {
 
@@ -18,7 +19,7 @@ public interface SpotifyServiceInterface {
 
     //logged in users saved tracks
     @GET("v1/me/tracks")
-    Call<UserTracks> getUserTracks(@Header("Authorization") String bearerToken);
+    Call<UserTracks> getUserTracks(@Header("Authorization") String bearerToken, @Query("offset") int offset);
 
     //logged in users playlists
     @GET("v1/me/playlists")
@@ -30,6 +31,7 @@ public interface SpotifyServiceInterface {
 
     //playlist tracks for playlist for specific user
     @GET("/v1/users/{user_id}/playlists/{playlist_id}/tracks")
-    Call<PlaylistTracksList> getPlaylistTracks(@Header("Authorization") String bearerToken, @Path("user_id") String userId, @Path("playlist_id") String playlistId);
+    Call<PlaylistTracksList> getPlaylistTracks(@Header("Authorization") String bearerToken,
+                                               @Path("user_id") String userId, @Path("playlist_id") String playlistId);
 
 }

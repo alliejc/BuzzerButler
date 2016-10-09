@@ -20,7 +20,7 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 
 import com.example.alisonjc.compplayertwo.DividerItemDecoration;
-import com.example.alisonjc.compplayertwo.EndlessScrollListener;
+import com.example.alisonjc.compplayertwo.EndlessScrollListener2;
 import com.example.alisonjc.compplayertwo.R;
 import com.example.alisonjc.compplayertwo.spotify.SpotifyPlayer;
 import com.example.alisonjc.compplayertwo.spotify.SpotifyService;
@@ -81,22 +81,18 @@ public class TracksFragment extends RoboFragment {
     private int mSongLocation;
     private Timer mTimer;
     private Player mPlayer;
+    private OnTracksInteractionListener mListener;
     private Handler seekHandler = new Handler();
     private RecyclerView mRecyclerView;
-    private RecyclerView.LayoutManager mLayoutManager;
+    private LinearLayoutManager mLayoutManager;
     private List<Item> mTracksList;
     private TracksRecyclerAdapter mAdapter;
     private View rootView;
-    private String mPlaylistId;
     private int mItemPosition = 0;
     private int mPauseTimeAt = 90000;
     private boolean mBeepPlayed = false;
-    private Item mTrackItem;
-    private String mTrackName;
-    private Drawable dividerDrawable;
-
-
-    private OnTracksInteractionListener mListener;
+    private int mTotalTracks = 0;
+    private int mOffset;
 
     public TracksFragment() {
     }
@@ -106,7 +102,6 @@ public class TracksFragment extends RoboFragment {
 
         return fragment;
     }
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -122,10 +117,9 @@ public class TracksFragment extends RoboFragment {
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
         mSongLocationView.setText("0:00");
         mSongDurationView.setText(R.string.one_thirty_radio_button);
-        dividerDrawable = ContextCompat.getDrawable(getContext(), R.drawable.recycler_view_divider);
+        Drawable dividerDrawable = ContextCompat.getDrawable(getContext(), R.drawable.recycler_view_divider);
 
         playerControlsSetup();
         startTimerTask();
@@ -148,12 +142,12 @@ public class TracksFragment extends RoboFragment {
 
         mRecyclerView.setAdapter(mAdapter);
 
-        mSpotifyService.getUserTracks().enqueue(new Callback<UserTracks>() {
+        mSpotifyService.getUserTracks(mOffset).enqueue(new Callback<UserTracks>() {
             @Override
             public void onResponse(Call<UserTracks> call, Response<UserTracks> response) {
                 if (response.isSuccess() && response.body() != null) {
+                    mTotalTracks = response.body().getTotal();
                     mAdapter.updateAdapter(response.body().getItems());
-
                 } else if (response.code() == 401) {
 
                 }
@@ -163,17 +157,6 @@ public class TracksFragment extends RoboFragment {
             public void onFailure(Call<UserTracks> call, Throwable t) {
             }
 
-        });
-
-        mRecyclerView.addOnScrollListener(new EndlessScrollListener() {
-            @Override
-            public boolean onLoadMore(int page, int totalItemsCount) {
-                // Triggered only when new data needs to be appended to the list
-                // Add whatever code is needed to append new items to your AdapterView
-                customLoadMoreDataFromApi(page);
-
-                return true; // ONLY if more data is actually being loaded; false otherwise.
-            }
         });
 
         mRadioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
@@ -202,16 +185,25 @@ public class TracksFragment extends RoboFragment {
             public void onStopTrackingTouch(SeekBar seekBar) {
             }
         });
+
+        mRecyclerView.addOnScrollListener(new EndlessScrollListener2(mLayoutManager, mTotalTracks) {
+            @Override
+            public void onLoadMore(int offset) {
+                mOffset = offset + 20;
+                loadMoreDataFromApi(mOffset);
+            }
+
+        });
     }
 
-    public void customLoadMoreDataFromApi(final int offset) {
+    public void loadMoreDataFromApi(final int offset) {
 
-        mSpotifyService.getUserTracks().enqueue(new Callback<UserTracks>() {
+        mSpotifyService.getUserTracks(offset).enqueue(new Callback<UserTracks>() {
             @Override
             public void onResponse(Call<UserTracks> call, Response<UserTracks> response) {
                 if (response.isSuccess() && response.body() != null) {
-                    response.body().setOffset(offset);
                     mAdapter.updateAdapter(response.body().getItems());
+
                 }
             }
 
@@ -222,7 +214,7 @@ public class TracksFragment extends RoboFragment {
         });
     }
 
-    private void smoothScroll(int position){
+    private void smoothScroll(int position) {
         mRecyclerView.smoothScrollToPosition(position);
     }
 
@@ -342,7 +334,6 @@ public class TracksFragment extends RoboFragment {
         this.mItemPosition = itemPosition;
         setSeekBar();
         mAdapter.recyclerViewSelector(itemPosition);
-
     }
 
     private void onPauseClicked() {
