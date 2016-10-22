@@ -93,6 +93,7 @@ public class TracksFragment extends RoboFragment {
     private boolean mBeepPlayed = false;
     private int mTotalTracks = 0;
     private int mOffset;
+    private int mLimit = 20;
 
     public TracksFragment() {
     }
@@ -142,7 +143,7 @@ public class TracksFragment extends RoboFragment {
 
         mRecyclerView.setAdapter(mAdapter);
 
-        mSpotifyService.getUserTracks(mOffset).enqueue(new Callback<UserTracks>() {
+        mSpotifyService.getUserTracks(mOffset, mLimit).enqueue(new Callback<UserTracks>() {
             @Override
             public void onResponse(Call<UserTracks> call, Response<UserTracks> response) {
                 if (response.isSuccess() && response.body() != null) {
@@ -198,7 +199,7 @@ public class TracksFragment extends RoboFragment {
 
     public void loadMoreDataFromApi(final int offset) {
 
-        mSpotifyService.getUserTracks(offset).enqueue(new Callback<UserTracks>() {
+        mSpotifyService.getUserTracks(offset, mLimit).enqueue(new Callback<UserTracks>() {
             @Override
             public void onResponse(Call<UserTracks> call, Response<UserTracks> response) {
                 if (response.isSuccess() && response.body() != null) {

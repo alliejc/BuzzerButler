@@ -11,7 +11,6 @@ public abstract class EndlessScrollListener extends RecyclerView.OnScrollListene
     private int mVisibleItemCount = 0;
     private int mVisibleThreshold = 13;
     private int mFirstVisibleItem = 0;
-    private int mCurrentPage = 0;
     private int mPreviousTotal = 0;
 
     private boolean mLoading = true; // True if we are still waiting for the last set of data to load.
@@ -44,10 +43,7 @@ public abstract class EndlessScrollListener extends RecyclerView.OnScrollListene
                 }
             }
             if (!mLoading && (mTotalItemCount - mVisibleItemCount) <= (mFirstVisibleItem + mVisibleThreshold)) {
-                // End has been reached
 
-                // Do something
-                mCurrentPage++;
                 mOffset = mOffset + 20;
                 onLoadMore(mOffset);
                 mLoading = true;

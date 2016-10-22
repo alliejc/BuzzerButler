@@ -67,8 +67,8 @@ public class SpotifyService {
         mSpotifyService = retrofit.create(SpotifyServiceInterface.class);
     }
 
-    public Call<PlaylistTracksList> getPlaylistTracks(String userId, String playlistId) {
-        return mSpotifyService.getPlaylistTracks("Bearer " + mToken, userId, playlistId);
+    public Call<PlaylistTracksList> getPlaylistTracks(String userId, String playlistId, int offset, int limit) {
+        return mSpotifyService.getPlaylistTracks("Bearer " + mToken, userId, playlistId, offset, limit);
     }
 
     public Call<UserPlaylists> getUserPlayLists() {
@@ -80,8 +80,8 @@ public class SpotifyService {
         return mSpotifyService.getCurrentUser("Bearer " + mToken);
     }
 
-    public Call<UserTracks> getUserTracks(int offset) {
-        return mSpotifyService.getUserTracks("Bearer " + mToken, offset);
+    public Call<UserTracks> getUserTracks(int offset, int limit) {
+        return mSpotifyService.getUserTracks("Bearer " + mToken, offset, limit);
     }
 
     public boolean isLoggedIn() {

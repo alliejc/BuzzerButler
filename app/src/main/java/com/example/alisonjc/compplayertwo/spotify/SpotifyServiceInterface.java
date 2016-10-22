@@ -19,7 +19,7 @@ public interface SpotifyServiceInterface {
 
     //logged in users saved tracks
     @GET("v1/me/tracks")
-    Call<UserTracks> getUserTracks(@Header("Authorization") String bearerToken, @Query("offset") int offset);
+    Call<UserTracks> getUserTracks(@Header("Authorization") String bearerToken, @Query("offset") int offset, @Query("limit") int limit);
 
     //logged in users playlists
     @GET("v1/me/playlists")
@@ -32,6 +32,6 @@ public interface SpotifyServiceInterface {
     //playlist tracks for playlist for specific user
     @GET("/v1/users/{user_id}/playlists/{playlist_id}/tracks")
     Call<PlaylistTracksList> getPlaylistTracks(@Header("Authorization") String bearerToken,
-                                               @Path("user_id") String userId, @Path("playlist_id") String playlistId);
+                                               @Path("user_id") String userId, @Path("playlist_id") String playlistId,  @Query("offset") int offset, @Query("limit") int limit);
 
 }

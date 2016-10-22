@@ -17,6 +17,7 @@ import android.widget.RadioGroup;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
+import com.example.alisonjc.compplayertwo.EndlessScrollListener;
 import com.example.alisonjc.compplayertwo.RecyclerDivider;
 import com.example.alisonjc.compplayertwo.R;
 import com.example.alisonjc.compplayertwo.spotify.SpotifyPlayer;
@@ -88,6 +89,9 @@ public class PlaylistTracksFragment extends RoboFragment {
     private int mItemPosition = 0;
     private int mPauseTimeAt = 90000;
     private boolean mBeepPlayed = false;
+    private int mTotalTracks = 0;
+    private int mOffset;
+    private int mLimit = 20;
 
     public PlaylistTracksFragment() {
     }
@@ -146,7 +150,6 @@ public class PlaylistTracksFragment extends RoboFragment {
             public void onItemClick(Item item, int position) {
                 mItemPosition = position;
                 mListener.onPlaylistTrackSelected(item.getTrack().getName());
-
                 playSong(position);
                 showPauseButton();
             }
@@ -154,10 +157,11 @@ public class PlaylistTracksFragment extends RoboFragment {
 
         mRecyclerView.setAdapter(mAdapter);
 
-        mSpotifyService.getPlaylistTracks(mUserId, mPlaylistId).enqueue(new Callback<PlaylistTracksList>() {
+    mSpotifyService.getPlaylistTracks(mUserId, mPlaylistId, mOffset, mLimit).enqueue(new Callback<PlaylistTracksList>() {
             @Override
             public void onResponse(Call<PlaylistTracksList> call, Response<PlaylistTracksList> response) {
                 if (response.isSuccess() && response.body() != null) {
+                    mTotalTracks = response.body().getTotal();
                     mAdapter.updateAdapter(response.body().getItems());
                 } else if (response.code() == 401) {
                     //add logout to interface
@@ -170,7 +174,6 @@ public class PlaylistTracksFragment extends RoboFragment {
 
             }
         });
-
 
         mRadioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
@@ -196,6 +199,31 @@ public class PlaylistTracksFragment extends RoboFragment {
 
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
+            }
+        });
+
+        mRecyclerView.addOnScrollListener(new EndlessScrollListener(mLayoutManager, mTotalTracks) {
+            @Override
+            public void onLoadMore(int offset) {
+                mOffset = offset;
+                loadMoreDataFromApi(mOffset);
+            }
+        });
+    }
+
+    public void loadMoreDataFromApi(final int offset){
+
+        mSpotifyService.getPlaylistTracks(mUserId, mPlaylistId, offset, mLimit).enqueue(new Callback<PlaylistTracksList>() {
+            @Override
+            public void onResponse(Call<PlaylistTracksList> call, Response<PlaylistTracksList> response) {
+                if(response.isSuccess() && response.body() != null){
+                    mAdapter.updateAdapter(response.body().getItems());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<PlaylistTracksList> call, Throwable t) {
+
             }
         });
     }
