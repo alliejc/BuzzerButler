@@ -19,8 +19,8 @@ import android.widget.RadioGroup;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
-import com.example.alisonjc.compplayertwo.DividerItemDecoration;
-import com.example.alisonjc.compplayertwo.EndlessScrollListener2;
+import com.example.alisonjc.compplayertwo.RecyclerDivider;
+import com.example.alisonjc.compplayertwo.EndlessScrollListener;
 import com.example.alisonjc.compplayertwo.R;
 import com.example.alisonjc.compplayertwo.spotify.SpotifyPlayer;
 import com.example.alisonjc.compplayertwo.spotify.SpotifyService;
@@ -127,7 +127,7 @@ public class TracksFragment extends RoboFragment {
         mTracksList = new ArrayList<>();
         mLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
         mRecyclerView.setLayoutManager(mLayoutManager);
-        RecyclerView.ItemDecoration dividerItemDecoration = new DividerItemDecoration(dividerDrawable);
+        RecyclerView.ItemDecoration dividerItemDecoration = new RecyclerDivider(dividerDrawable);
         mRecyclerView.addItemDecoration(dividerItemDecoration);
 
         mAdapter = new TracksRecyclerAdapter(getContext(), mTracksList, new TracksRecyclerAdapter.onItemClickListener() {
@@ -186,10 +186,10 @@ public class TracksFragment extends RoboFragment {
             }
         });
 
-        mRecyclerView.addOnScrollListener(new EndlessScrollListener2(mLayoutManager, mTotalTracks) {
+        mRecyclerView.addOnScrollListener(new EndlessScrollListener(mLayoutManager, mTotalTracks) {
             @Override
             public void onLoadMore(int offset) {
-                mOffset = offset + 20;
+                mOffset = offset;
                 loadMoreDataFromApi(mOffset);
             }
 

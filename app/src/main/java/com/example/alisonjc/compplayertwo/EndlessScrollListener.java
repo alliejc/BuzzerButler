@@ -1,84 +1,61 @@
-//package com.example.alisonjc.compplayertwo;
-//
-//import android.support.v7.widget.RecyclerView;
-//import android.widget.AbsListView;
-//
-//public abstract class EndlessScrollListener extends RecyclerView.OnScrollListener {
-//
-//    // The minimum number of items to have below current scroll position
-//    // before loading more.
-//    private int visibleThreshold = 10;
-//
-//    // The current offset index of loaded data
-//    private int currentPage = 0;
-//
-//    // The total number of items in the dataset after the last load
-//    private int previousTotalItemCount = 0;
-//
-//    // True if we are still waiting for the last set of data to load.
-//    private boolean loading = true;
-//
-//    // Sets the starting page index
-//    private int startingPageIndex = 0;
-//
-//
-//    public EndlessScrollListener() {
-//    }
-//
-//    public EndlessScrollListener(int visibleThreshold) {
-//        this.visibleThreshold = visibleThreshold;
-//    }
-//
-//    public EndlessScrollListener(int visibleThreshold, int startPage) {
-//        this.visibleThreshold = visibleThreshold;
-//        this.startingPageIndex = startPage;
-//        this.currentPage = startPage;
-//    }
-//
-//    @Override
-//    public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
-//        super.onScrollStateChanged(recyclerView, newState);
-//    }
-//
-//    @Override
-//    public void onScrolled(RecyclerView recyclerView, int horizontalScroll, int verticalScroll) {
-//        super.onScrolled(recyclerView, horizontalScroll, verticalScroll);
-//    }
-//
-//    // This happens many times a second during a scroll
-//    // We are given a few useful parameters to help us work out if we need to load some more data,
-//    // but first we check if we are waiting for the previous load to finish.
-//
-//    @Override
-//    public void onScroll(RecyclerView recyclerView, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
-//
-//        if (totalItemCount < previousTotalItemCount) {
-//            this.currentPage = this.startingPageIndex;
-//            this.previousTotalItemCount = totalItemCount;
-//            if (totalItemCount == 0) {
-//                this.loading = true;
-//            }
-//        }
-//
-//        if (loading && (totalItemCount > previousTotalItemCount)) {
-//            loading = false;
-//            previousTotalItemCount = totalItemCount;
-//            currentPage++;
-//        }
-//
-//        if (!loading && (firstVisibleItem + visibleItemCount + visibleThreshold) >= totalItemCount) {
-//            loading = onLoadMore(currentPage + 1, totalItemCount);
-//        }
-//    }
-//
-//    // Defines the process for actually loading more data based on page
-//    // Returns true if more data is being loaded; returns false if there is no more data to load.
-//    public abstract boolean onLoadMore(int page, int totalItemsCount);
-//
-//
-//    @Override
-//    public void onScrollStateChanged(AbsListView view, int scrollState) {
-//
-//    }
-//
-//}
+package com.example.alisonjc.compplayertwo;
+
+
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+
+public abstract class EndlessScrollListener extends RecyclerView.OnScrollListener {
+
+    private int mTotalItemCount;
+    private int mOffset = 0;
+    private int mVisibleItemCount = 0;
+    private int mVisibleThreshold = 13;
+    private int mFirstVisibleItem = 0;
+    private int mCurrentPage = 0;
+    private int mPreviousTotal = 0;
+
+    private boolean mLoading = true; // True if we are still waiting for the last set of data to load.
+    private LinearLayoutManager mLinearLayoutManager;
+
+    public EndlessScrollListener(LinearLayoutManager linearLayoutManager, int totalItemCount) {
+        this.mLinearLayoutManager = linearLayoutManager;
+        this.mTotalItemCount = totalItemCount;
+    }
+
+    @Override
+    public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+        super.onScrollStateChanged(recyclerView, newState);
+    }
+
+    @Override
+    public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+        super.onScrolled(recyclerView, dx, dy);
+
+        if (dy > 0) {
+            mVisibleItemCount = recyclerView.getChildCount();
+            mTotalItemCount = mLinearLayoutManager.getItemCount();
+            mFirstVisibleItem = mLinearLayoutManager.findFirstVisibleItemPosition();
+
+
+            if (mLoading) {
+                if (mTotalItemCount > mPreviousTotal) {
+                    mLoading = false;
+                    mPreviousTotal = mTotalItemCount;
+                }
+            }
+            if (!mLoading && (mTotalItemCount - mVisibleItemCount) <= (mFirstVisibleItem + mVisibleThreshold)) {
+                // End has been reached
+
+                // Do something
+                mCurrentPage++;
+                mOffset = mOffset + 20;
+                onLoadMore(mOffset);
+                mLoading = true;
+            }
+        }
+    }
+
+    // Returns true if more data is being loaded; returns false if there is no more data to load.
+    public abstract void onLoadMore(int offset);
+
+}

@@ -19,6 +19,7 @@ public class PlaylistTracksRecyclerAdapter extends RecyclerView.Adapter<Playlist
     private Context mContext;
     private final OnItemClickListener listener;
     private int selectedItem = 0;
+    private PlaylistTracksViewHolder mPlaylistTracksViewHolder;
 
     public interface OnItemClickListener {
         void onItemClick(Item item, int position);
@@ -36,8 +37,9 @@ public class PlaylistTracksRecyclerAdapter extends RecyclerView.Adapter<Playlist
         mContext = parent.getContext();
         LayoutInflater layoutInflater = LayoutInflater.from(mContext);
         View v = layoutInflater.inflate(R.layout.item_track, parent, false);
+        mPlaylistTracksViewHolder = new PlaylistTracksViewHolder(v);
 
-        return new PlaylistTracksViewHolder(v);
+        return mPlaylistTracksViewHolder;
     }
 
     @Override
@@ -55,8 +57,14 @@ public class PlaylistTracksRecyclerAdapter extends RecyclerView.Adapter<Playlist
 
     public void updateAdapter(List<Item> items) {
 
+        this.mPlaylistTracksList.clear();
         mPlaylistTracksList.addAll(items);
         notifyDataSetChanged();
+    }
+
+    @Override
+    public int getItemCount() {
+        return mPlaylistTracksList.size();
     }
 
 
@@ -65,17 +73,6 @@ public class PlaylistTracksRecyclerAdapter extends RecyclerView.Adapter<Playlist
         notifyItemChanged(selectedItem);
         selectedItem = position;
         notifyItemChanged(selectedItem);
-    }
-
-
-    @Override
-    public void onAttachedToRecyclerView(RecyclerView recyclerView) {
-        super.onAttachedToRecyclerView(recyclerView);
-    }
-
-    @Override
-    public int getItemCount() {
-        return mPlaylistTracksList.size();
     }
 
 

@@ -7,11 +7,11 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
 
-public class DividerItemDecoration extends RecyclerView.ItemDecoration {
+public class RecyclerDivider extends RecyclerView.ItemDecoration {
 
     private Drawable mDivider;
 
-    public DividerItemDecoration(Drawable divider) {
+    public RecyclerDivider(Drawable divider) {
         mDivider = divider;
     }
 

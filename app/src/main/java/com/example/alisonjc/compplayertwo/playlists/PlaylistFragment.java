@@ -10,7 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.example.alisonjc.compplayertwo.DividerItemDecoration;
+import com.example.alisonjc.compplayertwo.RecyclerDivider;
 import com.example.alisonjc.compplayertwo.R;
 import com.example.alisonjc.compplayertwo.spotify.SpotifyService;
 import com.example.alisonjc.compplayertwo.spotify.model.playlists.Item;
@@ -69,7 +69,7 @@ public class PlaylistFragment extends RoboFragment {
             mPlaylistItemList = new ArrayList<>();
             mLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
             mRecyclerView.setLayoutManager(mLayoutManager);
-            RecyclerView.ItemDecoration dividerItemDecoration = new DividerItemDecoration(dividerDrawable);
+            RecyclerView.ItemDecoration dividerItemDecoration = new RecyclerDivider(dividerDrawable);
             mRecyclerView.addItemDecoration(dividerItemDecoration);
 
             mAdapter = new PlaylistRecyclerAdapter(getContext(), mPlaylistItemList, new PlaylistRecyclerAdapter.onItemClickListener() {
