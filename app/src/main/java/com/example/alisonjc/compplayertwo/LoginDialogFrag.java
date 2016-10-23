@@ -35,7 +35,7 @@ public class LoginDialogFrag extends DialogFragment {
                 AuthenticationRequest.Builder builder = new AuthenticationRequest.Builder(CLIENT_ID, AuthenticationResponse.Type.TOKEN, REDIRECT_URI);
                 builder.setScopes(new String[]{"playlist-read-private", "playlist-read-collaborative", "playlist-modify-public", "playlist-modify-private", "streaming",
                         "user-follow-modify", "user-follow-read", "user-library-read", "user-library-modify", "user-read-private", "user-read-birthdate", "user-read-email"});
-                builder.setShowDialog(true);
+//                builder.setShowDialog(true);
                 AuthenticationRequest request = builder.build();
                 AuthenticationClient.openLoginActivity(getActivity(), REQUEST_CODE, request);
 

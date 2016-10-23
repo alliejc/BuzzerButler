@@ -18,17 +18,18 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 
 import com.example.alisonjc.compplayertwo.EndlessScrollListener;
-import com.example.alisonjc.compplayertwo.RecyclerDivider;
 import com.example.alisonjc.compplayertwo.R;
-import com.example.alisonjc.compplayertwo.spotify.SpotifyPlayer;
+import com.example.alisonjc.compplayertwo.RecyclerDivider;
+import com.example.alisonjc.compplayertwo.spotify.MusicPlayer;
 import com.example.alisonjc.compplayertwo.spotify.SpotifyService;
 import com.example.alisonjc.compplayertwo.spotify.model.playlist_tracklists.Item;
 import com.example.alisonjc.compplayertwo.spotify.model.playlist_tracklists.PlaylistTracksList;
 import com.google.inject.Inject;
+import com.spotify.sdk.android.player.Error;
+import com.spotify.sdk.android.player.PlaybackState;
 import com.spotify.sdk.android.player.Player;
-import com.spotify.sdk.android.player.PlayerState;
-import com.spotify.sdk.android.player.PlayerStateCallback;
 import com.spotify.sdk.android.player.Spotify;
+import com.spotify.sdk.android.player.SpotifyPlayer;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -48,7 +49,7 @@ public class PlaylistTracksFragment extends RoboFragment {
     private SpotifyService mSpotifyService;
 
     @Inject
-    private SpotifyPlayer mSpotifyPlayer;
+    private MusicPlayer mMusicPlayer;
 
     @BindView(R.id.play)
     ImageButton mPlayButton;
@@ -77,7 +78,7 @@ public class PlaylistTracksFragment extends RoboFragment {
     private int mSongLocation;
     private Timer mTimer;
     private Handler seekHandler = new Handler();
-    private Player mPlayer;
+    private SpotifyPlayer mPlayer;
     private PlaylistTracksRecyclerAdapter mAdapter;
     private RecyclerView mRecyclerView;
     private LinearLayoutManager mLayoutManager;
@@ -92,6 +93,19 @@ public class PlaylistTracksFragment extends RoboFragment {
     private int mTotalTracks = 0;
     private int mOffset;
     private int mLimit = 20;
+    private PlaybackState mCurrentPlaybackState;
+
+    private final Player.OperationCallback mOperationCallback = new Player.OperationCallback() {
+        @Override
+        public void onSuccess() {
+
+        }
+
+        @Override
+        public void onError(Error error) {
+
+        }
+    };
 
     public PlaylistTracksFragment() {
     }
@@ -112,7 +126,7 @@ public class PlaylistTracksFragment extends RoboFragment {
         super.onCreate(savedInstanceState);
         mPlaylistId = getArguments().getString("playlistId");
         mUserId = getArguments().getString("userId");
-        mPlayer = mSpotifyPlayer.getPlayer(getContext());
+        mPlayer = mMusicPlayer.getPlayer(getContext());
 
         startTimerTask();
     }
@@ -184,11 +198,10 @@ public class PlaylistTracksFragment extends RoboFragment {
         });
 
         mSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                 if (mPlayer != null && fromUser) {
-                    mPlayer.seekToPosition(progress);
+                    mPlayer.seekToPosition(mOperationCallback, progress);
                     mSeekBar.setProgress(progress);
                 }
             }
@@ -238,7 +251,7 @@ public class PlaylistTracksFragment extends RoboFragment {
         showPauseButton();
         setCurrentPlayingSong(locationid);
         smoothScroll(locationid);
-        mPlayer.play("spotify:track:" + mPlaylistTracksList.get(locationid).getTrack().getId());
+        mPlayer.playUri(mOperationCallback, "spotify:track:" + mPlaylistTracksList.get(locationid).getTrack().getId(), 0, 0);
         onButtonPressed(mPlaylistTracksList.get(locationid).getTrack().getName());
     }
 
@@ -247,20 +260,15 @@ public class PlaylistTracksFragment extends RoboFragment {
         TimerTask mTimerTask = new TimerTask() {
             @Override
             public void run() {
-                mPlayer.getPlayerState(new PlayerStateCallback() {
-                    @Override
-                    public void onPlayerState(PlayerState playerState) {
 
                         if (mSongLocation >= mPauseTimeAt - 10000 && !mBeepPlayed) {
                             playBeep();
                             mBeepPlayed = true;
                         }
                         if (mSongLocation >= mPauseTimeAt) {
-                            mPlayer.pause();
+                           mPlayer.pause(mOperationCallback);
                             onSkipNextClicked();
                         }
-                    }
-                });
             }
         };
         mTimer = new Timer();
@@ -270,21 +278,15 @@ public class PlaylistTracksFragment extends RoboFragment {
     private void setSeekBar() {
 
         if (mPlayer != null) {
-            mPlayer.getPlayerState(new PlayerStateCallback() {
 
-                @Override
-                public void onPlayerState(PlayerState playerState) {
+            mSongLocation = (int) mPlayer.getPlaybackState().positionMs;
+            mSeekBar.setMax(mPauseTimeAt);
+            mSeekBar.setProgress(mSongLocation);
 
-                    mSongLocation = playerState.positionInMs;
-                    mSeekBar.setMax(mPauseTimeAt);
-                    mSeekBar.setProgress(mSongLocation);
+            int seconds = ((mSongLocation / 1000) % 60);
+            int minutes = ((mSongLocation / 1000) / 60);
 
-                    int seconds = ((mSongLocation / 1000) % 60);
-                    int minutes = ((mSongLocation / 1000) / 60);
-
-                    mSongLocationView.setText(String.format("%2d:%02d", minutes, seconds, 0));
-                }
-            });
+            mSongLocationView.setText(String.format("%2d:%02d", minutes, seconds, 0));
         }
 
         seekHandler.postDelayed(run, 1000);
@@ -354,7 +356,7 @@ public class PlaylistTracksFragment extends RoboFragment {
         if (mPlayer == null) {
             //Toast.makeText(this, "Please select a song", Toast.LENGTH_SHORT).show();
         } else {
-            mPlayer.pause();
+            mPlayer.pause(mOperationCallback);
             showPlayButton();
         }
     }
@@ -376,7 +378,7 @@ public class PlaylistTracksFragment extends RoboFragment {
         if (mPlayer == null) {
             //Toast.makeText(this, "Please select a song", Toast.LENGTH_SHORT).show();
         } else {
-            mPlayer.resume();
+            mPlayer.resume(mOperationCallback);
             showPauseButton();
         }
     }

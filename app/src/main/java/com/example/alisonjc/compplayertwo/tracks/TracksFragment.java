@@ -19,17 +19,16 @@ import android.widget.RadioGroup;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
-import com.example.alisonjc.compplayertwo.RecyclerDivider;
 import com.example.alisonjc.compplayertwo.EndlessScrollListener;
 import com.example.alisonjc.compplayertwo.R;
-import com.example.alisonjc.compplayertwo.spotify.SpotifyPlayer;
+import com.example.alisonjc.compplayertwo.RecyclerDivider;
+import com.example.alisonjc.compplayertwo.spotify.MusicPlayer;
 import com.example.alisonjc.compplayertwo.spotify.SpotifyService;
 import com.example.alisonjc.compplayertwo.spotify.model.UserTracks.Item;
 import com.example.alisonjc.compplayertwo.spotify.model.UserTracks.UserTracks;
 import com.google.inject.Inject;
+import com.spotify.sdk.android.player.Error;
 import com.spotify.sdk.android.player.Player;
-import com.spotify.sdk.android.player.PlayerState;
-import com.spotify.sdk.android.player.PlayerStateCallback;
 import com.spotify.sdk.android.player.Spotify;
 
 import java.util.ArrayList;
@@ -51,7 +50,7 @@ public class TracksFragment extends RoboFragment {
     private SpotifyService mSpotifyService;
 
     @Inject
-    private SpotifyPlayer mSpotifyPlayer;
+    private MusicPlayer mSpotifyPlayer;
 
 
     @BindView(R.id.play)
@@ -94,6 +93,16 @@ public class TracksFragment extends RoboFragment {
     private int mTotalTracks = 0;
     private int mOffset;
     private int mLimit = 20;
+
+    private final Player.OperationCallback mOperationCallback = new Player.OperationCallback() {
+        @Override
+        public void onSuccess() {
+        }
+
+        @Override
+        public void onError(Error error) {
+        }
+    };
 
     public TracksFragment() {
     }
@@ -173,7 +182,7 @@ public class TracksFragment extends RoboFragment {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                 if (mPlayer != null && fromUser) {
-                    mPlayer.seekToPosition(progress);
+                    mPlayer.seekToPosition(mOperationCallback, progress);
                     mSeekBar.setProgress(progress);
                 }
             }
@@ -225,7 +234,7 @@ public class TracksFragment extends RoboFragment {
         showPauseButton();
         setCurrentPlayingSong(locationid);
         smoothScroll(mItemPosition);
-        mPlayer.play("spotify:track:" + mTracksList.get(locationid).getTrack().getId());
+        mPlayer.playUri(mOperationCallback, "spotify:track:" + mTracksList.get(locationid).getTrack().getId(), 0, 0);
         onButtonPressed(mTracksList.get(locationid).getTrack().getName());
     }
 
@@ -234,21 +243,16 @@ public class TracksFragment extends RoboFragment {
         TimerTask mTimerTask = new TimerTask() {
             @Override
             public void run() {
-                mPlayer.getPlayerState(new PlayerStateCallback() {
-                    @Override
-                    public void onPlayerState(PlayerState playerState) {
 
                         if (mSongLocation >= mPauseTimeAt - 10000 && !mBeepPlayed) {
                             playBeep();
                             mBeepPlayed = true;
                         }
                         if (mSongLocation >= mPauseTimeAt) {
-                            mPlayer.pause();
+                            mPlayer.pause(mOperationCallback);
                             onSkipNextClicked();
                         }
                     }
-                });
-            }
         };
         mTimer = new Timer();
         mTimer.schedule(mTimerTask, 1000, 1000);
@@ -257,12 +261,8 @@ public class TracksFragment extends RoboFragment {
     private void setSeekBar() {
 
         if (mPlayer != null) {
-            mPlayer.getPlayerState(new PlayerStateCallback() {
 
-                @Override
-                public void onPlayerState(PlayerState playerState) {
-
-                    mSongLocation = playerState.positionInMs;
+                    mSongLocation = (int) mPlayer.getPlaybackState().positionMs;
                     mSeekBar.setMax(mPauseTimeAt);
                     mSeekBar.setProgress(mSongLocation);
 
@@ -271,8 +271,6 @@ public class TracksFragment extends RoboFragment {
 
                     mSongLocationView.setText(String.format("%2d:%02d", minutes, seconds, 0));
                 }
-            });
-        }
 
         seekHandler.postDelayed(run, 1000);
     }
@@ -342,7 +340,7 @@ public class TracksFragment extends RoboFragment {
         if (mPlayer == null) {
             //Toast.makeText(this, "Please select a song", Toast.LENGTH_SHORT).show();
         } else {
-            mPlayer.pause();
+            mPlayer.pause(mOperationCallback);
             showPlayButton();
         }
     }
@@ -364,7 +362,7 @@ public class TracksFragment extends RoboFragment {
         if (mPlayer == null) {
             //Toast.makeText(this, "Please select a song", Toast.LENGTH_SHORT).show();
         } else {
-            mPlayer.resume();
+            mPlayer.resume(mOperationCallback);
             showPauseButton();
         }
     }

@@ -5,23 +5,21 @@ import android.content.Context;
 import android.util.Log;
 
 import com.spotify.sdk.android.player.Config;
-import com.spotify.sdk.android.player.Player;
-import com.spotify.sdk.android.player.Spotify;
+import com.spotify.sdk.android.player.SpotifyPlayer;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
 @Singleton
-public class SpotifyPlayer {
+public class MusicPlayer {
 
     @Inject
     private SpotifyService mSpotifyService;
 
-    private Player mPlayer;
+    private SpotifyPlayer mPlayer;
 
 
-
-    public Player getPlayer(Context context) {
+    public SpotifyPlayer getPlayer(Context context) {
 
         if (mPlayer != null) {
 
@@ -32,15 +30,17 @@ public class SpotifyPlayer {
             final Config playerConfig = mSpotifyService.getPlayerConfig(context);
             playerConfig.useCache(false);
 
-            mPlayer = Spotify.getPlayer(playerConfig, this, new Player.InitializationObserver() {
 
+            mPlayer = SpotifyPlayer.create(playerConfig, new SpotifyPlayer.InitializationObserver() {
                 @Override
-                public void onInitialized(Player player) {
+                public void onInitialized(SpotifyPlayer spotifyPlayer) {
+
                 }
 
                 @Override
                 public void onError(Throwable throwable) {
                     Log.e("PlaylistActivity", "Could not initialize player: " + throwable.getMessage());
+
                 }
             });
 
