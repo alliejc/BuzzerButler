@@ -18,6 +18,7 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.SeekBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.alisonjc.compplayertwo.EndlessScrollListener;
 import com.example.alisonjc.compplayertwo.R;
@@ -213,7 +214,6 @@ public class TracksFragment extends RoboFragment {
             public void onResponse(Call<UserTracks> call, Response<UserTracks> response) {
                 if (response.isSuccess() && response.body() != null) {
                     mAdapter.updateAdapter(response.body().getItems());
-
                 }
             }
 
@@ -244,6 +244,9 @@ public class TracksFragment extends RoboFragment {
             @Override
             public void run() {
 
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
                         if (mSongLocation >= mPauseTimeAt - 10000 && !mBeepPlayed) {
                             playBeep();
                             mBeepPlayed = true;
@@ -253,7 +256,10 @@ public class TracksFragment extends RoboFragment {
                             onSkipNextClicked();
                         }
                     }
+                });
+                    }
         };
+
         mTimer = new Timer();
         mTimer.schedule(mTimerTask, 1000, 1000);
     }
@@ -338,8 +344,9 @@ public class TracksFragment extends RoboFragment {
     private void onPauseClicked() {
 
         if (mPlayer == null) {
-            //Toast.makeText(this, "Please select a song", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getActivity(), "Please select a song", Toast.LENGTH_SHORT).show();
         } else {
+
             mPlayer.pause(mOperationCallback);
             showPlayButton();
         }
@@ -360,7 +367,7 @@ public class TracksFragment extends RoboFragment {
     private void onPlayClicked() {
 
         if (mPlayer == null) {
-            //Toast.makeText(this, "Please select a song", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getActivity(), "Please select a song", Toast.LENGTH_SHORT).show();
         } else {
             mPlayer.resume(mOperationCallback);
             showPauseButton();
@@ -376,7 +383,7 @@ public class TracksFragment extends RoboFragment {
             playSong(mItemPosition + 1);
         }
         if (mPlayer == null) {
-            //Toast.makeText(this, "Please select a song", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getActivity(), "Please select a song", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -389,7 +396,7 @@ public class TracksFragment extends RoboFragment {
             playSong(mItemPosition - 1);
         }
         if (mPlayer == null) {
-            //Toast.makeText(this, "Please select a song", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getActivity(), "Please select a song", Toast.LENGTH_SHORT).show();
         }
     }
 

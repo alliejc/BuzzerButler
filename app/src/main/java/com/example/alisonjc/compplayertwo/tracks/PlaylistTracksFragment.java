@@ -16,6 +16,7 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.SeekBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.alisonjc.compplayertwo.EndlessScrollListener;
 import com.example.alisonjc.compplayertwo.R;
@@ -26,7 +27,6 @@ import com.example.alisonjc.compplayertwo.spotify.model.playlist_tracklists.Item
 import com.example.alisonjc.compplayertwo.spotify.model.playlist_tracklists.PlaylistTracksList;
 import com.google.inject.Inject;
 import com.spotify.sdk.android.player.Error;
-import com.spotify.sdk.android.player.PlaybackState;
 import com.spotify.sdk.android.player.Player;
 import com.spotify.sdk.android.player.Spotify;
 import com.spotify.sdk.android.player.SpotifyPlayer;
@@ -75,7 +75,7 @@ public class PlaylistTracksFragment extends RoboFragment {
     @BindView(R.id.two_minutes)
     RadioButton mTwoMin;
 
-    private int mSongLocation;
+    private int mSongLocation = 0;
     private Timer mTimer;
     private Handler seekHandler = new Handler();
     private SpotifyPlayer mPlayer;
@@ -93,7 +93,6 @@ public class PlaylistTracksFragment extends RoboFragment {
     private int mTotalTracks = 0;
     private int mOffset;
     private int mLimit = 20;
-    private PlaybackState mCurrentPlaybackState;
 
     private final Player.OperationCallback mOperationCallback = new Player.OperationCallback() {
         @Override
@@ -224,7 +223,7 @@ public class PlaylistTracksFragment extends RoboFragment {
         });
     }
 
-    public void loadMoreDataFromApi(final int offset){
+    public void loadMoreDataFromApi(int offset){
 
         mSpotifyService.getPlaylistTracks(mUserId, mPlaylistId, offset, mLimit).enqueue(new Callback<PlaylistTracksList>() {
             @Override
@@ -260,15 +259,21 @@ public class PlaylistTracksFragment extends RoboFragment {
         TimerTask mTimerTask = new TimerTask() {
             @Override
             public void run() {
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        mSongLocation = (int) mPlayer.getPlaybackState().positionMs;
 
                         if (mSongLocation >= mPauseTimeAt - 10000 && !mBeepPlayed) {
                             playBeep();
                             mBeepPlayed = true;
                         }
                         if (mSongLocation >= mPauseTimeAt) {
-                           mPlayer.pause(mOperationCallback);
+                            mPlayer.pause(mOperationCallback);
                             onSkipNextClicked();
                         }
+                    }
+                });
             }
         };
         mTimer = new Timer();
@@ -279,7 +284,6 @@ public class PlaylistTracksFragment extends RoboFragment {
 
         if (mPlayer != null) {
 
-            mSongLocation = (int) mPlayer.getPlaybackState().positionMs;
             mSeekBar.setMax(mPauseTimeAt);
             mSeekBar.setProgress(mSongLocation);
 
@@ -354,7 +358,7 @@ public class PlaylistTracksFragment extends RoboFragment {
     private void onPauseClicked() {
 
         if (mPlayer == null) {
-            //Toast.makeText(this, "Please select a song", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getActivity(), "Please select a song", Toast.LENGTH_SHORT).show();
         } else {
             mPlayer.pause(mOperationCallback);
             showPlayButton();
@@ -376,7 +380,7 @@ public class PlaylistTracksFragment extends RoboFragment {
     private void onPlayClicked() {
 
         if (mPlayer == null) {
-            //Toast.makeText(this, "Please select a song", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getActivity(), "Please select a song", Toast.LENGTH_SHORT).show();
         } else {
             mPlayer.resume(mOperationCallback);
             showPauseButton();
@@ -392,7 +396,7 @@ public class PlaylistTracksFragment extends RoboFragment {
             playSong(mItemPosition + 1);
         }
         if (mPlayer == null) {
-            //Toast.makeText(this, "Please select a song", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getActivity(), "Please select a song", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -405,7 +409,7 @@ public class PlaylistTracksFragment extends RoboFragment {
             playSong(mItemPosition - 1);
         }
         if (mPlayer == null) {
-            //Toast.makeText(this, "Please select a song", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getActivity(), "Please select a song", Toast.LENGTH_SHORT).show();
         }
     }
 

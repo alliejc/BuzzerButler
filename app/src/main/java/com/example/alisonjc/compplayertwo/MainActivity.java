@@ -53,7 +53,6 @@ public class MainActivity extends RoboActionBarActivity
     private ActionBar actionBar;
     private String mPlaylistTitle;
 
-
     private static final int REQUEST_CODE = 1337;
 
     @Override
