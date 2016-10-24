@@ -57,7 +57,6 @@ public class PlaylistTracksRecyclerAdapter extends RecyclerView.Adapter<Playlist
 
     public void updateAdapter(List<Item> items) {
 
-        this.mPlaylistTracksList.clear();
         mPlaylistTracksList.addAll(items);
         notifyDataSetChanged();
     }

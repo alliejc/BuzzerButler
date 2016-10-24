@@ -38,7 +38,6 @@ public class SpotifyService {
 //        SharedPreferences.Editor editor = settings.edit();
 //        editor.putString("userId", mUserId);
 //        editor.apply();
-
     }
 
     public void setToken(String token, Context context) {
@@ -52,7 +51,6 @@ public class SpotifyService {
 //        SharedPreferences.Editor editor = settings.edit();
 //        editor.putString("token", mToken);
 //        editor.apply();
-
     }
 
     private final SpotifyServiceInterface mSpotifyService;
@@ -100,8 +98,6 @@ public class SpotifyService {
         SharedPreferences.Editor editor = myPrefs.edit();
         editor.remove("userId").apply();
         editor.remove("token").apply();
-
     }
-
 }
 

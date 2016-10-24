@@ -223,7 +223,7 @@ public class PlaylistTracksFragment extends RoboFragment {
         });
     }
 
-    public void loadMoreDataFromApi(int offset){
+    public void loadMoreDataFromApi(final int offset){
 
         mSpotifyService.getPlaylistTracks(mUserId, mPlaylistId, offset, mLimit).enqueue(new Callback<PlaylistTracksList>() {
             @Override
