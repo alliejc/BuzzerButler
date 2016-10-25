@@ -18,7 +18,7 @@ public class PlaylistTracksRecyclerAdapter extends RecyclerView.Adapter<Playlist
     private List<Item> mPlaylistTracksList;
     private Context mContext;
     private final OnItemClickListener listener;
-    private int selectedItem = 0;
+    private int selectedItem = -1;
     private PlaylistTracksViewHolder mPlaylistTracksViewHolder;
 
     public interface OnItemClickListener {

@@ -23,7 +23,7 @@ public class TracksRecyclerAdapter extends RecyclerView.Adapter<TracksRecyclerAd
     private List<Item> mTracksList;
     private Context mContext;
     private onItemClickListener mListener;
-    private int selectedItem = 0;
+    private int selectedItem = -1;
 
     public TracksRecyclerAdapter(Context context, List<Item> tracksList, onItemClickListener listener) {
         mContext = context;
