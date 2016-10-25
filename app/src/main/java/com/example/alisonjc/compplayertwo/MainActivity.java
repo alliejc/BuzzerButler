@@ -15,6 +15,8 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.TextView;
 
 import com.example.alisonjc.compplayertwo.playlists.PlaylistFragment;
 import com.example.alisonjc.compplayertwo.spotify.SpotifyService;
@@ -52,6 +54,8 @@ public class MainActivity extends RoboActionBarActivity
 
     private ActionBar actionBar;
     private String mPlaylistTitle;
+    private String mUserName;
+    private String mUserEmail;
 
     private static final int REQUEST_CODE = 1337;
 
@@ -60,12 +64,11 @@ public class MainActivity extends RoboActionBarActivity
         super.onCreate(savedInstanceState);
         ButterKnife.bind(this);
 
-        navigationDrawerSetup();
-        toolbarSetup();
-
         if (mSpotifyService.isLoggedIn()) {
             userLogin();
         }
+
+        toolbarSetup();
     }
 
     private void navigationDrawerSetup() {
@@ -77,6 +80,11 @@ public class MainActivity extends RoboActionBarActivity
 
         mNavigationView = (NavigationView) findViewById(R.id.nav_view);
         mNavigationView.setNavigationItemSelectedListener(this);
+        View header = mNavigationView.getHeaderView(0);
+        TextView name = (TextView) header.findViewById(R.id.nav_header_top);
+        TextView email = (TextView) header.findViewById(R.id.nav_header_bottom);
+        name.setText(mUserName);
+        email.setText(mUserEmail);
     }
 
 
@@ -185,6 +193,9 @@ public class MainActivity extends RoboActionBarActivity
 
                                 mSpotifyService.setUserId(response.body().getId(), getBaseContext());
                                 mSpotifyService.setToken(mToken, getBaseContext());
+                                mUserName = response.body().getDisplayName();
+                                mUserEmail = response.body().getEmail();
+                                navigationDrawerSetup();
 
                                 FragmentManager fragmentManager = getSupportFragmentManager();
                                 PlaylistFragment playlistFragment = PlaylistFragment.newInstance();

@@ -51,5 +51,4 @@ public abstract class EndlessScrollListener extends RecyclerView.OnScrollListene
 
     // Returns true if more data is being loaded; returns false if there is no more data to load.
     public abstract void onLoadMore(int offset);
-
 }

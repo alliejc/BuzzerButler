@@ -58,6 +58,7 @@ public class TracksRecyclerAdapter extends RecyclerView.Adapter<TracksRecyclerAd
     }
 
     public void updateAdapter(List<Item> list){
+
         mTracksList.addAll(list);
         notifyDataSetChanged();
     }

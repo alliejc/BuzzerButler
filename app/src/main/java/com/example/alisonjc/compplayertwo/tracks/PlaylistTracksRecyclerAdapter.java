@@ -50,9 +50,9 @@ public class PlaylistTracksRecyclerAdapter extends RecyclerView.Adapter<Playlist
         TextView artistName = holder.artistName;
         artistName.setText(item.getTrack().getArtists().get(0).getName());
         songName.setText(item.getTrack().getName());
+
         holder.itemView.setSelected(selectedItem == position);
         holder.bind(item, listener);
-
     }
 
     public void updateAdapter(List<Item> items) {
@@ -72,6 +72,7 @@ public class PlaylistTracksRecyclerAdapter extends RecyclerView.Adapter<Playlist
         notifyItemChanged(selectedItem);
         selectedItem = position;
         notifyItemChanged(selectedItem);
+        notifyDataSetChanged();
     }
 
 
@@ -95,7 +96,6 @@ public class PlaylistTracksRecyclerAdapter extends RecyclerView.Adapter<Playlist
                 public void onClick(View v) {
 
                     listener.onItemClick(item, getAdapterPosition());
-
                     notifyItemChanged(selectedItem);
                     selectedItem = getLayoutPosition();
                     notifyItemChanged(selectedItem);

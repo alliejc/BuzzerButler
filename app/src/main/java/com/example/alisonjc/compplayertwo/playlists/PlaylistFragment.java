@@ -96,8 +96,7 @@ public class PlaylistFragment extends RoboFragment {
             public void onResponse(Call<UserPlaylists> call, Response<UserPlaylists> response) {
 
                 if (response.isSuccess() && response.body() != null) {
-
-                    updateListView(response.body().getItems());
+                    mAdapter.updateAdapter(response.body().getItems());
 
                 } else if (response.code() == 401) {
                     //userLogout();
@@ -109,10 +108,6 @@ public class PlaylistFragment extends RoboFragment {
 
             }
         });
-    }
-
-    private void updateListView(List<Item> items) {
-        mAdapter.updateAdapter(items);
     }
 
     public void onButtonPressed(String string) {

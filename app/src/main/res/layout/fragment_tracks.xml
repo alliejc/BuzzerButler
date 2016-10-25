@@ -18,12 +18,12 @@
             android:layout_weight="15"/>
 
         <android.support.v7.widget.RecyclerView
+            android:id="@+id/tracks_recycler_view"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:id="@+id/tracks_recycler_view"
             android:layout_weight="55"
-            android:scrollbars="vertical"
-            android:scrollbarSize="10dp">
+            android:scrollbarSize="10dp"
+            android:scrollbars="vertical">
         </android.support.v7.widget.RecyclerView>
 
 

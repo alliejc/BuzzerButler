@@ -170,7 +170,7 @@ public class PlaylistTracksFragment extends RoboFragment {
 
         mRecyclerView.setAdapter(mAdapter);
 
-    mSpotifyService.getPlaylistTracks(mUserId, mPlaylistId, mOffset, mLimit).enqueue(new Callback<PlaylistTracksList>() {
+        mSpotifyService.getPlaylistTracks(mUserId, mPlaylistId, mOffset, mLimit).enqueue(new Callback<PlaylistTracksList>() {
             @Override
             public void onResponse(Call<PlaylistTracksList> call, Response<PlaylistTracksList> response) {
                 if (response.isSuccess() && response.body() != null) {
@@ -223,12 +223,12 @@ public class PlaylistTracksFragment extends RoboFragment {
         });
     }
 
-    public void loadMoreDataFromApi(final int offset){
+    public void loadMoreDataFromApi(final int offset) {
 
         mSpotifyService.getPlaylistTracks(mUserId, mPlaylistId, offset, mLimit).enqueue(new Callback<PlaylistTracksList>() {
             @Override
             public void onResponse(Call<PlaylistTracksList> call, Response<PlaylistTracksList> response) {
-                if(response.isSuccess() && response.body() != null){
+                if (response.isSuccess() && response.body() != null) {
                     mAdapter.updateAdapter(response.body().getItems());
                 }
             }
