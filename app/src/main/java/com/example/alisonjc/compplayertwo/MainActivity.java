@@ -95,10 +95,13 @@ public class MainActivity extends RoboActionBarActivity
 
         if (mDrawerLayout.isDrawerOpen(GravityCompat.START)) {
             mDrawerLayout.closeDrawer(GravityCompat.START);
+
         } else if (fragmentManager.getBackStackEntryCount() > 1) {
             fragmentManager.popBackStackImmediate();
+
         } else if (fragmentManager.getBackStackEntryCount() <= 1) {
             moveTaskToBack(true);
+
         } else {
             super.onBackPressed();
         }

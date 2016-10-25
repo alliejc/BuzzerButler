@@ -128,12 +128,18 @@ public class TracksFragment extends RoboFragment {
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
         mSongLocationView.setText("0:00");
         mSongDurationView.setText(R.string.one_thirty_radio_button);
-        Drawable dividerDrawable = ContextCompat.getDrawable(getContext(), R.drawable.recycler_view_divider);
 
         playerControlsSetup();
         startTimerTask();
+        recyclerViewSetup();
+    }
+
+    private void recyclerViewSetup(){
+
+        Drawable dividerDrawable = ContextCompat.getDrawable(getContext(), R.drawable.recycler_view_divider);
 
         mTracksList = new ArrayList<>();
         mLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
@@ -145,7 +151,6 @@ public class TracksFragment extends RoboFragment {
             @Override
             public void onItemClick(Item item, int position) {
                 mItemPosition = position;
-                mListener.onTrackSelected(item.getTrack().getName());
                 playSong(position);
                 showPauseButton();
             }
@@ -167,34 +172,6 @@ public class TracksFragment extends RoboFragment {
             @Override
             public void onFailure(Call<UserTracks> call, Throwable t) {
             }
-
-        });
-
-        mRadioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(RadioGroup group, int checkedId) {
-
-                onRadioButtonClicked(checkedId);
-            }
-        });
-
-        mSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-
-            @Override
-            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                if (mPlayer != null && fromUser) {
-                    mPlayer.seekToPosition(mOperationCallback, progress);
-                    mSeekBar.setProgress(progress);
-                }
-            }
-
-            @Override
-            public void onStartTrackingTouch(SeekBar seekBar) {
-            }
-
-            @Override
-            public void onStopTrackingTouch(SeekBar seekBar) {
-            }
         });
 
         mRecyclerView.addOnScrollListener(new EndlessScrollListener(mLayoutManager, mTotalTracks) {
@@ -203,7 +180,6 @@ public class TracksFragment extends RoboFragment {
                 mOffset = offset;
                 loadMoreDataFromApi(mOffset);
             }
-
         });
     }
 
@@ -318,6 +294,33 @@ public class TracksFragment extends RoboFragment {
             @Override
             public void onClick(View v) {
                 onSkipNextClicked();
+            }
+        });
+
+        mRadioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
+
+                onRadioButtonClicked(checkedId);
+            }
+        });
+
+        mSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                if (mPlayer != null && fromUser) {
+                    mPlayer.seekToPosition(mOperationCallback, progress);
+                    mSeekBar.setProgress(progress);
+                }
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
             }
         });
     }

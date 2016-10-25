@@ -146,11 +146,15 @@ public class PlaylistTracksFragment extends RoboFragment {
 
         mSongLocationView.setText("0:00");
         mSongDurationView.setText(R.string.one_thirty_radio_button);
-
-        Drawable dividerDrawable = ContextCompat.getDrawable(getContext(), R.drawable.recycler_view_divider);
-
+        
         playerControlsSetup();
         setSeekBar();
+        recyclerViewSetup();
+    }
+
+    private void recyclerViewSetup(){
+
+        Drawable dividerDrawable = ContextCompat.getDrawable(getContext(), R.drawable.recycler_view_divider);
 
         mPlaylistTracksList = new ArrayList<>();
         mLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
@@ -185,32 +189,6 @@ public class PlaylistTracksFragment extends RoboFragment {
             @Override
             public void onFailure(Call<PlaylistTracksList> call, Throwable t) {
 
-            }
-        });
-
-        mRadioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(RadioGroup group, int checkedId) {
-
-                onRadioButtonClicked(checkedId);
-            }
-        });
-
-        mSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-            @Override
-            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                if (mPlayer != null && fromUser) {
-                    mPlayer.seekToPosition(mOperationCallback, progress);
-                    mSeekBar.setProgress(progress);
-                }
-            }
-
-            @Override
-            public void onStartTrackingTouch(SeekBar seekBar) {
-            }
-
-            @Override
-            public void onStopTrackingTouch(SeekBar seekBar) {
             }
         });
 
@@ -333,6 +311,32 @@ public class PlaylistTracksFragment extends RoboFragment {
             @Override
             public void onClick(View v) {
                 onSkipNextClicked();
+            }
+        });
+
+        mRadioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
+
+                onRadioButtonClicked(checkedId);
+            }
+        });
+
+        mSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                if (mPlayer != null && fromUser) {
+                    mPlayer.seekToPosition(mOperationCallback, progress);
+                    mSeekBar.setProgress(progress);
+                }
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
             }
         });
     }
