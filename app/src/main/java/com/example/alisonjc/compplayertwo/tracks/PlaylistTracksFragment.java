@@ -51,6 +51,15 @@ public class PlaylistTracksFragment extends RoboFragment {
     @Inject
     private MusicPlayer mMusicPlayer;
 
+//    @BindView(R.id.title_bar)
+//    Toolbar mNowPlaying;
+
+    @BindView(R.id.song_title)
+    TextView mSongTitle;
+
+    @BindView(R.id.artist)
+    TextView mArtist;
+
     @BindView(R.id.play)
     ImageButton mPlayButton;
 
@@ -146,7 +155,7 @@ public class PlaylistTracksFragment extends RoboFragment {
 
         mSongLocationView.setText("0:00");
         mSongDurationView.setText(R.string.one_thirty_radio_button);
-        
+
         playerControlsSetup();
         setSeekBar();
         recyclerViewSetup();
@@ -228,6 +237,8 @@ public class PlaylistTracksFragment extends RoboFragment {
         showPauseButton();
         setCurrentPlayingSong(locationid);
         smoothScroll(locationid);
+        mSongTitle.setText(mPlaylistTracksList.get(locationid).getTrack().getName() + " - ");
+        mArtist.setText(mPlaylistTracksList.get(locationid).getTrack().getArtists().get(0).getName());
         mPlayer.playUri(mOperationCallback, "spotify:track:" + mPlaylistTracksList.get(locationid).getTrack().getId(), 0, 0);
         onButtonPressed(mPlaylistTracksList.get(locationid).getTrack().getName());
     }

@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/color_default"
+    android:orientation="horizontal"
+    android:layout_weight="100"
+    >
+<TextView
+    android:id="@+id/song_title"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_weight="50"
+    android:textColor="@color/color_light_pink"
+    android:textSize="18sp"
+    android:layout_gravity="center_vertical|end"
+    android:gravity="center_vertical|end"/>
+
+    <TextView
+        android:id="@+id/artist"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="50"
+        android:textColor="@color/color_light_pink"
+        android:textSize="18sp"
+        android:layout_gravity="center_vertical|start"
+        android:gravity="center_vertical|start"/>
+</LinearLayout>
+
+<!--<android.support.v7.widget.Toolbar-->
+    <!--xmlns:android="http://schemas.android.com/apk/res/android"-->
+    <!--android:id="@+id/title_bar"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:background="@color/color_default"-->
+    <!--android:orientation="vertical"-->
+    <!--android:subtitle="hi"-->
+    <!--android:title="hello"-->
+    <!--android:theme="@style/ThemeOverlay.AppCompat.Dark"/>-->

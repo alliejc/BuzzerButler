@@ -150,7 +150,7 @@ public class MainActivity extends RoboActionBarActivity
             PlaylistFragment playlistFragment = PlaylistFragment.newInstance();
             fragmentManager.beginTransaction().replace(R.id.main_framelayout, playlistFragment, "playlistFragment").addToBackStack(null).commit();
             actionBar.setTitle(R.string.playlists_drawer);
-            actionBar.setSubtitle(R.string.app_subtitle);
+            //actionBar.setSubtitle(R.string.app_subtitle);
 
 
         } else if (id == R.id.nav_songs) {
@@ -159,7 +159,7 @@ public class MainActivity extends RoboActionBarActivity
             TracksFragment tracksFragment = TracksFragment.newInstance();
             fragmentManager.beginTransaction().replace(R.id.main_framelayout, tracksFragment, "tracksFragment").addToBackStack(null).commit();
             actionBar.setTitle(R.string.songs_drawer);
-            actionBar.setSubtitle("Please select a song");
+            //actionBar.setSubtitle("Please select a song");
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -173,7 +173,7 @@ public class MainActivity extends RoboActionBarActivity
         setSupportActionBar(myToolbar);
         actionBar = getSupportActionBar();
         actionBar.setTitle(R.string.app_name);
-        actionBar.setSubtitle(R.string.app_subtitle);
+        //actionBar.setSubtitle(R.string.app_subtitle);
         actionBar.setDisplayShowTitleEnabled(true);
         actionBar.setDisplayHomeAsUpEnabled(true);
     }
@@ -234,7 +234,7 @@ public class MainActivity extends RoboActionBarActivity
 
         mPlaylistTitle = playlistTitle;
         actionBar.setTitle(mPlaylistTitle);
-        actionBar.setSubtitle("Please select a song");
+        //actionBar.setSubtitle("Please select a song");
 
         FragmentManager fragmentManager = getSupportFragmentManager();
         PlaylistTracksFragment playlistTracksFragment = PlaylistTracksFragment.newInstance(userId, playlistId);
@@ -242,12 +242,11 @@ public class MainActivity extends RoboActionBarActivity
     }
 
     public void onPlaylistTrackSelected(String trackName) {
-        actionBar.setSubtitle(trackName);
+//        actionBar.setSubtitle(trackName);
     }
-
 
     @Override
     public void onTrackSelected(String trackId) {
-        actionBar.setSubtitle(trackId);
+//        actionBar.setSubtitle(trackId);
     }
 }
