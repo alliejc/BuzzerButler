@@ -25,19 +25,12 @@ public class SpotifyService {
     private String mToken = "";
     private String mUserId = "";
     public SharedPreferences myPrefs;
-    private int mTotalTracks = 0;
 
     public void setUserId(String userId, Context context) {
 
         mUserId = userId;
         myPrefs = context.getSharedPreferences("myPrefs", Context.MODE_PRIVATE);
         myPrefs.edit().putString("userId", mUserId).apply();
-
-//        context.getSharedPreferences("userId", Context.MODE_PRIVATE).edit().putString("userId", mUserId).apply();
-//        settings = PreferenceManager.getDefaultSharedPreferences(context);
-//        SharedPreferences.Editor editor = settings.edit();
-//        editor.putString("userId", mUserId);
-//        editor.apply();
     }
 
     public void setToken(String token, Context context) {
@@ -45,12 +38,6 @@ public class SpotifyService {
         mToken = token;
         myPrefs = context.getSharedPreferences("myPrefs", Context.MODE_PRIVATE);
         myPrefs.edit().putString("token", mToken).apply();
-
-//        context.getSharedPreferences("token", Context.MODE_PRIVATE).edit().putString("token", mToken).apply();
-//        settings = PreferenceManager.getDefaultSharedPreferences(context);
-//        SharedPreferences.Editor editor = settings.edit();
-//        editor.putString("token", mToken);
-//        editor.apply();
     }
 
     private final SpotifyServiceInterface mSpotifyService;

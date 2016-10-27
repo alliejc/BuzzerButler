@@ -161,7 +161,7 @@ public class PlaylistTracksFragment extends RoboFragment {
         recyclerViewSetup();
     }
 
-    private void recyclerViewSetup(){
+    private void recyclerViewSetup() {
 
         Drawable dividerDrawable = ContextCompat.getDrawable(getContext(), R.drawable.recycler_view_divider);
 

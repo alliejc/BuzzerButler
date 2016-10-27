@@ -142,7 +142,7 @@ public class TracksFragment extends RoboFragment {
         recyclerViewSetup();
     }
 
-    private void recyclerViewSetup(){
+    private void recyclerViewSetup() {
 
         Drawable dividerDrawable = ContextCompat.getDrawable(getContext(), R.drawable.recycler_view_divider);
 
@@ -240,7 +240,7 @@ public class TracksFragment extends RoboFragment {
                         }
                     }
                 });
-                    }
+            }
         };
 
         mTimer = new Timer();
@@ -251,15 +251,15 @@ public class TracksFragment extends RoboFragment {
 
         if (mPlayer != null) {
 
-                    mSongLocation = (int) mPlayer.getPlaybackState().positionMs;
-                    mSeekBar.setMax(mPauseTimeAt);
-                    mSeekBar.setProgress(mSongLocation);
+            mSongLocation = (int) mPlayer.getPlaybackState().positionMs;
+            mSeekBar.setMax(mPauseTimeAt);
+            mSeekBar.setProgress(mSongLocation);
 
-                    int seconds = ((mSongLocation / 1000) % 60);
-                    int minutes = ((mSongLocation / 1000) / 60);
+            int seconds = ((mSongLocation / 1000) % 60);
+            int minutes = ((mSongLocation / 1000) / 60);
 
-                    mSongLocationView.setText(String.format("%2d:%02d", minutes, seconds, 0));
-                }
+            mSongLocationView.setText(String.format("%2d:%02d", minutes, seconds, 0));
+        }
 
         seekHandler.postDelayed(run, 1000);
     }

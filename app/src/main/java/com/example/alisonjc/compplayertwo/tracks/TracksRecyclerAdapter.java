@@ -13,7 +13,6 @@ import com.example.alisonjc.compplayertwo.spotify.model.UserTracks.Item;
 import java.util.List;
 
 
-
 public class TracksRecyclerAdapter extends RecyclerView.Adapter<TracksRecyclerAdapter.TracksViewHolder> {
 
     public interface onItemClickListener {
@@ -57,7 +56,7 @@ public class TracksRecyclerAdapter extends RecyclerView.Adapter<TracksRecyclerAd
         return mTracksList.size();
     }
 
-    public void updateAdapter(List<Item> list){
+    public void updateAdapter(List<Item> list) {
 
         mTracksList.addAll(list);
         notifyDataSetChanged();
@@ -86,7 +85,8 @@ public class TracksRecyclerAdapter extends RecyclerView.Adapter<TracksRecyclerAd
             songName = (TextView) itemView.findViewById(R.id.songname);
             artistName = (TextView) itemView.findViewById(R.id.artistname);
         }
-        public void onBind(final Item item, final TracksRecyclerAdapter.onItemClickListener listener){
+
+        public void onBind(final Item item, final TracksRecyclerAdapter.onItemClickListener listener) {
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

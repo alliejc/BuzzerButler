@@ -32,6 +32,6 @@ public interface SpotifyServiceInterface {
     //playlist tracks for playlist for specific user
     @GET("/v1/users/{user_id}/playlists/{playlist_id}/tracks")
     Call<PlaylistTracksList> getPlaylistTracks(@Header("Authorization") String bearerToken,
-                                               @Path("user_id") String userId, @Path("playlist_id") String playlistId,  @Query("offset") int offset, @Query("limit") int limit);
+                                               @Path("user_id") String userId, @Path("playlist_id") String playlistId, @Query("offset") int offset, @Query("limit") int limit);
 
 }
