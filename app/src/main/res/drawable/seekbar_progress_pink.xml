@@ -2,7 +2,7 @@
 
     <item
         android:id="@android:id/background"
-        android:drawable="@drawable/seekbar_track_grey"/>
+        android:drawable="@drawable/seekbar_track_lightpink"/>
     <item android:id="@android:id/secondaryProgress">
         <scale
             android:drawable="@drawable/seekbar_track_pink"

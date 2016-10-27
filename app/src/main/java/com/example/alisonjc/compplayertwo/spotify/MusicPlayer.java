@@ -21,6 +21,7 @@ public class MusicPlayer implements Player.NotificationCallback {
 
     private SpotifyPlayer mPlayer;
 
+
     public SpotifyPlayer getPlayer(Context context) {
 
         if (mPlayer != null) {
@@ -29,6 +30,7 @@ public class MusicPlayer implements Player.NotificationCallback {
         } else {
             final Config playerConfig = mSpotifyService.getPlayerConfig(context);
             playerConfig.useCache(false);
+
 
             mPlayer = SpotifyPlayer.create(playerConfig, new SpotifyPlayer.InitializationObserver() {
                 @Override
@@ -48,11 +50,13 @@ public class MusicPlayer implements Player.NotificationCallback {
         }
     }
 
+
     @Override
     public void onPlaybackEvent(PlayerEvent playerEvent) {
     }
 
     @Override
     public void onPlaybackError(Error error) {
+
     }
 }

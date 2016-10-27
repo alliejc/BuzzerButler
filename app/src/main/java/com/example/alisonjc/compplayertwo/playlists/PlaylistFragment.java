@@ -38,6 +38,7 @@ public class PlaylistFragment extends RoboFragment {
     private PlaylistInteractionListener mListener;
     private Drawable dividerDrawable;
 
+
     public PlaylistFragment() {
     }
 
@@ -136,6 +137,7 @@ public class PlaylistFragment extends RoboFragment {
     public interface PlaylistInteractionListener {
         void onPlaylistSelected(String userId, String playlistId, String playlistTitle);
     }
+
 }
 
 
