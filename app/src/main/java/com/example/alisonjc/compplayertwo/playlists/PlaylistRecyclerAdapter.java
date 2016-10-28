@@ -44,8 +44,11 @@ public class PlaylistRecyclerAdapter extends RecyclerView.Adapter<PlaylistRecycl
     public void onBindViewHolder(PlaylistViewHolder holder, int position) {
 
         Item item = mPlaylistItemList.get(position);
-        TextView textView = holder.playlistTitle;
-        textView.setText(item.getName());
+        TextView playlistTitle = holder.playlistTitle;
+        TextView songCount = holder.songCount;
+
+        playlistTitle.setText(item.getName());
+        songCount.setText(item.getTracks().getTotal().toString() + " songs");
         holder.bind(item, listener);
     }
 
@@ -68,11 +71,13 @@ public class PlaylistRecyclerAdapter extends RecyclerView.Adapter<PlaylistRecycl
     public class PlaylistViewHolder extends RecyclerView.ViewHolder {
 
         public TextView playlistTitle;
+        public TextView songCount;
 
         public PlaylistViewHolder(View itemView) {
             super(itemView);
 
-            playlistTitle = (TextView) itemView.findViewById(R.id.playlisttitle);
+            playlistTitle = (TextView) itemView.findViewById(R.id.playlist_title);
+            songCount = (TextView) itemView.findViewById(R.id.song_count);
         }
 
         public void bind(final Item item, final onItemClickListener listener) {

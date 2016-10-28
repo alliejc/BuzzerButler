@@ -21,7 +21,6 @@ public class MusicPlayer implements Player.NotificationCallback {
 
     private SpotifyPlayer mPlayer;
 
-
     public SpotifyPlayer getPlayer(Context context) {
 
         if (mPlayer != null) {

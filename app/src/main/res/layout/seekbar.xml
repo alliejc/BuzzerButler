@@ -6,42 +6,43 @@
     android:layout_height="wrap_content"
     android:background="@color/color_default"
     android:orientation="horizontal"
-    android:weightSum="100"
-    android:layout_marginStart="5dp"
-    android:layout_marginEnd="5dp">
+    android:weightSum="100">
 
-        <TextView
-            android:id="@+id/musicCurrentLoc"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="15"
-            android:text="0:00"
-            android:textColor="@color/color_light_gray"
-            android:textSize="18sp"
-            android:layout_gravity="center"
-            android:gravity="center">
-        </TextView>
+    <TextView
+        android:id="@+id/musicCurrentLoc"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_gravity="center"
+        android:layout_weight="15"
+        android:gravity="center"
+        android:text="0:00"
+        android:textColor="@color/color_light_gray"
+        android:textSize="18sp">
+    </TextView>
 
     <SeekBar
         android:id="@+id/seekerBarView"
         android:layout_width="0dp"
         android:layout_height="match_parent"
-        android:layout_weight="70"
-        android:indeterminate="false"
-        android:progressDrawable="@drawable/seekbar_progress_pink"
         android:layout_gravity="center"
-        android:gravity="center"/>
+        android:layout_weight="70"
+        android:gravity="center"
+        android:indeterminate="false"
+        android:paddingEnd="10dip"
+        android:paddingStart="10dip"
+        android:progressDrawable="@drawable/seekbar_progress_pink"
+        />
 
-        <TextView
-            android:id="@+id/musicDuration"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="15"
-            android:text="1:30"
-            android:textColor="@color/color_light_gray"
-            android:textSize="18sp"
-            android:layout_gravity="center"
-            android:gravity="center">
+    <TextView
+        android:id="@+id/musicDuration"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_gravity="center"
+        android:layout_weight="15"
+        android:gravity="center"
+        android:text="1:30"
+        android:textColor="@color/color_light_gray"
+        android:textSize="18sp">
 
-        </TextView>
-    </LinearLayout>
+    </TextView>
+</LinearLayout>

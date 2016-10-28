@@ -1,29 +1,39 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical"
-    android:minHeight="?android:attr/listPreferredItemHeight"
+    android:background="@drawable/selector_item"
     android:maxHeight="?android:attr/listPreferredItemHeight"
-    android:layout_marginLeft="10dp"
-    android:layout_marginRight="10dp"
-    android:background= "@drawable/selector_item"
+    android:minHeight="?android:attr/listPreferredItemHeight"
+    android:orientation="vertical"
     android:padding="2dip">
 
-        <!-- Playlist Name -->
-        <TextView
-            android:id="@+id/playlisttitle"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginEnd="15dp"
-            android:layout_marginStart="15dp"
-            android:ellipsize="marquee"
-            android:textColor="@color/color_white"
-            android:textSize="20sp"
-            android:layout_gravity="center_vertical|start"/>
+    <!-- Playlist Name -->
+    <TextView
+        android:id="@+id/playlist_title"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center_vertical|center|start"
+        android:layout_marginEnd="15dp"
+        android:layout_marginStart="15dp"
+        android:ellipsize="marquee"
+        android:maxLines="1"
+        android:textColor="@color/color_white"
+        android:textSize="20sp"/>
 
+    <!--Playlist Song Count-->
+    <TextView
+        android:id="@+id/song_count"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginEnd="30dp"
+        android:layout_marginStart="45dp"
+        android:layout_marginTop="10dp"
+        android:ellipsize="marquee"
+        android:gravity="bottom"
+        android:maxLines="1"
+        android:textColor="@color/color_light_gray"
+        android:textSize="15sp"/>
 
 </LinearLayout>

@@ -233,12 +233,10 @@ public class PlaylistTracksFragment extends RoboFragment {
 
     private void playSong(int locationid) {
 
+        setCurrentPlayingSong(locationid);
         mBeepPlayed = false;
         showPauseButton();
-        setCurrentPlayingSong(locationid);
-        smoothScroll(locationid);
-        mSongTitle.setText(mPlaylistTracksList.get(locationid).getTrack().getName() + " - ");
-        mArtist.setText(mPlaylistTracksList.get(locationid).getTrack().getArtists().get(0).getName());
+        setSeekBar();
         mPlayer.playUri(mOperationCallback, "spotify:track:" + mPlaylistTracksList.get(locationid).getTrack().getId(), 0, 0);
         onButtonPressed(mPlaylistTracksList.get(locationid).getTrack().getName());
     }
@@ -365,9 +363,12 @@ public class PlaylistTracksFragment extends RoboFragment {
     }
 
     private void setCurrentPlayingSong(int itemPosition) {
+
         this.mItemPosition = itemPosition;
-        setSeekBar();
         mAdapter.recyclerViewSelector(itemPosition);
+        smoothScroll(itemPosition);
+        mSongTitle.setText(mPlaylistTracksList.get(itemPosition).getTrack().getName() + " - ");
+        mArtist.setText(mPlaylistTracksList.get(itemPosition).getTrack().getArtists().get(0).getName());
     }
 
     private void onPauseClicked() {
@@ -468,6 +469,10 @@ public class PlaylistTracksFragment extends RoboFragment {
         super.onDetach();
         Spotify.destroyPlayer(this);
         mListener = null;
+        mTimer.cancel();
+        mTimer.purge();
+        seekHandler.removeCallbacks(run);
+        mSeekBar.setProgress(0);
     }
 
     @Override

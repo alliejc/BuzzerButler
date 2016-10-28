@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="pressed_color">#191970</color>
+    <color name="color_blue">#FF0000ff</color>
     <color name="color_light_pink">#FF4081</color>
     <color name="color_dark_pink">#ef0051</color>
     <color name="color_light_gray">#a8a8a8</color>

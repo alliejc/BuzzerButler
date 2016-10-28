@@ -6,7 +6,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_weight="100"
+        android:layout_weight="110"
         android:orientation="vertical">
 
         <include
@@ -14,14 +14,38 @@
             layout="@layout/toolbar"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="20"
-            />
+            android:layout_weight="15"/>
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/recycler_view"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="80"/>
+            android:layout_weight="70"/>
+
+        <include
+            android:id="@+id/seeker_bar"
+            layout="@layout/seekbar"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="10"
+            android:visibility="gone"
+            />
+
+        <include
+            android:id="@+id/music_player"
+            layout="@layout/music_player"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="10"
+            android:visibility="gone"/>
+
+        <include
+            android:id="@+id/title_bar"
+            layout="@layout/toolbar_nowplaying"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="5"
+            android:visibility="gone"/>
 
     </LinearLayout>
 </FrameLayout>
