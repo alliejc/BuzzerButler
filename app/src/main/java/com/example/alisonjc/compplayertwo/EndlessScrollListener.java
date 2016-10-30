@@ -13,7 +13,7 @@ public abstract class EndlessScrollListener extends RecyclerView.OnScrollListene
     private int mFirstVisibleItem = 0;
     private int mPreviousTotal = 0;
 
-    private boolean mLoading = true; // True if we are still waiting for the last set of data to load.
+    private boolean mLoading = true;
     private LinearLayoutManager mLinearLayoutManager;
 
     public EndlessScrollListener(LinearLayoutManager linearLayoutManager, int totalItemCount) {
@@ -49,6 +49,5 @@ public abstract class EndlessScrollListener extends RecyclerView.OnScrollListene
         }
     }
 
-    // Returns true if more data is being loaded; returns false if there is no more data to load.
     public abstract void onLoadMore(int offset);
 }

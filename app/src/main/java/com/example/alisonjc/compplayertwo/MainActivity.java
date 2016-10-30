@@ -18,9 +18,12 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
+import com.example.alisonjc.compplayertwo.playlists.OnPlaylistInteractionListener;
 import com.example.alisonjc.compplayertwo.playlists.PlaylistFragment;
 import com.example.alisonjc.compplayertwo.spotify.SpotifyService;
 import com.example.alisonjc.compplayertwo.spotify.model.playlists.SpotifyUser;
+import com.example.alisonjc.compplayertwo.tracks.OnControllerTrackChangeListener;
+import com.example.alisonjc.compplayertwo.tracks.OnTrackSelectedListener;
 import com.example.alisonjc.compplayertwo.tracks.PlaylistTracksFragment;
 import com.example.alisonjc.compplayertwo.tracks.TracksFragment;
 import com.google.inject.Inject;
@@ -37,7 +40,7 @@ import roboguice.inject.ContentView;
 
 @ContentView(R.layout.activity_main)
 public class MainActivity extends RoboActionBarActivity
-        implements NavigationView.OnNavigationItemSelectedListener, PlaylistFragment.PlaylistInteractionListener, PlaylistTracksFragment.OnPlaylistTracksInteractionListener, TracksFragment.OnTracksInteractionListener, SendToController, SendToFragment {
+        implements NavigationView.OnNavigationItemSelectedListener, OnPlaylistInteractionListener, OnControllerTrackChangeListener, OnTrackSelectedListener {
 
     @Inject
     SpotifyService mSpotifyService;
@@ -48,24 +51,19 @@ public class MainActivity extends RoboActionBarActivity
     @BindView(R.id.drawer_layout)
     DrawerLayout mDrawerLayout;
 
+    @BindView(R.id.nav_view)
     NavigationView mNavigationView;
 
-    private ActionBarDrawerToggle toggle;
-
-    private ActionBar actionBar;
+    private ActionBarDrawerToggle mActionBarDrawerToggle;
+    private ActionBar mActionBar;
     private String mPlaylistTitle;
     private String mUserName;
     private String mUserEmail;
-    private MediaController mMediaController;
-    private String mSongName;
-    private String mArtistName;
-    private String mUri;
+    private MediaControllerListener mMediaController;
     private PlaylistTracksFragment mPlaylistTracksFragment;
     private TracksFragment mTracksFragment;
-    private SendToFragment mListener;
     private static final int REQUEST_CODE = 1337;
-
-    private SendToFragment mSendToFragment;
+    private OnControllerTrackChangeListener mOnControllerTrackChangeListener;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -82,12 +80,11 @@ public class MainActivity extends RoboActionBarActivity
 
     private void navigationDrawerSetup() {
 
-        toggle = new ActionBarDrawerToggle(
+        mActionBarDrawerToggle = new ActionBarDrawerToggle(
                 this, mDrawerLayout, mToolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        mDrawerLayout.setDrawerListener(toggle);
-        toggle.syncState();
+        mDrawerLayout.addDrawerListener(mActionBarDrawerToggle);
+        mActionBarDrawerToggle.syncState();
 
-        mNavigationView = (NavigationView) findViewById(R.id.nav_view);
         mNavigationView.setNavigationItemSelectedListener(this);
         View header = mNavigationView.getHeaderView(0);
         TextView name = (TextView) header.findViewById(R.id.nav_header_top);
@@ -157,18 +154,15 @@ public class MainActivity extends RoboActionBarActivity
             fragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
             PlaylistFragment playlistFragment = PlaylistFragment.newInstance();
             fragmentManager.beginTransaction().replace(R.id.main_framelayout, playlistFragment, "playlistFragment").addToBackStack(null).commit();
-            actionBar.setTitle(R.string.playlists_drawer);
-            //actionBar.setSubtitle(R.string.app_subtitle);
-
+            mActionBar.setTitle(R.string.playlists_drawer);
 
         } else if (id == R.id.nav_songs) {
 
             fragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
             mTracksFragment = TracksFragment.newInstance();
-            mSendToFragment = mTracksFragment;
+            mOnControllerTrackChangeListener = mTracksFragment;
             fragmentManager.beginTransaction().replace(R.id.main_framelayout, mTracksFragment, "tracksFragment").addToBackStack(null).commit();
-            actionBar.setTitle(R.string.songs_drawer);
-            //actionBar.setSubtitle("Please select a song");
+            mActionBar.setTitle(R.string.songs_drawer);
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -180,11 +174,10 @@ public class MainActivity extends RoboActionBarActivity
 
         Toolbar myToolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(myToolbar);
-        actionBar = getSupportActionBar();
-        actionBar.setTitle(R.string.app_name);
-        //actionBar.setSubtitle(R.string.app_subtitle);
-        actionBar.setDisplayShowTitleEnabled(true);
-        actionBar.setDisplayHomeAsUpEnabled(true);
+        mActionBar = getSupportActionBar();
+        mActionBar.setTitle(R.string.app_name);
+        mActionBar.setDisplayShowTitleEnabled(true);
+        mActionBar.setDisplayHomeAsUpEnabled(true);
     }
 
     @Override
@@ -211,7 +204,7 @@ public class MainActivity extends RoboActionBarActivity
 
                                 FragmentManager fragmentManager = getSupportFragmentManager();
                                 PlaylistFragment playlistFragment = PlaylistFragment.newInstance();
-                                mMediaController = MediaController.newInstance();
+                                mMediaController = MediaControllerListener.newInstance();
 
                                 fragmentManager.beginTransaction()
                                         .replace(R.id.main_framelayout, playlistFragment, "playlistTracksFragment").addToBackStack(null)
@@ -221,7 +214,7 @@ public class MainActivity extends RoboActionBarActivity
                                         .commit();
                             }
 
-                            actionBar.setTitle(R.string.playlists_drawer);
+                            mActionBar.setTitle(R.string.playlists_drawer);
                         }
 
                     @Override
@@ -240,40 +233,29 @@ public class MainActivity extends RoboActionBarActivity
 
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
-        toggle.onConfigurationChanged(newConfig);
+        mActionBarDrawerToggle.onConfigurationChanged(newConfig);
     }
 
     @Override
     public void onPlaylistSelected(String userId, String playlistId, String playlistTitle) {
 
         mPlaylistTitle = playlistTitle;
-        actionBar.setTitle(mPlaylistTitle);
-        //actionBar.setSubtitle("Please select a song");
+        mActionBar.setTitle(mPlaylistTitle);
 
         FragmentManager fragmentManager = getSupportFragmentManager();
         mPlaylistTracksFragment = PlaylistTracksFragment.newInstance(userId, playlistId);
-        mSendToFragment = mPlaylistTracksFragment;
+        mOnControllerTrackChangeListener = mPlaylistTracksFragment;
         fragmentManager.beginTransaction().replace(R.id.main_framelayout, mPlaylistTracksFragment, "playlistTracksFragment").addToBackStack(null).commit();
-    }
-
-    public void onPlaylistTrackSelected(String songName, String artistName, String uri) {
-        onSendToController(songName, artistName, uri);
     }
 
     @Override
     public void onTrackSelected(String songName, String artistName, String uri) {
-        onSendToController(songName, artistName, uri);
-    }
+        mMediaController.playSong(songName, artistName, uri); }
 
     @Override
-    public void onSendToController(String songName, String artistName, String uri) {
-        mMediaController.playSong(songName, artistName, uri);
-    }
-
-    @Override
-    public void sendToFragment(boolean skipforward) {
-        if (mSendToFragment != null) {
-            mSendToFragment.sendToFragment(skipforward);
+    public void onControllerTrackChange(boolean skipforward) {
+        if (mOnControllerTrackChangeListener != null) {
+            mOnControllerTrackChangeListener.onControllerTrackChange(skipforward);
         }
     }
 }

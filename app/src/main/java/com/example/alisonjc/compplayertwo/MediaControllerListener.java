@@ -16,6 +16,7 @@ import android.widget.Toast;
 
 import com.example.alisonjc.compplayertwo.spotify.MusicPlayer;
 import com.example.alisonjc.compplayertwo.spotify.SpotifyService;
+import com.example.alisonjc.compplayertwo.tracks.OnControllerTrackChangeListener;
 import com.google.inject.Inject;
 import com.spotify.sdk.android.player.Error;
 import com.spotify.sdk.android.player.Player;
@@ -25,9 +26,11 @@ import com.spotify.sdk.android.player.SpotifyPlayer;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import roboguice.fragment.RoboFragment;
 
-public class MediaController extends RoboFragment implements SendToFragment {
+public class MediaControllerListener extends RoboFragment implements OnControllerTrackChangeListener {
 
     @Inject
     private SpotifyService mSpotifyService;
@@ -35,52 +38,67 @@ public class MediaController extends RoboFragment implements SendToFragment {
     @Inject
     private MusicPlayer mMusicPlayer;
 
-    private TextView mSongView;
-    private TextView mArtistView;
-    private ImageButton mPlayButton;
-    private ImageButton mPauseButton;
-    private SeekBar mSeekBar;
-    private TextView mSongLocationView;
-    private TextView mSongDurationView;
-    private RadioGroup mRadioGroup;
-    private RadioButton mOneThirtyMin;
-    private RadioButton mTwoMin;
+    @BindView(R.id.song_title)
+    TextView mSongView;
+
+    @BindView(R.id.artist)
+    TextView mArtistView;
+
+    @BindView(R.id.play)
+    ImageButton mPlayButton;
+
+    @BindView(R.id.pause)
+    ImageButton mPauseButton;
+
+    @BindView(R.id.seekerBarView)
+    SeekBar mSeekBar;
+
+    @BindView(R.id.musicCurrentLoc)
+    TextView mSongLocationView;
+
+    @BindView(R.id.musicDuration)
+    TextView mSongDurationView;
+
+    @BindView(R.id.radio_group)
+    RadioGroup mRadioGroup;
+
+    @BindView(R.id.one_minute_thirty)
+    RadioButton mOneThirtyMin;
+
+    @BindView(R.id.two_minutes)
+    RadioButton mTwoMin;
+
     private int mSongLocation = 0;
     private Timer mTimer;
     private Handler seekHandler = new Handler();
     private SpotifyPlayer mPlayer;
     private int mPauseTimeAt = 90000;
     private boolean mBeepPlayed = false;
-    private View rootView;
     private View mPlayerControls;
+    private OnControllerTrackChangeListener mListener;
 
-    private SendToFragment mListener;
-
-    public MediaController() {
+    public MediaControllerListener() {
     }
 
-    public static MediaController newInstance() {
-        MediaController fragment = new MediaController();
-
-        return fragment;
+    public static MediaControllerListener newInstance() {
+        return new MediaControllerListener();
     }
 
     private final Player.OperationCallback mOperationCallback = new Player.OperationCallback() {
         @Override
         public void onSuccess() {
-
         }
 
         @Override
         public void onError(Error error) {
-
         }
     };
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        rootView = inflater.inflate(R.layout.media_controls, container, false);
-        //ButterKnife.bind(this, rootView);
+        View rootView = inflater.inflate(R.layout.media_controls, container, false);
+        mPlayerControls = rootView.findViewById(R.id.music_player);
+        ButterKnife.bind(this, rootView);
 
         return rootView;
     }
@@ -89,37 +107,21 @@ public class MediaController extends RoboFragment implements SendToFragment {
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        mSongView = (TextView) rootView.findViewById(R.id.song_title);
-        mArtistView = (TextView) rootView.findViewById(R.id.artist);
-        mPlayButton = (ImageButton) rootView.findViewById(R.id.play);
-        mPauseButton = (ImageButton) rootView.findViewById(R.id.pause);
-        mSeekBar = (SeekBar) rootView.findViewById(R.id.seekerBarView);
-        mSongLocationView = (TextView) rootView.findViewById(R.id.musicCurrentLoc);
-        mSongDurationView = (TextView) rootView.findViewById(R.id.musicDuration);
-        mRadioGroup = (RadioGroup) rootView.findViewById(R.id.radio_group);
-        mOneThirtyMin = (RadioButton) rootView.findViewById(R.id.one_minute_thirty);
-        mTwoMin = (RadioButton) rootView.findViewById(R.id.two_minutes);
-
-        mSongLocationView.setText("0:00");
-        mSongDurationView.setText(R.string.one_thirty_radio_button);
-
         playerControlsSetup();
         setSeekBar();
         startTimerTask();
 
-        if(mPlayer == null){
+        if (mPlayer == null) {
             mPlayer = mMusicPlayer.getPlayer(getContext());
         }
     }
 
-    public void playSong(String songName, String artistName, String uri){
+    public void playSong(String songName, String artistName, String uri) {
 
         mBeepPlayed = false;
-
         startTimerTask();
         showPauseButton();
         setSeekBar();
-
         mPlayer.playUri(mOperationCallback, uri, 0, 0);
         mSongView.setText(songName + " - ");
         mArtistView.setText(artistName);
@@ -175,7 +177,9 @@ public class MediaController extends RoboFragment implements SendToFragment {
     };
 
     private void playerControlsSetup() {
-        mPlayerControls = rootView.findViewById(R.id.music_player);
+
+        mSongLocationView.setText(R.string.start_time);
+        mSongDurationView.setText(R.string.one_thirty_radio_button);
 
         mPlayerControls.findViewById(R.id.skip_previous).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -278,21 +282,21 @@ public class MediaController extends RoboFragment implements SendToFragment {
 
     private void onSkipNextClicked() {
 
-        if(mPlayer == null){
+        if (mPlayer == null) {
             Toast.makeText(getActivity(), "Please select a song", Toast.LENGTH_SHORT).show();
         } else {
             mPlayer.skipToNext(mOperationCallback);
-            sendToFragment(true);
+            onControllerTrackChange(true);
         }
     }
 
     private void onPreviousClicked() {
 
-        if(mPlayer == null){
+        if (mPlayer == null) {
             Toast.makeText(getActivity(), "Please select a song", Toast.LENGTH_SHORT).show();
         } else {
             mPlayer.skipToPrevious(mOperationCallback);
-            sendToFragment(false);
+            onControllerTrackChange(false);
         }
     }
 
@@ -338,8 +342,8 @@ public class MediaController extends RoboFragment implements SendToFragment {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        if (context instanceof SendToFragment) {
-            mListener = (SendToFragment) context;
+        if (context instanceof OnControllerTrackChangeListener) {
+            mListener = (OnControllerTrackChangeListener) context;
         } else {
             throw new RuntimeException(context.toString()
                     + " must implement OnControllerInteractionListener");
@@ -347,9 +351,9 @@ public class MediaController extends RoboFragment implements SendToFragment {
     }
 
     @Override
-    public void sendToFragment(boolean skipforward) {
-        if(mListener != null) {
-            mListener.sendToFragment(skipforward);
+    public void onControllerTrackChange(boolean skipforward) {
+        if (mListener != null) {
+            mListener.onControllerTrackChange(skipforward);
         }
     }
 }

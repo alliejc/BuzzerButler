@@ -5,10 +5,11 @@
     android:layout_width="match_parent">
 
 <LinearLayout
-              android:layout_width="match_parent"
-              android:layout_height="match_parent"
-              android:layout_weight="100"
-              android:orientation="vertical">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_weight="100"
+    android:orientation="vertical"
+    android:background="@color/color_default">
 
     <include
         android:id="@+id/seeker_bar"

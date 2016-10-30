@@ -8,7 +8,7 @@ android {
     defaultConfig {
         applicationId "com.example.alisonjc.compplayertwo"
         buildConfigField("String", "CLIENT_ID", CLIENT_ID)
-        minSdkVersion 19
+        minSdkVersion 21
         targetSdkVersion 23
         versionCode 1
         versionName "1.0"
@@ -49,7 +49,6 @@ dependencies {
     compile 'com.jakewharton:butterknife:8.4.0'
     apt 'com.jakewharton:butterknife-compiler:8.4.0'
     compile 'com.android.support:recyclerview-v7:23.2.1'
-
 }
 
 

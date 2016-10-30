@@ -13,13 +13,10 @@ import android.view.ViewGroup;
 import com.example.alisonjc.compplayertwo.EndlessScrollListener;
 import com.example.alisonjc.compplayertwo.R;
 import com.example.alisonjc.compplayertwo.RecyclerDivider;
-import com.example.alisonjc.compplayertwo.SendToFragment;
 import com.example.alisonjc.compplayertwo.spotify.SpotifyService;
 import com.example.alisonjc.compplayertwo.spotify.model.UserTracks.Item;
 import com.example.alisonjc.compplayertwo.spotify.model.UserTracks.UserTracks;
 import com.google.inject.Inject;
-import com.spotify.sdk.android.player.Error;
-import com.spotify.sdk.android.player.Player;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,12 +28,12 @@ import retrofit2.Response;
 import roboguice.fragment.RoboFragment;
 
 
-public class TracksFragment extends RoboFragment implements SendToFragment {
+public class TracksFragment extends RoboFragment implements OnControllerTrackChangeListener, OnTrackSelectedListener {
 
     @Inject
     private SpotifyService mSpotifyService;
 
-    private OnTracksInteractionListener mListener;
+    private OnTrackSelectedListener mListener;
     private RecyclerView mRecyclerView;
     private LinearLayoutManager mLayoutManager;
     private List<Item> mTracksList;
@@ -46,16 +43,6 @@ public class TracksFragment extends RoboFragment implements SendToFragment {
     private int mTotalTracks = 0;
     private int mOffset;
     private int mLimit = 20;
-
-    private final Player.OperationCallback mOperationCallback = new Player.OperationCallback() {
-        @Override
-        public void onSuccess() {
-        }
-
-        @Override
-        public void onError(Error error) {
-        }
-    };
 
     public TracksFragment() {
     }
@@ -165,8 +152,8 @@ public class TracksFragment extends RoboFragment implements SendToFragment {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        if (context instanceof OnTracksInteractionListener) {
-            mListener = (OnTracksInteractionListener) context;
+        if (context instanceof OnTrackSelectedListener) {
+            mListener = (OnTrackSelectedListener) context;
         } else {
             throw new RuntimeException(context.toString()
                     + " must implement OnTracksInteractionListener");
@@ -185,7 +172,7 @@ public class TracksFragment extends RoboFragment implements SendToFragment {
     }
 
     @Override
-    public void sendToFragment(boolean skipforward) {
+    public void onControllerTrackChange(boolean skipforward) {
 
         if (skipforward) {
             if (mAdapter.getItemCount() <= mItemPosition + 1) {
@@ -205,7 +192,8 @@ public class TracksFragment extends RoboFragment implements SendToFragment {
         }
     }
 
-    public interface OnTracksInteractionListener {
-        void onTrackSelected(String songName, String artistName, String uri);
+    @Override
+    public void onTrackSelected(String trackName, String artistName, String uri) {
+
     }
 }

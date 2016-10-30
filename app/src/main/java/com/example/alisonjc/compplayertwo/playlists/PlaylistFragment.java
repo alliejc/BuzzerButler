@@ -26,7 +26,7 @@ import retrofit2.Response;
 import roboguice.fragment.RoboFragment;
 
 
-public class PlaylistFragment extends RoboFragment {
+public class PlaylistFragment extends RoboFragment implements OnPlaylistInteractionListener {
 
     @Inject
     private SpotifyService mSpotifyService;
@@ -35,7 +35,7 @@ public class PlaylistFragment extends RoboFragment {
     private RecyclerView.LayoutManager mLayoutManager;
     private PlaylistRecyclerAdapter mAdapter;
     private List<Item> mPlaylistItemList;
-    private PlaylistInteractionListener mListener;
+    private OnPlaylistInteractionListener mListener;
     private Drawable dividerDrawable;
 
 
@@ -55,7 +55,7 @@ public class PlaylistFragment extends RoboFragment {
         super.onCreateView(inflater, container, savedInstanceState);
 
         View rootView = inflater.inflate(R.layout.fragment_playlist, container, false);
-        mRecyclerView = (RecyclerView) rootView.findViewById(R.id.recycler_view);
+        mRecyclerView = (RecyclerView) rootView.findViewById(R.id.playlist_recycler_view);
 
         return rootView;
     }
@@ -110,17 +110,11 @@ public class PlaylistFragment extends RoboFragment {
         });
     }
 
-    public void onButtonPressed(String string) {
-        if (mListener != null) {
-            mListener.onPlaylistSelected(string, string, string);
-        }
-    }
-
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        if (context instanceof PlaylistInteractionListener) {
-            mListener = (PlaylistInteractionListener) context;
+        if (context instanceof OnPlaylistInteractionListener) {
+            mListener = (OnPlaylistInteractionListener) context;
         } else {
             throw new RuntimeException(context.toString()
                     + " must implement OnTracksInteractionListener");
@@ -133,11 +127,9 @@ public class PlaylistFragment extends RoboFragment {
         mListener = null;
     }
 
-
-    public interface PlaylistInteractionListener {
-        void onPlaylistSelected(String userId, String playlistId, String playlistTitle);
+    @Override
+    public void onPlaylistSelected(String userId, String playlistId, String playlistTitle) {
     }
-
 }
 
 
