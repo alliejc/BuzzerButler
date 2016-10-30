@@ -37,7 +37,7 @@ import roboguice.inject.ContentView;
 
 @ContentView(R.layout.activity_main)
 public class MainActivity extends RoboActionBarActivity
-        implements NavigationView.OnNavigationItemSelectedListener, PlaylistFragment.PlaylistInteractionListener, PlaylistTracksFragment.OnPlaylistTracksInteractionListener, TracksFragment.OnTracksInteractionListener {
+        implements NavigationView.OnNavigationItemSelectedListener, PlaylistFragment.PlaylistInteractionListener, PlaylistTracksFragment.OnPlaylistTracksInteractionListener, TracksFragment.OnTracksInteractionListener, SendToController, SendToFragment {
 
     @Inject
     SpotifyService mSpotifyService;
@@ -56,8 +56,16 @@ public class MainActivity extends RoboActionBarActivity
     private String mPlaylistTitle;
     private String mUserName;
     private String mUserEmail;
-
+    private MediaController mMediaController;
+    private String mSongName;
+    private String mArtistName;
+    private String mUri;
+    private PlaylistTracksFragment mPlaylistTracksFragment;
+    private TracksFragment mTracksFragment;
+    private SendToFragment mListener;
     private static final int REQUEST_CODE = 1337;
+
+    private SendToFragment mSendToFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,6 +74,14 @@ public class MainActivity extends RoboActionBarActivity
 
         if (mSpotifyService.isLoggedIn()) {
             userLogin();
+        }
+
+        if(mMediaController == null) {
+            FragmentManager fragmentManager = getSupportFragmentManager();
+            mMediaController = MediaController.newInstance();
+            fragmentManager.beginTransaction()
+                    .add(mMediaController, "mediaController")
+                    .commit();
         }
 
         toolbarSetup();
@@ -156,8 +172,9 @@ public class MainActivity extends RoboActionBarActivity
         } else if (id == R.id.nav_songs) {
 
             fragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
-            TracksFragment tracksFragment = TracksFragment.newInstance();
-            fragmentManager.beginTransaction().replace(R.id.main_framelayout, tracksFragment, "tracksFragment").addToBackStack(null).commit();
+            mTracksFragment = TracksFragment.newInstance();
+            mSendToFragment = mTracksFragment;
+            fragmentManager.beginTransaction().replace(R.id.main_framelayout, mTracksFragment, "tracksFragment").addToBackStack(null).commit();
             actionBar.setTitle(R.string.songs_drawer);
             //actionBar.setSubtitle("Please select a song");
         }
@@ -202,6 +219,7 @@ public class MainActivity extends RoboActionBarActivity
 
                                 FragmentManager fragmentManager = getSupportFragmentManager();
                                 PlaylistFragment playlistFragment = PlaylistFragment.newInstance();
+
                                 fragmentManager.beginTransaction()
                                         .replace(R.id.main_framelayout, playlistFragment, "playlistTracksFragment").addToBackStack(null)
                                         .commit();
@@ -237,16 +255,30 @@ public class MainActivity extends RoboActionBarActivity
         //actionBar.setSubtitle("Please select a song");
 
         FragmentManager fragmentManager = getSupportFragmentManager();
-        PlaylistTracksFragment playlistTracksFragment = PlaylistTracksFragment.newInstance(userId, playlistId);
-        fragmentManager.beginTransaction().replace(R.id.main_framelayout, playlistTracksFragment, "playlistTracksFragment").addToBackStack(null).commit();
+        mPlaylistTracksFragment = PlaylistTracksFragment.newInstance(userId, playlistId);
+        mSendToFragment = mPlaylistTracksFragment;
+        fragmentManager.beginTransaction().replace(R.id.main_framelayout, mPlaylistTracksFragment, "playlistTracksFragment").addToBackStack(null).commit();
     }
 
-    public void onPlaylistTrackSelected(String trackName) {
-//        actionBar.setSubtitle(trackName);
+    public void onPlaylistTrackSelected(String songName, String artistName, String uri) {
+        onSendToController(songName, artistName, uri);
     }
 
     @Override
-    public void onTrackSelected(String trackId) {
-//        actionBar.setSubtitle(trackId);
+    public void onTrackSelected(String songName, String artistName, String uri) {
+        onSendToController(songName, artistName, uri);
+    }
+
+    @Override
+    public void onSendToController(String songName, String artistName, String uri) {
+        mMediaController.playSong(songName, artistName, uri);
+    }
+
+    @Override
+    public void sendToFragment(boolean skipforward) {
+        if (mSendToFragment != null){
+            mSendToFragment.sendToFragment(skipforward);
+        }
     }
 }
+

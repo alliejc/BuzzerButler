@@ -27,6 +27,7 @@ public class MusicPlayer implements Player.NotificationCallback {
             return mPlayer;
 
         } else {
+
             final Config playerConfig = mSpotifyService.getPlayerConfig(context);
             playerConfig.useCache(false);
 
@@ -49,13 +50,12 @@ public class MusicPlayer implements Player.NotificationCallback {
         }
     }
 
-
     @Override
     public void onPlaybackEvent(PlayerEvent playerEvent) {
     }
 
     @Override
     public void onPlaybackError(Error error) {
-
     }
 }
+

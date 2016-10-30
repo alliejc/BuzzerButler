@@ -7,7 +7,3 @@
         android:centerColor="@color/color_dark_gray"
         android:angle="0"/>
 </shape>
-
-    <!--android:startColor="#FFFF4081"-->
-    <!--android:centerColor="#FF6E0025"-->
-    <!--android:endColor="#FF6E0025"-->

@@ -2,92 +2,39 @@ package com.example.alisonjc.compplayertwo.tracks;
 
 import android.content.Context;
 import android.graphics.drawable.Drawable;
-import android.media.MediaPlayer;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageButton;
-import android.widget.RadioButton;
-import android.widget.RadioGroup;
-import android.widget.SeekBar;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.alisonjc.compplayertwo.EndlessScrollListener;
 import com.example.alisonjc.compplayertwo.R;
 import com.example.alisonjc.compplayertwo.RecyclerDivider;
-import com.example.alisonjc.compplayertwo.spotify.MusicPlayer;
+import com.example.alisonjc.compplayertwo.SendToFragment;
 import com.example.alisonjc.compplayertwo.spotify.SpotifyService;
 import com.example.alisonjc.compplayertwo.spotify.model.playlist_tracklists.Item;
 import com.example.alisonjc.compplayertwo.spotify.model.playlist_tracklists.PlaylistTracksList;
 import com.google.inject.Inject;
 import com.spotify.sdk.android.player.Error;
 import com.spotify.sdk.android.player.Player;
-import com.spotify.sdk.android.player.Spotify;
-import com.spotify.sdk.android.player.SpotifyPlayer;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Timer;
-import java.util.TimerTask;
 
-import butterknife.BindView;
 import butterknife.ButterKnife;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 import roboguice.fragment.RoboFragment;
 
-public class PlaylistTracksFragment extends RoboFragment {
+public class PlaylistTracksFragment extends RoboFragment implements SendToFragment {
 
     @Inject
     private SpotifyService mSpotifyService;
 
-    @Inject
-    private MusicPlayer mMusicPlayer;
-
-//    @BindView(R.id.title_bar)
-//    Toolbar mNowPlaying;
-
-    @BindView(R.id.song_title)
-    TextView mSongTitle;
-
-    @BindView(R.id.artist)
-    TextView mArtist;
-
-    @BindView(R.id.play)
-    ImageButton mPlayButton;
-
-    @BindView(R.id.pause)
-    ImageButton mPauseButton;
-
-    @BindView(R.id.seekerBarView)
-    SeekBar mSeekBar;
-
-    @BindView(R.id.musicCurrentLoc)
-    TextView mSongLocationView;
-
-    @BindView(R.id.musicDuration)
-    TextView mSongDurationView;
-
-    @BindView(R.id.radio_group)
-    RadioGroup mRadioGroup;
-
-    @BindView(R.id.one_minute_thirty)
-    RadioButton mOneThirtyMin;
-
-    @BindView(R.id.two_minutes)
-    RadioButton mTwoMin;
-
-    private int mSongLocation = 0;
-    private Timer mTimer;
-    private Handler seekHandler = new Handler();
-    private SpotifyPlayer mPlayer;
     private PlaylistTracksRecyclerAdapter mAdapter;
     private RecyclerView mRecyclerView;
     private LinearLayoutManager mLayoutManager;
@@ -97,8 +44,6 @@ public class PlaylistTracksFragment extends RoboFragment {
     private String mPlaylistId;
     private String mUserId;
     private int mItemPosition = 0;
-    private int mPauseTimeAt = 90000;
-    private boolean mBeepPlayed = false;
     private int mTotalTracks = 0;
     private int mOffset;
     private int mLimit = 20;
@@ -134,9 +79,6 @@ public class PlaylistTracksFragment extends RoboFragment {
         super.onCreate(savedInstanceState);
         mPlaylistId = getArguments().getString("playlistId");
         mUserId = getArguments().getString("userId");
-        mPlayer = mMusicPlayer.getPlayer(getContext());
-
-        startTimerTask();
     }
 
     @Override
@@ -153,15 +95,10 @@ public class PlaylistTracksFragment extends RoboFragment {
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        mSongLocationView.setText("0:00");
-        mSongDurationView.setText(R.string.one_thirty_radio_button);
-
-        playerControlsSetup();
-        setSeekBar();
         recyclerViewSetup();
     }
 
-    private void recyclerViewSetup(){
+    private void recyclerViewSetup() {
 
         Drawable dividerDrawable = ContextCompat.getDrawable(getContext(), R.drawable.recycler_view_divider);
 
@@ -175,9 +112,7 @@ public class PlaylistTracksFragment extends RoboFragment {
             @Override
             public void onItemClick(Item item, int position) {
                 mItemPosition = position;
-                mListener.onPlaylistTrackSelected(item.getTrack().getName());
-                playSong(position);
-                showPauseButton();
+                setCurrentPlayingSong(position);
             }
         }));
 
@@ -197,7 +132,6 @@ public class PlaylistTracksFragment extends RoboFragment {
 
             @Override
             public void onFailure(Call<PlaylistTracksList> call, Throwable t) {
-
             }
         });
 
@@ -222,7 +156,6 @@ public class PlaylistTracksFragment extends RoboFragment {
 
             @Override
             public void onFailure(Call<PlaylistTracksList> call, Throwable t) {
-
             }
         });
     }
@@ -231,225 +164,17 @@ public class PlaylistTracksFragment extends RoboFragment {
         mRecyclerView.smoothScrollToPosition(position);
     }
 
-    private void playSong(int locationid) {
-
-        setCurrentPlayingSong(locationid);
-        mBeepPlayed = false;
-        showPauseButton();
-        setSeekBar();
-        mPlayer.playUri(mOperationCallback, "spotify:track:" + mPlaylistTracksList.get(locationid).getTrack().getId(), 0, 0);
-        onButtonPressed(mPlaylistTracksList.get(locationid).getTrack().getName());
-    }
-
-    private void startTimerTask() {
-
-        TimerTask mTimerTask = new TimerTask() {
-            @Override
-            public void run() {
-                getActivity().runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        mSongLocation = (int) mPlayer.getPlaybackState().positionMs;
-
-                        if (mSongLocation >= mPauseTimeAt - 10000 && !mBeepPlayed) {
-                            playBeep();
-                            mBeepPlayed = true;
-                        }
-                        if (mSongLocation >= mPauseTimeAt) {
-                            mPlayer.pause(mOperationCallback);
-                            onSkipNextClicked();
-                        }
-                    }
-                });
-            }
-        };
-        mTimer = new Timer();
-        mTimer.schedule(mTimerTask, 1000, 1000);
-    }
-
-    private void setSeekBar() {
-
-        if (mPlayer != null) {
-
-            mSeekBar.setMax(mPauseTimeAt);
-            mSeekBar.setProgress(mSongLocation);
-
-            int seconds = ((mSongLocation / 1000) % 60);
-            int minutes = ((mSongLocation / 1000) / 60);
-
-            mSongLocationView.setText(String.format("%2d:%02d", minutes, seconds, 0));
-        }
-
-        seekHandler.postDelayed(run, 1000);
-    }
-
-    Runnable run = new Runnable() {
-        @Override
-        public void run() {
-            setSeekBar();
-        }
-    };
-
-    private void playerControlsSetup() {
-
-        View playerControls = rootView.findViewById(R.id.music_player);
-
-        assert playerControls != null;
-        playerControls.findViewById(R.id.skip_previous).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onPreviousClicked();
-            }
-        });
-
-        playerControls.findViewById(R.id.play).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onPlayClicked();
-            }
-        });
-
-        playerControls.findViewById(R.id.pause).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onPauseClicked();
-            }
-        });
-
-        playerControls.findViewById(R.id.skip_next).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onSkipNextClicked();
-            }
-        });
-
-        mRadioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(RadioGroup group, int checkedId) {
-
-                onRadioButtonClicked(checkedId);
-            }
-        });
-
-        mSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-            @Override
-            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                if (mPlayer != null && fromUser) {
-                    mPlayer.seekToPosition(mOperationCallback, progress);
-                    mSeekBar.setProgress(progress);
-                }
-            }
-
-            @Override
-            public void onStartTrackingTouch(SeekBar seekBar) {
-            }
-
-            @Override
-            public void onStopTrackingTouch(SeekBar seekBar) {
-            }
-        });
-    }
-
-    private void playBeep() {
-
-        final MediaPlayer mediaPlayer = MediaPlayer.create(getContext(), R.raw.beep);
-        mediaPlayer.start();
-        mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
-            @Override
-            public void onCompletion(MediaPlayer mp) {
-                mediaPlayer.release();
-            }
-        });
-    }
-
     private void setCurrentPlayingSong(int itemPosition) {
 
         this.mItemPosition = itemPosition;
         mAdapter.recyclerViewSelector(itemPosition);
         smoothScroll(itemPosition);
-        mSongTitle.setText(mPlaylistTracksList.get(itemPosition).getTrack().getName() + " - ");
-        mArtist.setText(mPlaylistTracksList.get(itemPosition).getTrack().getArtists().get(0).getName());
+        onSongSelected(mPlaylistTracksList.get(itemPosition).getTrack().getName(), mPlaylistTracksList.get(itemPosition).getTrack().getArtists().get(0).toString(), mPlaylistTracksList.get(itemPosition).getTrack().getUri());
     }
 
-    private void onPauseClicked() {
-
-        if (mPlayer == null) {
-            Toast.makeText(getActivity(), "Please select a song", Toast.LENGTH_SHORT).show();
-        } else {
-            mPlayer.pause(mOperationCallback);
-            showPlayButton();
-        }
-    }
-
-    private void showPauseButton() {
-
-        mPlayButton.setVisibility(View.GONE);
-        mPauseButton.setVisibility(View.VISIBLE);
-    }
-
-    private void showPlayButton() {
-
-        mPauseButton.setVisibility(View.GONE);
-        mPlayButton.setVisibility(View.VISIBLE);
-    }
-
-    private void onPlayClicked() {
-
-        if (mPlayer == null) {
-            Toast.makeText(getActivity(), "Please select a song", Toast.LENGTH_SHORT).show();
-        } else {
-            mPlayer.resume(mOperationCallback);
-            showPauseButton();
-        }
-    }
-
-    private void onSkipNextClicked() {
-
-        if (mAdapter.getItemCount() <= mItemPosition + 1) {
-            mItemPosition = 0;
-            playSong(mItemPosition);
-        } else {
-            playSong(mItemPosition + 1);
-        }
-        if (mPlayer == null) {
-            Toast.makeText(getActivity(), "Please select a song", Toast.LENGTH_SHORT).show();
-        }
-    }
-
-    private void onPreviousClicked() {
-
-        if (mItemPosition < 1) {
-            mItemPosition = 0;
-            playSong(mItemPosition);
-        } else {
-            playSong(mItemPosition - 1);
-        }
-        if (mPlayer == null) {
-            Toast.makeText(getActivity(), "Please select a song", Toast.LENGTH_SHORT).show();
-        }
-    }
-
-    public void onRadioButtonClicked(int id) {
-
-        switch (id) {
-            case R.id.one_minute_thirty:
-                if (mOneThirtyMin.isChecked()) {
-                    mSongDurationView.setText(R.string.one_thirty_radio_button);
-                    mPauseTimeAt = 90000;
-                }
-                break;
-            case R.id.two_minutes:
-                if (mTwoMin.isChecked()) {
-                    mSongDurationView.setText(R.string.two_minute_radio_button);
-                    mPauseTimeAt = 120000;
-                }
-                break;
-        }
-    }
-
-    public void onButtonPressed(String trackName) {
+    public void onSongSelected(String songName, String artistName, String uri) {
         if (mListener != null) {
-            mListener.onPlaylistTrackSelected(trackName);
+            mListener.onPlaylistTrackSelected(songName, artistName, uri);
         }
     }
 
@@ -467,26 +192,38 @@ public class PlaylistTracksFragment extends RoboFragment {
     @Override
     public void onDetach() {
         super.onDetach();
-        Spotify.destroyPlayer(this);
-        mListener = null;
-        mTimer.cancel();
-        mTimer.purge();
-        seekHandler.removeCallbacks(run);
-        mSeekBar.setProgress(0);
+        //Spotify.destroyPlayer(this);
+        //mListener = null;
     }
 
     @Override
     public void onPause() {
         super.onPause();
-        Spotify.destroyPlayer(this);
-        mTimer.cancel();
-        mTimer.purge();
-        seekHandler.removeCallbacks(run);
-        mSeekBar.setProgress(0);
+        //Spotify.destroyPlayer(this);
+    }
+
+    @Override
+    public void sendToFragment(boolean skipforward) {
+        if (skipforward) {
+            if (mAdapter.getItemCount() <= mItemPosition + 1) {
+                mItemPosition = 0;
+                setCurrentPlayingSong(mItemPosition);
+            } else {
+                setCurrentPlayingSong(mItemPosition + 1);
+            }
+
+        } else {
+            if (mItemPosition < 1) {
+                mItemPosition = 0;
+                setCurrentPlayingSong(mItemPosition);
+            } else {
+                setCurrentPlayingSong(mItemPosition - 1);
+            }
+        }
     }
 
     public interface OnPlaylistTracksInteractionListener {
-        void onPlaylistTrackSelected(String trackName);
+        void onPlaylistTrackSelected(String trackName, String artistName, String uri);
     }
 
 }
