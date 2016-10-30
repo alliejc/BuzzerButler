@@ -70,18 +70,11 @@ public class MainActivity extends RoboActionBarActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
 
         if (mSpotifyService.isLoggedIn()) {
             userLogin();
-        }
-
-        if(mMediaController == null) {
-            FragmentManager fragmentManager = getSupportFragmentManager();
-            mMediaController = MediaController.newInstance();
-            fragmentManager.beginTransaction()
-                    .add(mMediaController, "mediaController")
-                    .commit();
         }
 
         toolbarSetup();
@@ -102,7 +95,6 @@ public class MainActivity extends RoboActionBarActivity
         name.setText(mUserName);
         email.setText(mUserEmail);
     }
-
 
     @Override
     public void onBackPressed() {
@@ -219,28 +211,32 @@ public class MainActivity extends RoboActionBarActivity
 
                                 FragmentManager fragmentManager = getSupportFragmentManager();
                                 PlaylistFragment playlistFragment = PlaylistFragment.newInstance();
+                                mMediaController = MediaController.newInstance();
 
                                 fragmentManager.beginTransaction()
                                         .replace(R.id.main_framelayout, playlistFragment, "playlistTracksFragment").addToBackStack(null)
                                         .commit();
-
-                                actionBar.setTitle(R.string.playlists_drawer);
+                                fragmentManager.beginTransaction()
+                                        .replace(R.id.media_controls_frame, mMediaController, "mediaController")
+                                        .commit();
                             }
+
+                            actionBar.setTitle(R.string.playlists_drawer);
                         }
 
-                        @Override
-                        public void onFailure(Call<SpotifyUser> call, Throwable t) {
-                        }
-                    });
-                    break;
+                    @Override
+                    public void onFailure (Call < SpotifyUser > call, Throwable t){
+                }
+            });
+            break;
 
-                case ERROR:
-                    break;
+            case ERROR:
+                break;
 
-                default:
-            }
+            default:
         }
     }
+}
 
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
@@ -276,7 +272,7 @@ public class MainActivity extends RoboActionBarActivity
 
     @Override
     public void sendToFragment(boolean skipforward) {
-        if (mSendToFragment != null){
+        if (mSendToFragment != null) {
             mSendToFragment.sendToFragment(skipforward);
         }
     }

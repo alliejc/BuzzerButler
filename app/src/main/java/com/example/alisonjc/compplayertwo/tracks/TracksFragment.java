@@ -153,7 +153,7 @@ public class TracksFragment extends RoboFragment implements SendToFragment {
         this.mItemPosition = itemPosition;
         mAdapter.recyclerViewSelector(itemPosition);
         smoothScroll(itemPosition);
-        onSongSelected(mTracksList.get(itemPosition).getTrack().getName(), mTracksList.get(itemPosition).getTrack().getArtists().get(0).toString(), mTracksList.get(itemPosition).getTrack().getUri());
+        onSongSelected(mTracksList.get(itemPosition).getTrack().getName(), mTracksList.get(itemPosition).getTrack().getArtists().get(0).getName(), mTracksList.get(itemPosition).getTrack().getUri());
     }
 
     public void onSongSelected(String songName, String artistName, String uri) {
@@ -176,7 +176,7 @@ public class TracksFragment extends RoboFragment implements SendToFragment {
     @Override
     public void onDetach() {
         super.onDetach();
-        //mListener = null;
+        mListener = null;
     }
 
     @Override

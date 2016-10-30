@@ -52,6 +52,7 @@ public class MediaController extends RoboFragment implements SendToFragment {
     private int mPauseTimeAt = 90000;
     private boolean mBeepPlayed = false;
     private View rootView;
+    private View mPlayerControls;
 
     private SendToFragment mListener;
 
@@ -174,31 +175,30 @@ public class MediaController extends RoboFragment implements SendToFragment {
     };
 
     private void playerControlsSetup() {
+        mPlayerControls = rootView.findViewById(R.id.music_player);
 
-        View playerControls = rootView.findViewById(R.id.music_player);
-
-        playerControls.findViewById(R.id.skip_previous).setOnClickListener(new View.OnClickListener() {
+        mPlayerControls.findViewById(R.id.skip_previous).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 onPreviousClicked();
             }
         });
 
-        playerControls.findViewById(R.id.play).setOnClickListener(new View.OnClickListener() {
+        mPlayerControls.findViewById(R.id.play).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 onPlayClicked();
             }
         });
 
-        playerControls.findViewById(R.id.pause).setOnClickListener(new View.OnClickListener() {
+        mPlayerControls.findViewById(R.id.pause).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 onPauseClicked();
             }
         });
 
-        playerControls.findViewById(R.id.skip_next).setOnClickListener(new View.OnClickListener() {
+        mPlayerControls.findViewById(R.id.skip_next).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 onSkipNextClicked();
@@ -278,12 +278,22 @@ public class MediaController extends RoboFragment implements SendToFragment {
 
     private void onSkipNextClicked() {
 
-        sendToFragment(true);
+        if(mPlayer == null){
+            Toast.makeText(getActivity(), "Please select a song", Toast.LENGTH_SHORT).show();
+        } else {
+            mPlayer.skipToNext(mOperationCallback);
+            sendToFragment(true);
+        }
     }
 
     private void onPreviousClicked() {
 
-        sendToFragment(false);
+        if(mPlayer == null){
+            Toast.makeText(getActivity(), "Please select a song", Toast.LENGTH_SHORT).show();
+        } else {
+            mPlayer.skipToPrevious(mOperationCallback);
+            sendToFragment(false);
+        }
     }
 
     public void onRadioButtonClicked(int id) {

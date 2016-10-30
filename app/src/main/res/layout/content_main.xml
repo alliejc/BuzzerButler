@@ -19,15 +19,17 @@
 
     <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="0dp"
         android:id="@+id/main_framelayout"
-        android:layout_weight="70"/>
+        android:layout_weight="70"
+        />
 
-    <include
+    <FrameLayout
         layout="@layout/media_controls"
-        android:id="@+id/media_controls"
-        android:layout_height="200dp"
+        android:id="@+id/media_controls_frame"
+        android:layout_height="0dp"
         android:layout_width="match_parent"
-        android:layout_weight="30"/>
+        android:layout_weight="30"
+        />
 
 </LinearLayout>

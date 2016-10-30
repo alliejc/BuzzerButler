@@ -31,11 +31,11 @@ public class MusicPlayer implements Player.NotificationCallback {
             final Config playerConfig = mSpotifyService.getPlayerConfig(context);
             playerConfig.useCache(false);
 
-
             mPlayer = SpotifyPlayer.create(playerConfig, new SpotifyPlayer.InitializationObserver() {
                 @Override
                 public void onInitialized(SpotifyPlayer spotifyPlayer) {
                     spotifyPlayer.addNotificationCallback(MusicPlayer.this);
+
                 }
 
                 @Override

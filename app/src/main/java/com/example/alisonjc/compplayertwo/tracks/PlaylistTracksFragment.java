@@ -20,6 +20,7 @@ import com.example.alisonjc.compplayertwo.spotify.model.playlist_tracklists.Play
 import com.google.inject.Inject;
 import com.spotify.sdk.android.player.Error;
 import com.spotify.sdk.android.player.Player;
+import com.spotify.sdk.android.player.Spotify;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -169,7 +170,7 @@ public class PlaylistTracksFragment extends RoboFragment implements SendToFragme
         this.mItemPosition = itemPosition;
         mAdapter.recyclerViewSelector(itemPosition);
         smoothScroll(itemPosition);
-        onSongSelected(mPlaylistTracksList.get(itemPosition).getTrack().getName(), mPlaylistTracksList.get(itemPosition).getTrack().getArtists().get(0).toString(), mPlaylistTracksList.get(itemPosition).getTrack().getUri());
+        onSongSelected(mPlaylistTracksList.get(itemPosition).getTrack().getName(), mPlaylistTracksList.get(itemPosition).getTrack().getArtists().get(0).getName(), mPlaylistTracksList.get(itemPosition).getTrack().getUri());
     }
 
     public void onSongSelected(String songName, String artistName, String uri) {
@@ -192,14 +193,14 @@ public class PlaylistTracksFragment extends RoboFragment implements SendToFragme
     @Override
     public void onDetach() {
         super.onDetach();
-        //Spotify.destroyPlayer(this);
-        //mListener = null;
+        Spotify.destroyPlayer(this);
+        mListener = null;
     }
 
     @Override
     public void onPause() {
         super.onPause();
-        //Spotify.destroyPlayer(this);
+        Spotify.destroyPlayer(this);
     }
 
     @Override
