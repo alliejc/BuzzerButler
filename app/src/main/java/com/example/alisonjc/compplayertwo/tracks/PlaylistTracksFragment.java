@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.alisonjc.compplayertwo.EndlessScrollListener;
+import com.example.alisonjc.compplayertwo.GenericRecyclerAdapter;
 import com.example.alisonjc.compplayertwo.R;
 import com.example.alisonjc.compplayertwo.RecyclerDivider;
 import com.example.alisonjc.compplayertwo.spotify.SpotifyService;
@@ -36,7 +37,7 @@ public class PlaylistTracksFragment extends RoboFragment implements OnController
     @BindView(R.id.tracks_recycler_view)
     RecyclerView mRecyclerView;
 
-    private PlaylistTracksRecyclerAdapter mAdapter;
+    private GenericRecyclerAdapter<?> mAdapter;
     private LinearLayoutManager mLayoutManager;
     private List<Item> mPlaylistTracksList;
     private OnTrackSelectedListener mListener;
@@ -95,22 +96,13 @@ public class PlaylistTracksFragment extends RoboFragment implements OnController
         mRecyclerView.setLayoutManager(mLayoutManager);
         mRecyclerView.setHasFixedSize(true);
 
-
-//        mAdapter = new GenericRecyclerAdapter(mPlaylistTracksList, getContext(), new GenericRecyclerAdapter.OnItemClickListener() {
-//            @Override
-//            public void onItemClick(Object item, int position) {
-//                mItemPosition = position;
-//                setCurrentPlayingSong(position);
-//            }
-//        });
-
-        mAdapter = (new PlaylistTracksRecyclerAdapter(getContext(), mPlaylistTracksList, new PlaylistTracksRecyclerAdapter.OnItemClickListener() {
+        mAdapter = new GenericRecyclerAdapter<Item>(mPlaylistTracksList, getContext(), new GenericRecyclerAdapter.OnItemClickListener() {
             @Override
-            public void onItemClick(Item item, int position) {
+            public void onItemClick(Object item, int position) {
                 mItemPosition = position;
-                setCurrentPlayingSong(position);
+                setCurrentPlayingSong(mItemPosition);
             }
-        }));
+        });
 
         mRecyclerView.setAdapter(mAdapter);
 
@@ -120,7 +112,9 @@ public class PlaylistTracksFragment extends RoboFragment implements OnController
                 if (response.isSuccess() && response.body() != null) {
                     mTotalTracks = response.body().getTotal();
                     mAdapter.notifyDataSetChanged();
-                    mAdapter.updateAdapter(response.body().getItems());
+                    mPlaylistTracksList.addAll(response.body().getItems());
+                    mAdapter.notifyDataSetChanged();
+
                 } else if (response.code() == 401) {
                     //add logout to interface
                     //userLogout();
@@ -148,7 +142,8 @@ public class PlaylistTracksFragment extends RoboFragment implements OnController
             public void onResponse(Call<PlaylistTracksList> call, Response<PlaylistTracksList> response) {
                 if (response.isSuccess() && response.body() != null) {
                     mAdapter.notifyDataSetChanged();
-                    mAdapter.updateAdapter(response.body().getItems());
+                    mPlaylistTracksList.addAll(response.body().getItems());
+                    mAdapter.notifyDataSetChanged();
                 }
             }
 

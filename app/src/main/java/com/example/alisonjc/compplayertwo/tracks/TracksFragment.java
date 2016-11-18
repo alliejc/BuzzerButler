@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.alisonjc.compplayertwo.EndlessScrollListener;
+import com.example.alisonjc.compplayertwo.GenericRecyclerAdapter;
 import com.example.alisonjc.compplayertwo.R;
 import com.example.alisonjc.compplayertwo.RecyclerDivider;
 import com.example.alisonjc.compplayertwo.spotify.SpotifyService;
@@ -37,7 +38,7 @@ public class TracksFragment extends RoboFragment implements OnControllerTrackCha
     private RecyclerView mRecyclerView;
     private LinearLayoutManager mLayoutManager;
     private List<Item> mTracksList;
-    private TracksRecyclerAdapter mAdapter;
+    private GenericRecyclerAdapter mAdapter;
     private View rootView;
     private int mItemPosition = 0;
     private int mTotalTracks = 0;
@@ -81,9 +82,9 @@ public class TracksFragment extends RoboFragment implements OnControllerTrackCha
         mRecyclerView.addItemDecoration(dividerItemDecoration);
         mRecyclerView.setHasFixedSize(true);
 
-        mAdapter = new TracksRecyclerAdapter(getContext(), mTracksList, new TracksRecyclerAdapter.onItemClickListener() {
+        mAdapter = new GenericRecyclerAdapter<Item>(mTracksList, getContext(), new GenericRecyclerAdapter.OnItemClickListener() {
             @Override
-            public void onItemClick(Item item, int position) {
+            public void onItemClick(Object item, int position) {
                 mItemPosition = position;
                 setCurrentPlayingSong(position);
             }
@@ -96,7 +97,9 @@ public class TracksFragment extends RoboFragment implements OnControllerTrackCha
             public void onResponse(Call<UserTracks> call, Response<UserTracks> response) {
                 if (response.isSuccess() && response.body() != null) {
                     mTotalTracks = response.body().getTotal();
-                    mAdapter.updateAdapter(response.body().getItems());
+                    mAdapter.notifyDataSetChanged();
+                    mTracksList.addAll(response.body().getItems());
+                    mAdapter.notifyDataSetChanged();
                 } else if (response.code() == 401) {
 
                 }
@@ -122,7 +125,9 @@ public class TracksFragment extends RoboFragment implements OnControllerTrackCha
             @Override
             public void onResponse(Call<UserTracks> call, Response<UserTracks> response) {
                 if (response.isSuccess() && response.body() != null) {
-                    mAdapter.updateAdapter(response.body().getItems());
+                    mAdapter.notifyDataSetChanged();
+                    mTracksList.addAll(response.body().getItems());
+                    mAdapter.notifyDataSetChanged();
                 }
             }
 
