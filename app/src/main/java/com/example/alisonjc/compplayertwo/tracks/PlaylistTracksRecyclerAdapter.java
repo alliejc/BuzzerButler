@@ -75,7 +75,6 @@ public class PlaylistTracksRecyclerAdapter extends RecyclerView.Adapter<Playlist
         notifyDataSetChanged();
     }
 
-
     public class PlaylistTracksViewHolder extends RecyclerView.ViewHolder {
 
         private TextView songName;
@@ -100,8 +99,6 @@ public class PlaylistTracksRecyclerAdapter extends RecyclerView.Adapter<Playlist
                     selectedItem = getLayoutPosition();
                     notifyItemChanged(selectedItem);
                     notifyDataSetChanged();
-
-
                 }
             });
         }

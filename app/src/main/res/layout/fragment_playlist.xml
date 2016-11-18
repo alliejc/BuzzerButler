@@ -19,7 +19,12 @@
             android:id="@+id/playlist_recycler_view"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="70"/>
+            android:scrollbars="vertical"
+            android:fadeScrollbars="true"
+            android:paddingTop="5dp"
+            android:layout_weight="70"
+            style="@style/scrollbar_style"
+            />
 
     </LinearLayout>
 </FrameLayout>

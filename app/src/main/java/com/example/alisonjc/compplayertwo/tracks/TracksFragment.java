@@ -79,6 +79,7 @@ public class TracksFragment extends RoboFragment implements OnControllerTrackCha
         mRecyclerView.setLayoutManager(mLayoutManager);
         RecyclerView.ItemDecoration dividerItemDecoration = new RecyclerDivider(dividerDrawable);
         mRecyclerView.addItemDecoration(dividerItemDecoration);
+        mRecyclerView.setHasFixedSize(true);
 
         mAdapter = new TracksRecyclerAdapter(getContext(), mTracksList, new TracksRecyclerAdapter.onItemClickListener() {
             @Override

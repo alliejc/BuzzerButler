@@ -19,7 +19,12 @@
             android:id="@+id/tracks_recycler_view"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="70">
+            android:paddingTop="5dp"
+            android:scrollbars="vertical"
+            android:fadeScrollbars="true"
+            android:layout_weight="70"
+            style="@style/scrollbar_style"
+            >
         </android.support.v7.widget.RecyclerView>
 
     </LinearLayout>

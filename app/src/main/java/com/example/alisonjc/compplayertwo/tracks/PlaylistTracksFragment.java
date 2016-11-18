@@ -93,6 +93,16 @@ public class PlaylistTracksFragment extends RoboFragment implements OnController
         mPlaylistTracksList = new ArrayList<>();
         mLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
         mRecyclerView.setLayoutManager(mLayoutManager);
+        mRecyclerView.setHasFixedSize(true);
+
+
+//        mAdapter = new GenericRecyclerAdapter(mPlaylistTracksList, getContext(), new GenericRecyclerAdapter.OnItemClickListener() {
+//            @Override
+//            public void onItemClick(Object item, int position) {
+//                mItemPosition = position;
+//                setCurrentPlayingSong(position);
+//            }
+//        });
 
         mAdapter = (new PlaylistTracksRecyclerAdapter(getContext(), mPlaylistTracksList, new PlaylistTracksRecyclerAdapter.OnItemClickListener() {
             @Override
@@ -109,6 +119,7 @@ public class PlaylistTracksFragment extends RoboFragment implements OnController
             public void onResponse(Call<PlaylistTracksList> call, Response<PlaylistTracksList> response) {
                 if (response.isSuccess() && response.body() != null) {
                     mTotalTracks = response.body().getTotal();
+                    mAdapter.notifyDataSetChanged();
                     mAdapter.updateAdapter(response.body().getItems());
                 } else if (response.code() == 401) {
                     //add logout to interface
@@ -136,6 +147,7 @@ public class PlaylistTracksFragment extends RoboFragment implements OnController
             @Override
             public void onResponse(Call<PlaylistTracksList> call, Response<PlaylistTracksList> response) {
                 if (response.isSuccess() && response.body() != null) {
+                    mAdapter.notifyDataSetChanged();
                     mAdapter.updateAdapter(response.body().getItems());
                 }
             }

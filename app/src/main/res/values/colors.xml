@@ -2,7 +2,7 @@
 <resources>
     <color name="color_blue">#FF0000ff</color>
     <color name="color_light_pink">#FF4081</color>
-    <color name="color_dark_pink">#ef0051</color>
+    <color name="color_dark_pink">#4c1326</color>
     <color name="color_light_gray">#a8a8a8</color>
     <color name="color_dark_gray">#545454</color>
     <color name="color_default">#000000</color>
