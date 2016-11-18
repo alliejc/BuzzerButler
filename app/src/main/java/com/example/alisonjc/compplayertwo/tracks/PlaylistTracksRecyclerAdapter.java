@@ -36,7 +36,7 @@ public class PlaylistTracksRecyclerAdapter extends RecyclerView.Adapter<Playlist
 
         mContext = parent.getContext();
         LayoutInflater layoutInflater = LayoutInflater.from(mContext);
-        View v = layoutInflater.inflate(R.layout.item_track, parent, false);
+        View v = layoutInflater.inflate(R.layout.recyclerview_item, parent, false);
         mPlaylistTracksViewHolder = new PlaylistTracksViewHolder(v);
 
         return mPlaylistTracksViewHolder;
@@ -83,8 +83,8 @@ public class PlaylistTracksRecyclerAdapter extends RecyclerView.Adapter<Playlist
         public PlaylistTracksViewHolder(View itemView) {
             super(itemView);
 
-            songName = (TextView) itemView.findViewById(R.id.songname);
-            artistName = (TextView) itemView.findViewById(R.id.artistname);
+            songName = (TextView) itemView.findViewById(R.id.recyclerview_header_text);
+            artistName = (TextView) itemView.findViewById(R.id.recyclerview_sub_text);
         }
 
         public void bind(final Item item, final PlaylistTracksRecyclerAdapter.OnItemClickListener listener) {

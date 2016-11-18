@@ -34,7 +34,7 @@ public class PlaylistRecyclerAdapter extends RecyclerView.Adapter<PlaylistRecycl
 
         mContext = parent.getContext();
         LayoutInflater inflater = LayoutInflater.from(mContext);
-        View v = inflater.inflate(R.layout.item_playlist, parent, false);
+        View v = inflater.inflate(R.layout.recyclerview_item, parent, false);
         PlaylistViewHolder holder = new PlaylistViewHolder(v);
 
         return holder;
@@ -76,8 +76,8 @@ public class PlaylistRecyclerAdapter extends RecyclerView.Adapter<PlaylistRecycl
         public PlaylistViewHolder(View itemView) {
             super(itemView);
 
-            playlistTitle = (TextView) itemView.findViewById(R.id.playlist_title);
-            songCount = (TextView) itemView.findViewById(R.id.song_count);
+            playlistTitle = (TextView) itemView.findViewById(R.id.recyclerview_header_text);
+            songCount = (TextView) itemView.findViewById(R.id.recyclerview_sub_text);
         }
 
         public void bind(final Item item, final onItemClickListener listener) {

@@ -35,7 +35,7 @@ public class TracksRecyclerAdapter extends RecyclerView.Adapter<TracksRecyclerAd
     public TracksViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         mContext = parent.getContext();
         LayoutInflater layoutInflater = LayoutInflater.from(mContext);
-        View v = layoutInflater.inflate(R.layout.item_track, parent, false);
+        View v = layoutInflater.inflate(R.layout.recyclerview_item, parent, false);
 
         return new TracksViewHolder(v);
     }
@@ -83,8 +83,8 @@ public class TracksRecyclerAdapter extends RecyclerView.Adapter<TracksRecyclerAd
         public TracksViewHolder(View itemView) {
             super(itemView);
 
-            songName = (TextView) itemView.findViewById(R.id.songname);
-            artistName = (TextView) itemView.findViewById(R.id.artistname);
+            songName = (TextView) itemView.findViewById(R.id.recyclerview_header_text);
+            artistName = (TextView) itemView.findViewById(R.id.recyclerview_sub_text);
         }
         public void onBind(final Item item, final TracksRecyclerAdapter.onItemClickListener listener){
             itemView.setOnClickListener(new View.OnClickListener() {
