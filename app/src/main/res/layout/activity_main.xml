@@ -7,7 +7,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
-    android:background="@color/color_dark_gray"
     tools:openDrawer="start">
 
     <include
@@ -20,10 +19,15 @@
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_gravity="start"
+        android:background="@drawable/side_nav_bar"
         android:fitsSystemWindows="true"
         app:headerLayout="@layout/nav_header_main"
+        app:itemIconTint="@color/color_white"
+        app:itemTextColor="@color/color_white"
+        app:itemTextAppearance="@color/color_white"
         app:menu="@menu/activity_main_drawer">
-</android.support.design.widget.NavigationView>
+
+    </android.support.design.widget.NavigationView>
 </android.support.v4.widget.DrawerLayout>
 
 
