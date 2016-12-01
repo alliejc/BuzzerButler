@@ -11,7 +11,6 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.alisonjc.compplayertwo.EndlessScrollListener;
-import com.example.alisonjc.compplayertwo.GenericRecyclerAdapter;
 import com.example.alisonjc.compplayertwo.R;
 import com.example.alisonjc.compplayertwo.RecyclerDivider;
 import com.example.alisonjc.compplayertwo.spotify.SpotifyService;
@@ -38,7 +37,7 @@ public class TracksFragment extends RoboFragment implements OnControllerTrackCha
     private RecyclerView mRecyclerView;
     private LinearLayoutManager mLayoutManager;
     private List<Item> mTracksList;
-    private GenericRecyclerAdapter mAdapter;
+    private TracksRecyclerAdapter mAdapter;
     private View rootView;
     private int mItemPosition = 0;
     private int mTotalTracks = 0;
@@ -82,7 +81,7 @@ public class TracksFragment extends RoboFragment implements OnControllerTrackCha
         mRecyclerView.addItemDecoration(dividerItemDecoration);
         mRecyclerView.setHasFixedSize(true);
 
-        mAdapter = new GenericRecyclerAdapter<Item>(mTracksList, getContext(), new GenericRecyclerAdapter.OnItemClickListener() {
+        mAdapter = new TracksRecyclerAdapter<Item>(mTracksList, getContext(), new TracksRecyclerAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(Object item, int position) {
                 mItemPosition = position;

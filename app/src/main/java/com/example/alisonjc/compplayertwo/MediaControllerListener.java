@@ -340,6 +340,14 @@ public class MediaControllerListener extends RoboFragment implements OnControlle
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+        if(mPlayer != null){
+            setSeekBar();
+        }
+    }
+
+    @Override
     public void onAttach(Context context) {
         super.onAttach(context);
         if (context instanceof OnControllerTrackChangeListener) {

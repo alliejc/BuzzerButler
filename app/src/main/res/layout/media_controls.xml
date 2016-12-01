@@ -8,7 +8,6 @@
 <LinearLayout
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_weight="100"
     android:orientation="vertical"
     android:background="@color/color_default">
 
@@ -16,20 +15,20 @@
         android:id="@+id/seeker_bar"
         layout="@layout/seekbar"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="10"/>
+        android:layout_height="match_parent"
+        android:layout_weight="1"/>
 
     <include
         android:id="@+id/music_player"
         layout="@layout/music_player"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="10"/>
+        android:layout_height="match_parent"
+        android:layout_weight="1"/>
     <include
-        android:id="@+id/title_bar"
+        android:id="@+id/nowplaying"
         layout="@layout/nowplaying"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="5"/>
+        android:layout_height="match_parent"
+        android:layout_weight="1"/>
 </LinearLayout>
 </FrameLayout>

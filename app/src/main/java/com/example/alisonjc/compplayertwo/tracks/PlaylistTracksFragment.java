@@ -11,7 +11,6 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.alisonjc.compplayertwo.EndlessScrollListener;
-import com.example.alisonjc.compplayertwo.GenericRecyclerAdapter;
 import com.example.alisonjc.compplayertwo.R;
 import com.example.alisonjc.compplayertwo.RecyclerDivider;
 import com.example.alisonjc.compplayertwo.spotify.SpotifyService;
@@ -37,7 +36,7 @@ public class PlaylistTracksFragment extends RoboFragment implements OnController
     @BindView(R.id.tracks_recycler_view)
     RecyclerView mRecyclerView;
 
-    private GenericRecyclerAdapter<?> mAdapter;
+    private TracksRecyclerAdapter<?> mAdapter;
     private LinearLayoutManager mLayoutManager;
     private List<Item> mPlaylistTracksList;
     private OnTrackSelectedListener mListener;
@@ -96,7 +95,7 @@ public class PlaylistTracksFragment extends RoboFragment implements OnController
         mRecyclerView.setLayoutManager(mLayoutManager);
         mRecyclerView.setHasFixedSize(true);
 
-        mAdapter = new GenericRecyclerAdapter<Item>(mPlaylistTracksList, getContext(), new GenericRecyclerAdapter.OnItemClickListener() {
+        mAdapter = new TracksRecyclerAdapter<Item>(mPlaylistTracksList, getContext(), new TracksRecyclerAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(Object item, int position) {
                 mItemPosition = position;
@@ -186,11 +185,6 @@ public class PlaylistTracksFragment extends RoboFragment implements OnController
     public void onDetach() {
         super.onDetach();
         mListener = null;
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
     }
 
     @Override

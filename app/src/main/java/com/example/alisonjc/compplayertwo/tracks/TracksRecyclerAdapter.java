@@ -1,4 +1,4 @@
-package com.example.alisonjc.compplayertwo;
+package com.example.alisonjc.compplayertwo.tracks;
 
 
 import android.content.Context;
@@ -8,11 +8,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.example.alisonjc.compplayertwo.R;
 import com.example.alisonjc.compplayertwo.spotify.model.playlist_tracklists.Item;
 
 import java.util.List;
 
-public class GenericRecyclerAdapter<T> extends RecyclerView.Adapter<GenericRecyclerAdapter<T>.GenericViewHolder> {
+public class TracksRecyclerAdapter<T> extends RecyclerView.Adapter<TracksRecyclerAdapter<T>.GenericViewHolder> {
 
     private List<?> mList;
     private Context mContext;
@@ -26,7 +27,7 @@ public class GenericRecyclerAdapter<T> extends RecyclerView.Adapter<GenericRecyc
         void onItemClick(Object item, int position);
     }
 
-    public GenericRecyclerAdapter(List<T> list, Context context, OnItemClickListener listener) {
+    public TracksRecyclerAdapter(List<T> list, Context context, OnItemClickListener listener) {
         mList = list;
         mContext = context;
         mListener = listener;
@@ -88,7 +89,7 @@ public class GenericRecyclerAdapter<T> extends RecyclerView.Adapter<GenericRecyc
             subTextView = (TextView) itemView.findViewById(R.id.recyclerview_sub_text);
         }
 
-        public void bind(final Object item, final GenericRecyclerAdapter.OnItemClickListener listener) {
+        public void bind(final Object item, final TracksRecyclerAdapter.OnItemClickListener listener) {
 
             itemView.setOnClickListener(new View.OnClickListener() {
 
