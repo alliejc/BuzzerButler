@@ -230,19 +230,6 @@ public class MainActivity extends RoboActionBarActivity
     }
 }
 
-//    public void onConfigurationChanged(Configuration newConfig) {
-//        super.onConfigurationChanged(newConfig);
-//        //mActionBarDrawerToggle.onConfigurationChanged(newConfig);
-//        if(newConfig.orientation==Configuration.ORIENTATION_LANDSCAPE){
-//            setContentView(R.layout.content_main);
-//            Log.e("On Config Change","LANDSCAPE");
-//        }else {
-//
-//            Log.e("On Config Change","PORTRAIT");
-//        }
-//
-//    }
-
     @Override
     public void onPlaylistSelected(String userId, String playlistId, String playlistTitle) {
 

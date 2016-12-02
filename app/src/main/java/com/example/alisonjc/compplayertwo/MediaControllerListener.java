@@ -108,8 +108,8 @@ public class MediaControllerListener extends RoboFragment implements OnControlle
         super.onViewCreated(view, savedInstanceState);
 
         playerControlsSetup();
-        setSeekBar();
         startTimerTask();
+        setSeekBar();
 
         if (mPlayer == null) {
             mPlayer = mMusicPlayer.getPlayer(getContext());
@@ -273,7 +273,6 @@ public class MediaControllerListener extends RoboFragment implements OnControlle
     private void onPlayClicked() {
 
         if (mPlayer == null) {
-            Toast.makeText(getActivity(), "Please select a song", Toast.LENGTH_SHORT).show();
         } else {
             mPlayer.resume(mOperationCallback);
             showPauseButton();
@@ -283,7 +282,6 @@ public class MediaControllerListener extends RoboFragment implements OnControlle
     private void onSkipNextClicked() {
 
         if (mPlayer == null) {
-            Toast.makeText(getActivity(), "Please select a song", Toast.LENGTH_SHORT).show();
         } else {
             mPlayer.skipToNext(mOperationCallback);
             onControllerTrackChange(true);
@@ -293,7 +291,6 @@ public class MediaControllerListener extends RoboFragment implements OnControlle
     private void onPreviousClicked() {
 
         if (mPlayer == null) {
-            Toast.makeText(getActivity(), "Please select a song", Toast.LENGTH_SHORT).show();
         } else {
             mPlayer.skipToPrevious(mOperationCallback);
             onControllerTrackChange(false);
