@@ -5,13 +5,13 @@
                                    xmlns:app="http://schemas.android.com/apk/res-auto"
                                    android:layout_width="match_parent"
                                    android:layout_height="match_parent"
-                                   android:background="@color/color_dark_pink"
+                                   android:background="@color/color_default"
                                    android:fitsSystemWindows="true"
                                    android:gravity="center_horizontal|start"
-                                   android:orientation="horizontal"
                                    android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
                                    app:layout_anchorGravity="top"
                                    app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
-                                   app:titleTextAppearance="@style/ToolbarText"/>
+                                   app:titleTextAppearance="@style/ToolbarText"
+                                   android:layout_gravity="bottom"/>
 
 

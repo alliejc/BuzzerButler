@@ -4,7 +4,6 @@ package com.example.alisonjc.compplayertwo;
 import android.app.DialogFragment;
 import android.app.FragmentTransaction;
 import android.content.Intent;
-import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.FragmentManager;
@@ -231,10 +230,18 @@ public class MainActivity extends RoboActionBarActivity
     }
 }
 
-    public void onConfigurationChanged(Configuration newConfig) {
-        super.onConfigurationChanged(newConfig);
-        mActionBarDrawerToggle.onConfigurationChanged(newConfig);
-    }
+//    public void onConfigurationChanged(Configuration newConfig) {
+//        super.onConfigurationChanged(newConfig);
+//        //mActionBarDrawerToggle.onConfigurationChanged(newConfig);
+//        if(newConfig.orientation==Configuration.ORIENTATION_LANDSCAPE){
+//            setContentView(R.layout.content_main);
+//            Log.e("On Config Change","LANDSCAPE");
+//        }else {
+//
+//            Log.e("On Config Change","PORTRAIT");
+//        }
+//
+//    }
 
     @Override
     public void onPlaylistSelected(String userId, String playlistId, String playlistTitle) {
