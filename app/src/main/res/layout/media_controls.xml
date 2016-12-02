@@ -3,32 +3,36 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_height="match_parent"
     android:layout_width="match_parent"
-    android:background="@color/color_default">
+    android:background="@color/color_default"
+    >
 
 <LinearLayout
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="@color/color_default">
+    android:background="@color/color_default"
+    android:weightSum="100"
+    >
 
     <include
         android:id="@+id/seeker_bar"
         layout="@layout/seekbar"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_weight="1"/>
+        android:layout_height="0dp"
+        android:layout_weight="33.3"/>
 
     <include
         android:id="@+id/music_player"
         layout="@layout/music_player"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_weight="1"/>
+        android:layout_height="0dp"
+        android:layout_weight="33.3"/>
     <include
         android:id="@+id/nowplaying"
         layout="@layout/nowplaying"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_weight="1"/>
+        android:layout_height="0dp"
+        android:layout_weight="33.3"/>
+
 </LinearLayout>
 </FrameLayout>

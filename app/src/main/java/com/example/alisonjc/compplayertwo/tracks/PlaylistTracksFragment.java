@@ -33,7 +33,7 @@ public class PlaylistTracksFragment extends RoboFragment implements OnController
     @Inject
     private SpotifyService mSpotifyService;
 
-    @BindView(R.id.tracks_recycler_view)
+    @BindView(R.id.recycler_view)
     RecyclerView mRecyclerView;
 
     private TracksRecyclerAdapter<?> mAdapter;
@@ -71,7 +71,7 @@ public class PlaylistTracksFragment extends RoboFragment implements OnController
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_tracks, container, false);
+        View rootView = inflater.inflate(R.layout.recyclerview_list, container, false);
         ButterKnife.bind(this, rootView);
 
         return rootView;

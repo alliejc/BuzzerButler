@@ -6,31 +6,31 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingBottom="@dimen/activity_vertical_margin"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
-    android:fitsSystemWindows="true"
-    android:orientation="vertical"
     android:background="@color/color_default"
+    android:orientation="vertical"
+    android:weightSum="100"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context="com.example.alisonjc.compplayertwo.MainActivity"
-    tools:showIn="@layout/app_bar_main"
-    android:layout_weight="100">
+    tools:showIn="@layout/app_bar_main">
 
-    <FrameLayout
+    <include
+        android:id="@+id/toolbar"
+        layout="@layout/toolbar"
         android:layout_width="match_parent"
         android:layout_height="0dp"
+        android:layout_weight="33.3"/>
+
+    <FrameLayout
         android:id="@+id/main_framelayout"
-        android:layout_weight="70"
-        />
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="33.3"/>
 
     <FrameLayout
-        layout="@layout/media_controls"
         android:id="@+id/media_controls_frame"
-        android:layout_height="0dp"
+        layout="@layout/media_controls"
         android:layout_width="match_parent"
-        android:layout_weight="30"
-        />
+        android:layout_height="0dp"
+        android:layout_weight="33.3"/>
 
 </LinearLayout>

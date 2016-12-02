@@ -56,9 +56,9 @@ public class TracksFragment extends RoboFragment implements OnControllerTrackCha
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        rootView = inflater.inflate(R.layout.fragment_tracks, container, false);
+        rootView = inflater.inflate(R.layout.recyclerview_list, container, false);
         ButterKnife.bind(this, rootView);
-        mRecyclerView = (RecyclerView) rootView.findViewById(R.id.tracks_recycler_view);
+        mRecyclerView = (RecyclerView) rootView.findViewById(R.id.recycler_view);
 
         return rootView;
     }

@@ -54,8 +54,8 @@ public class PlaylistFragment extends RoboFragment implements OnPlaylistInteract
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
 
-        View rootView = inflater.inflate(R.layout.fragment_playlist, container, false);
-        mRecyclerView = (RecyclerView) rootView.findViewById(R.id.playlist_recycler_view);
+        View rootView = inflater.inflate(R.layout.recyclerview_list, container, false);
+        mRecyclerView = (RecyclerView) rootView.findViewById(R.id.recycler_view);
 
         return rootView;
     }

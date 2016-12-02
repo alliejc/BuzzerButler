@@ -4,34 +4,33 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@drawable/selector_item"
-    android:maxHeight="?android:attr/listPreferredItemHeight"
-    android:minHeight="?android:attr/listPreferredItemHeight"
     android:orientation="vertical"
-    android:padding="2dip">
+    android:weightSum="100"
+    >
 
     <TextView
         android:id="@+id/recyclerview_header_text"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="0dp"
         android:gravity="center_vertical|center|start"
         android:layout_marginEnd="15dp"
         android:layout_marginStart="15dp"
-        android:ellipsize="marquee"
         android:maxLines="1"
         android:textColor="@color/color_white"
-        android:textSize="20sp"/>
+        android:textSize="20sp"
+        android:layout_weight="50"/>
 
     <TextView
         android:id="@+id/recyclerview_sub_text"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="0dp"
         android:layout_marginEnd="30dp"
         android:layout_marginStart="45dp"
         android:layout_marginTop="10dp"
-        android:ellipsize="marquee"
         android:gravity="bottom"
         android:maxLines="1"
         android:textColor="@color/color_light_gray"
-        android:textSize="15sp"/>
+        android:textSize="15sp"
+        android:layout_weight="50"/>
 
 </LinearLayout>
