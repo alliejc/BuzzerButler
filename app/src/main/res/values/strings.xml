@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">CompPlayerTwo</string>
+    <string name="app_name">CompMusicPlayer</string>
     <string name="app_subtitle">Select a Playlist</string>
 
     <!--Navigation-->
@@ -16,8 +16,6 @@
     <string name="login_dialog_title">Please login to continue</string>
     <string name="login_Dialog_Fragment">Login Screen</string>
 
-    <string name="sort_a_z">Sort A-Z</string>
-    <string name="sort_z_a">Sort Z-A</string>
     <!--Music Player-->
 
     <string name="content_description_play">Play Button</string>
@@ -37,7 +35,6 @@
     <string-array name="nav_drawer_array">
         <item>Playlists</item>
         <item>Songs</item>
-
     </string-array>
 
 </resources>
