@@ -57,6 +57,10 @@ CLIENT_ID="{your key}"
   - Only available for paid Spotify accounts (Spotify limitation)
   - The Spotify OAuth token only lasts 1 hour, without a refresh token option for the Android SDK, meaning the user must login every hour (Spotify Limitation)
   - Also see the "Issues" tab in GitHub
+  
+### Privacy Policy
+
+  - Any information provided by a user, collected about a user, and collected about a user’s use of the app or device is not stored or kept for any purpose, and is only aquired to provide a personalized experience within the app (ie. displaying your name and e-mail address)
 
 
 [//]: # (These are reference links used in the body of this note and get stripped out when the markdown processor does its job. There is no need to format nicely because it shouldn't be seen. Thanks SO - http://stackoverflow.com/questions/4823468/store-comments-in-markdown-syntax)
