@@ -23,14 +23,11 @@ import com.spotify.sdk.android.player.Player;
 import com.spotify.sdk.android.player.Spotify;
 import com.spotify.sdk.android.player.SpotifyPlayer;
 
-import java.util.Timer;
-import java.util.TimerTask;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import roboguice.fragment.RoboFragment;
 
-public class MediaControllerListener extends RoboFragment implements OnControllerTrackChangeListener {
+public class MediaController extends RoboFragment implements OnControllerTrackChangeListener {
 
     @Inject
     private SpotifyService mSpotifyService;
@@ -69,19 +66,19 @@ public class MediaControllerListener extends RoboFragment implements OnControlle
     RadioButton mTwoMin;
 
     private int mSongLocation = 0;
-    private Timer mTimer;
     private Handler seekHandler = new Handler();
+    private Handler timerHandler = new Handler();
     private SpotifyPlayer mPlayer;
     private int mPauseTimeAt = 90000;
     private boolean mBeepPlayed = false;
     private View mPlayerControls;
-    private OnControllerTrackChangeListener mListener;
+    private OnControllerTrackChangeListener mOnControllerTrackChangeListener;
 
-    public MediaControllerListener() {
+    public MediaController() {
     }
 
-    public static MediaControllerListener newInstance() {
-        return new MediaControllerListener();
+    public static MediaController newInstance() {
+        return new MediaController();
     }
 
     private final Player.OperationCallback mOperationCallback = new Player.OperationCallback() {
@@ -108,7 +105,7 @@ public class MediaControllerListener extends RoboFragment implements OnControlle
         super.onViewCreated(view, savedInstanceState);
 
         playerControlsSetup();
-        startTimerTask();
+        setTimer();
         setSeekBar();
 
         if (mPlayer == null) {
@@ -119,7 +116,7 @@ public class MediaControllerListener extends RoboFragment implements OnControlle
     public void playSong(String songName, String artistName, String uri) {
 
         mBeepPlayed = false;
-        startTimerTask();
+        setTimer();
         showPauseButton();
         setSeekBar();
         mPlayer.playUri(mOperationCallback, uri, 0, 0);
@@ -127,33 +124,38 @@ public class MediaControllerListener extends RoboFragment implements OnControlle
         mArtistView.setText(artistName);
     }
 
-    private void startTimerTask() {
+    private void setTimer() {
 
-        TimerTask mTimerTask = new TimerTask() {
-            @Override
-            public void run() {
-                getActivity().runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        mSongLocation = (int) mPlayer.getPlaybackState().positionMs;
-
-                        if (mSongLocation >= mPauseTimeAt - 10000 && !mBeepPlayed) {
-                            playBeep();
-                            mBeepPlayed = true;
-                        }
-                        if (mSongLocation >= mPauseTimeAt) {
-                            mPlayer.pause(mOperationCallback);
-                            onSkipNextClicked();
-                        }
-                    }
-                });
+        if (timerHandler != null) {
+            timerHandler.removeCallbacks(timerRun);
+        }
+        if (mPlayer != null) {
+            mSongLocation = (int) mPlayer.getPlaybackState().positionMs;
+            if (mSongLocation >= mPauseTimeAt - 10000 && !mBeepPlayed) {
+                playBeep();
+                mBeepPlayed = true;
             }
-        };
-        mTimer = new Timer();
-        mTimer.schedule(mTimerTask, 1000, 1000);
+            if (mSongLocation >= mPauseTimeAt) {
+                mPlayer.pause(mOperationCallback);
+                onSkipNextClicked();
+            }
+            timerHandler.postDelayed(timerRun, 1000);
+        }
     }
 
+    private Runnable timerRun = new Runnable() {
+        @Override
+        public void run() {
+            setTimer();
+        }
+    };
+
     private void setSeekBar() {
+
+        if (seekHandler != null) {
+            seekHandler.removeCallbacks(seekrun);
+            mSeekBar.setProgress(0);
+        }
 
         if (mPlayer != null) {
 
@@ -166,10 +168,10 @@ public class MediaControllerListener extends RoboFragment implements OnControlle
             mSongLocationView.setText(String.format("%2d:%02d", minutes, seconds, 0));
         }
 
-        seekHandler.postDelayed(run, 1000);
+        seekHandler.postDelayed(seekrun, 1000);
     }
 
-    Runnable run = new Runnable() {
+    Runnable seekrun = new Runnable() {
         @Override
         public void run() {
             setSeekBar();
@@ -318,28 +320,13 @@ public class MediaControllerListener extends RoboFragment implements OnControlle
     @Override
     public void onDetach() {
         super.onDetach();
-        Spotify.destroyPlayer(this);
-        mListener = null;
-        mTimer.cancel();
-        mTimer.purge();
-        seekHandler.removeCallbacks(run);
-        mSeekBar.setProgress(0);
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-        Spotify.destroyPlayer(this);
-        mTimer.cancel();
-        mTimer.purge();
-        seekHandler.removeCallbacks(run);
-        mSeekBar.setProgress(0);
+        clearPlayer();
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        if(mPlayer != null){
+        if (mPlayer != null) {
             setSeekBar();
         }
     }
@@ -348,7 +335,8 @@ public class MediaControllerListener extends RoboFragment implements OnControlle
     public void onAttach(Context context) {
         super.onAttach(context);
         if (context instanceof OnControllerTrackChangeListener) {
-            mListener = (OnControllerTrackChangeListener) context;
+            mOnControllerTrackChangeListener = (OnControllerTrackChangeListener) context;
+
         } else {
             throw new RuntimeException(context.toString()
                     + " must implement OnControllerInteractionListener");
@@ -357,8 +345,19 @@ public class MediaControllerListener extends RoboFragment implements OnControlle
 
     @Override
     public void onControllerTrackChange(boolean skipforward) {
-        if (mListener != null) {
-            mListener.onControllerTrackChange(skipforward);
+        if (mOnControllerTrackChangeListener != null) {
+            mOnControllerTrackChangeListener.onControllerTrackChange(skipforward);
+        }
+    }
+
+    public void clearPlayer() {
+        setSeekBar();
+        setTimer();
+
+        if (mPlayer != null) {
+            mPlayer.pause(mOperationCallback);
+            Spotify.destroyPlayer(mPlayer);
         }
     }
 }
+

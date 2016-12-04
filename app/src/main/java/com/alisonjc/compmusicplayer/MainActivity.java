@@ -58,7 +58,7 @@ public class MainActivity extends RoboActionBarActivity
     private String mPlaylistTitle;
     private String mUserName;
     private String mUserEmail;
-    private MediaControllerListener mMediaController;
+    private MediaController mMediaController;
     private PlaylistTracksFragment mPlaylistTracksFragment;
     private TracksFragment mTracksFragment;
     private static final int REQUEST_CODE = 1337;
@@ -76,8 +76,6 @@ public class MainActivity extends RoboActionBarActivity
 
         toolbarSetup();
     }
-
-
 
     private void navigationDrawerSetup() {
 
@@ -133,7 +131,7 @@ public class MainActivity extends RoboActionBarActivity
 
             case R.id.nav_logout:
                 mSpotifyService.userLogout(getApplicationContext());
-
+                mMediaController.clearPlayer();
                 userLogin();
                 break;
 
@@ -212,7 +210,7 @@ public class MainActivity extends RoboActionBarActivity
                                         .replace(R.id.main_framelayout, playlistFragment, "playlistTracksFragment").addToBackStack(null)
                                         .commit();
 
-                                mMediaController = MediaControllerListener.newInstance();
+                                mMediaController = MediaController.newInstance();
                                 fragmentManager.beginTransaction()
                                         .replace(R.id.media_controls_frame, mMediaController, "mediaController")
                                         .commit();
