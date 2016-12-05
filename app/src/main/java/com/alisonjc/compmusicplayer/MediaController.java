@@ -159,7 +159,7 @@ public class MediaController extends RoboFragment implements OnControllerTrackCh
 
         if (mPlayer != null) {
 
-            mSeekBar.setMax(mPauseTimeAt);
+            mSeekBar.setMax(120000);
             mSeekBar.setProgress(mSongLocation);
 
             int seconds = ((mSongLocation / 1000) % 60);
@@ -353,6 +353,7 @@ public class MediaController extends RoboFragment implements OnControllerTrackCh
     public void clearPlayer() {
         setSeekBar();
         setTimer();
+        showPlayButton();
 
         if (mPlayer != null) {
             mPlayer.pause(mOperationCallback);

@@ -86,6 +86,7 @@ public class MainActivity extends RoboActionBarActivity
 
         mNavigationView.setNavigationItemSelectedListener(this);
         View header = mNavigationView.getHeaderView(0);
+
         TextView name = (TextView) header.findViewById(R.id.nav_header_top);
         TextView email = (TextView) header.findViewById(R.id.nav_header_bottom);
         name.setText(mUserName);
@@ -131,6 +132,7 @@ public class MainActivity extends RoboActionBarActivity
 
             case R.id.nav_logout:
                 mSpotifyService.userLogout(getApplicationContext());
+                mNavigationView.setCheckedItem(R.id.nav_playlists);
                 mMediaController.clearPlayer();
                 userLogin();
                 break;

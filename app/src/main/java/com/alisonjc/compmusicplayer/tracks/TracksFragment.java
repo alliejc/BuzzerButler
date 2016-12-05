@@ -172,11 +172,6 @@ public class TracksFragment extends RoboFragment implements OnControllerTrackCha
     }
 
     @Override
-    public void onPause() {
-        super.onPause();
-    }
-
-    @Override
     public void onControllerTrackChange(boolean skipforward) {
 
         if (skipforward) {

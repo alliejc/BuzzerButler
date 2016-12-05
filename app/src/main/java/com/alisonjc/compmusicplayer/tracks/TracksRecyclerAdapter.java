@@ -74,7 +74,7 @@ public class TracksRecyclerAdapter<T> extends RecyclerView.Adapter<TracksRecycle
         notifyItemChanged(selectedItem);
         selectedItem = position;
         notifyItemChanged(selectedItem);
-        notifyDataSetChanged();
+        //notifyDataSetChanged();
     }
 
     public class GenericViewHolder extends RecyclerView.ViewHolder {
@@ -100,7 +100,7 @@ public class TracksRecyclerAdapter<T> extends RecyclerView.Adapter<TracksRecycle
                     notifyItemChanged(selectedItem);
                     selectedItem = getLayoutPosition();
                     notifyItemChanged(selectedItem);
-                    notifyDataSetChanged();
+                    //notifyDataSetChanged();
                 }
             });
         }
