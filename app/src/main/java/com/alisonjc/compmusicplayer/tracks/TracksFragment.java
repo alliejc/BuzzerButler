@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -43,6 +44,7 @@ public class TracksFragment extends RoboFragment implements OnControllerTrackCha
     private int mTotalTracks = 0;
     private int mOffset;
     private int mLimit = 20;
+    private static final String TAG = "TracksFragment";
 
     public TracksFragment() {
     }
@@ -81,7 +83,7 @@ public class TracksFragment extends RoboFragment implements OnControllerTrackCha
         mRecyclerView.addItemDecoration(dividerItemDecoration);
         mRecyclerView.setHasFixedSize(true);
 
-        mAdapter = new TracksRecyclerAdapter<Item>(mTracksList, getContext(), new TracksRecyclerAdapter.OnItemClickListener() {
+        mAdapter = new TracksRecyclerAdapter<>(mTracksList, getContext(), new TracksRecyclerAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(Object item, int position) {
                 mItemPosition = position;
@@ -106,6 +108,7 @@ public class TracksFragment extends RoboFragment implements OnControllerTrackCha
 
             @Override
             public void onFailure(Call<UserTracks> call, Throwable t) {
+                mSpotifyService.userLogout(getContext());
             }
         });
 
@@ -132,19 +135,15 @@ public class TracksFragment extends RoboFragment implements OnControllerTrackCha
 
             @Override
             public void onFailure(Call<UserTracks> call, Throwable t) {
-
+                mSpotifyService.userLogout(getContext());
             }
         });
     }
 
-    private void smoothScroll(int position) {
-        mRecyclerView.smoothScrollToPosition(position);
-    }
-
     private void setCurrentPlayingSong(int itemPosition) {
         this.mItemPosition = itemPosition;
-        mAdapter.recyclerViewSelector(itemPosition);
-        smoothScroll(itemPosition);
+        mAdapter.recyclerViewSelector(mItemPosition);
+        mRecyclerView.smoothScrollToPosition(mItemPosition);
         onSongSelected(mTracksList.get(itemPosition).getTrack().getName(), mTracksList.get(itemPosition).getTrack().getArtists().get(0).getName(), mTracksList.get(itemPosition).getTrack().getUri());
     }
 
@@ -152,6 +151,7 @@ public class TracksFragment extends RoboFragment implements OnControllerTrackCha
         if (mListener != null) {
             mListener.onTrackSelected(songName, artistName, uri);
         }
+        Log.d(TAG, "onSongSelected");
     }
 
     @Override
@@ -169,6 +169,7 @@ public class TracksFragment extends RoboFragment implements OnControllerTrackCha
     public void onDetach() {
         super.onDetach();
         mListener = null;
+        Log.d(TAG, "onDestroy");
     }
 
     @Override
@@ -190,10 +191,11 @@ public class TracksFragment extends RoboFragment implements OnControllerTrackCha
                 setCurrentPlayingSong(mItemPosition - 1);
             }
         }
+        Log.d(TAG, "onControllerTackChange");
     }
 
     @Override
     public void onTrackSelected(String trackName, String artistName, String uri) {
-
+        Log.d(TAG, "onTackSelected");
     }
 }

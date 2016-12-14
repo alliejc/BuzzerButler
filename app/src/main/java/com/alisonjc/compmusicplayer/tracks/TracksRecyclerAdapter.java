@@ -3,6 +3,7 @@ package com.alisonjc.compmusicplayer.tracks;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,6 +23,7 @@ public class TracksRecyclerAdapter<T> extends RecyclerView.Adapter<TracksRecycle
     private GenericViewHolder mViewHolder;
     private Item mPlaylistTracksItem;
     private com.alisonjc.compmusicplayer.spotify.model.UserTracks.Item mTracksItem;
+    private static final String TAG = "TracksRecyclerAdapter";
 
     public interface OnItemClickListener {
         void onItemClick(Object item, int position);
@@ -53,6 +55,7 @@ public class TracksRecyclerAdapter<T> extends RecyclerView.Adapter<TracksRecycle
             mPlaylistTracksItem = (Item)item;
             headerTextView.setText(mPlaylistTracksItem.getTrack().getName());
             subTextView.setText(mPlaylistTracksItem.getTrack().getArtists().get(0).getName());
+            Log.d(TAG, "setText PlaylistTracksItem");
 
         } else if (item instanceof com.alisonjc.compmusicplayer.spotify.model.UserTracks.Item){
             mTracksItem = (com.alisonjc.compmusicplayer.spotify.model.UserTracks.Item) item;
@@ -60,8 +63,8 @@ public class TracksRecyclerAdapter<T> extends RecyclerView.Adapter<TracksRecycle
             subTextView.setText(mTracksItem.getTrack().getArtists().get(0).getName());
         }
 
-        holder.itemView.setSelected(selectedItem == position);
         holder.bind(item, mListener);
+        holder.itemView.setSelected(selectedItem == position);
     }
 
     @Override
@@ -70,11 +73,13 @@ public class TracksRecyclerAdapter<T> extends RecyclerView.Adapter<TracksRecycle
     }
 
     public void recyclerViewSelector(int position) {
+        Log.d(TAG, "recyclerViewSelector");
 
         notifyItemChanged(selectedItem);
         selectedItem = position;
         notifyItemChanged(selectedItem);
-        //notifyDataSetChanged();
+
+
     }
 
     public class GenericViewHolder extends RecyclerView.ViewHolder {
@@ -89,18 +94,19 @@ public class TracksRecyclerAdapter<T> extends RecyclerView.Adapter<TracksRecycle
             subTextView = (TextView) itemView.findViewById(R.id.recyclerview_sub_text);
         }
 
+
         public void bind(final Object item, final TracksRecyclerAdapter.OnItemClickListener listener) {
 
             itemView.setOnClickListener(new View.OnClickListener() {
 
                 @Override
                 public void onClick(View v) {
+                    Log.d(TAG, "itemView OnClick");
 
                     listener.onItemClick(item, getAdapterPosition());
                     notifyItemChanged(selectedItem);
                     selectedItem = getLayoutPosition();
                     notifyItemChanged(selectedItem);
-                    //notifyDataSetChanged();
                 }
             });
         }

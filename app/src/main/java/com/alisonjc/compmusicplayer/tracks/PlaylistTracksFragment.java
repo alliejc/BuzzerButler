@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -46,6 +47,7 @@ public class PlaylistTracksFragment extends RoboFragment implements OnController
     private int mTotalTracks = 0;
     private int mOffset;
     private int mLimit = 20;
+    private static final String TAG = "PlaylistTracksFragment";
 
     public PlaylistTracksFragment() {
     }
@@ -115,8 +117,7 @@ public class PlaylistTracksFragment extends RoboFragment implements OnController
                     mAdapter.notifyDataSetChanged();
 
                 } else if (response.code() == 401) {
-                    //add logout to interface
-                    //userLogout();
+                    mSpotifyService.userLogout(getContext());
                 }
             }
 
@@ -148,26 +149,25 @@ public class PlaylistTracksFragment extends RoboFragment implements OnController
 
             @Override
             public void onFailure(Call<PlaylistTracksList> call, Throwable t) {
+                mSpotifyService.userLogout(getContext());
             }
         });
     }
 
-    private void smoothScroll(int position) {
-        mRecyclerView.smoothScrollToPosition(position);
-    }
-
     private void setCurrentPlayingSong(int itemPosition) {
-
+        Log.d(TAG, "setCurrentPlayingSong");
         this.mItemPosition = itemPosition;
-        mAdapter.recyclerViewSelector(itemPosition);
-        smoothScroll(itemPosition);
+        mAdapter.recyclerViewSelector(mItemPosition);
+        mRecyclerView.smoothScrollToPosition(mItemPosition);
         onSongSelected(mPlaylistTracksList.get(itemPosition).getTrack().getName(), mPlaylistTracksList.get(itemPosition).getTrack().getArtists().get(0).getName(), mPlaylistTracksList.get(itemPosition).getTrack().getUri());
     }
 
     public void onSongSelected(String songName, String artistName, String uri) {
+        Log.d(TAG, "onSongSelected");
         if (mListener != null) {
             mListener.onTrackSelected(songName, artistName, uri);
         }
+
     }
 
     @Override
@@ -185,6 +185,7 @@ public class PlaylistTracksFragment extends RoboFragment implements OnController
     public void onDetach() {
         super.onDetach();
         mListener = null;
+        Log.d(TAG, "onDestroy");
     }
 
     @Override
@@ -195,20 +196,21 @@ public class PlaylistTracksFragment extends RoboFragment implements OnController
                 setCurrentPlayingSong(mItemPosition);
             } else {
                 setCurrentPlayingSong(mItemPosition + 1);
+                Log.d(TAG, "onControllerTrackChangeFORWARD");
             }
-
         } else {
             if (mItemPosition < 1) {
                 mItemPosition = 0;
                 setCurrentPlayingSong(mItemPosition);
             } else {
                 setCurrentPlayingSong(mItemPosition - 1);
+                Log.d(TAG, "onControllerTrackChangeBACK");
             }
         }
     }
 
     @Override
     public void onTrackSelected(String trackName, String artistName, String uri) {
-
+        Log.d(TAG, "onTrackSelected");
     }
 }

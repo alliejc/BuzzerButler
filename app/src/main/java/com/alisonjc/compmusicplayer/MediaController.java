@@ -4,6 +4,7 @@ import android.content.Context;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -72,7 +73,11 @@ public class MediaController extends RoboFragment implements OnControllerTrackCh
     private int mPauseTimeAt = 90000;
     private boolean mBeepPlayed = false;
     private View mPlayerControls;
+    private int seconds = 0;
+    private int minutes = 0;
     private OnControllerTrackChangeListener mOnControllerTrackChangeListener;
+    private static final String TAG = "MediaController";
+//    private MediaPlayer mediaPlayer = new MediaPlayer();
 
     public MediaController() {
     }
@@ -95,6 +100,7 @@ public class MediaController extends RoboFragment implements OnControllerTrackCh
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.media_controls, container, false);
         mPlayerControls = rootView.findViewById(R.id.music_player);
+//        mediaPlayer = MediaPlayer.create(getContext(), R.raw.beep);
         ButterKnife.bind(this, rootView);
 
         return rootView;
@@ -114,6 +120,7 @@ public class MediaController extends RoboFragment implements OnControllerTrackCh
     }
 
     public void playSong(String songName, String artistName, String uri) {
+        Log.d(TAG, "playSong");
 
         mBeepPlayed = false;
         setTimer();
@@ -125,18 +132,13 @@ public class MediaController extends RoboFragment implements OnControllerTrackCh
     }
 
     private void setTimer() {
-
-        if (timerHandler != null) {
-            timerHandler.removeCallbacks(timerRun);
-        }
+        
         if (mPlayer != null) {
             mSongLocation = (int) mPlayer.getPlaybackState().positionMs;
             if (mSongLocation >= mPauseTimeAt - 10000 && !mBeepPlayed) {
                 playBeep();
                 mBeepPlayed = true;
-            }
-            if (mSongLocation >= mPauseTimeAt) {
-                mPlayer.pause(mOperationCallback);
+            } else if (mSongLocation >= mPauseTimeAt && mBeepPlayed) {
                 onSkipNextClicked();
             }
             timerHandler.postDelayed(timerRun, 1000);
@@ -152,18 +154,13 @@ public class MediaController extends RoboFragment implements OnControllerTrackCh
 
     private void setSeekBar() {
 
-        if (seekHandler != null) {
-            seekHandler.removeCallbacks(seekrun);
-            mSeekBar.setProgress(0);
-        }
-
         if (mPlayer != null) {
 
             mSeekBar.setMax(120000);
             mSeekBar.setProgress(mSongLocation);
 
-            int seconds = ((mSongLocation / 1000) % 60);
-            int minutes = ((mSongLocation / 1000) / 60);
+            seconds = ((mSongLocation / 1000) % 60);
+            minutes = ((mSongLocation / 1000) / 60);
 
             mSongLocationView.setText(String.format("%2d:%02d", minutes, seconds, 0));
         }
@@ -222,29 +219,51 @@ public class MediaController extends RoboFragment implements OnControllerTrackCh
         mSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                Log.d("Seekbar", "onProgressChanged" + progress);
+
                 if (mPlayer != null && fromUser) {
+
+                    seconds = ((progress / 1000) % 60);
+                    minutes = ((progress / 1000) / 60);
+
                     mPlayer.seekToPosition(mOperationCallback, progress);
-                    mSeekBar.setProgress(progress);
+                    mSongLocationView.setText(String.format("%2d:%02d", minutes, seconds, 0));
+                    Log.i("Seekbar", "setProgress" + progress);
                 }
             }
 
             @Override
             public void onStartTrackingTouch(SeekBar seekBar) {
+                Log.d("Seekbar", "START" + seekBar.getProgress());
             }
 
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
+                Log.d("Seekbar", "STOP" + seekBar.getProgress());
+                onProgressChanged(seekBar, seekBar.getProgress(), true);
             }
         });
     }
 
     private void playBeep() {
 
+        Log.d(TAG, "playBeep");
         final MediaPlayer mediaPlayer = MediaPlayer.create(getContext(), R.raw.beep);
-        mediaPlayer.start();
+
+        mediaPlayer.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
+            @Override
+            public void onPrepared(MediaPlayer mp) {
+                if (mp == mediaPlayer) {
+                    Log.d(TAG, "MediaPlayerSTART");
+                    mediaPlayer.start();
+                }
+            }
+        });
+
         mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
             @Override
             public void onCompletion(MediaPlayer mp) {
+                Log.d(TAG, "MediaPlayerRELEASE");
                 mediaPlayer.release();
             }
         });
@@ -283,17 +302,20 @@ public class MediaController extends RoboFragment implements OnControllerTrackCh
 
     private void onSkipNextClicked() {
 
-        if (mPlayer == null) {
-        } else {
+        Log.d(TAG, "onSkipClicked");
+
+        if (mPlayer != null) {
+            Log.d(TAG, "onSkipNextClickedPLAYERNOTNULL");
             mPlayer.skipToNext(mOperationCallback);
             onControllerTrackChange(true);
+        } else {
+            Log.d(TAG, "onSkipNextClickedPLAYERNULL");
         }
     }
 
     private void onPreviousClicked() {
 
-        if (mPlayer == null) {
-        } else {
+        if (mPlayer != null) {
             mPlayer.skipToPrevious(mOperationCallback);
             onControllerTrackChange(false);
         }
@@ -320,6 +342,7 @@ public class MediaController extends RoboFragment implements OnControllerTrackCh
     @Override
     public void onDetach() {
         super.onDetach();
+        Log.d(TAG, "onDetach");
         clearPlayer();
     }
 
@@ -329,6 +352,7 @@ public class MediaController extends RoboFragment implements OnControllerTrackCh
         if (mPlayer != null) {
             setSeekBar();
         }
+        Log.d(TAG, "onResume");
     }
 
     @Override
@@ -345,12 +369,18 @@ public class MediaController extends RoboFragment implements OnControllerTrackCh
 
     @Override
     public void onControllerTrackChange(boolean skipforward) {
+
         if (mOnControllerTrackChangeListener != null) {
+            Log.d(TAG, "onControllerTrackChangeNOTNULL");
             mOnControllerTrackChangeListener.onControllerTrackChange(skipforward);
+        }else {
+            Log.d(TAG, "onControllerTrackChangeNULL");
         }
+
     }
 
     public void clearPlayer() {
+        Log.d(TAG, "clearPlayer");
         setSeekBar();
         setTimer();
         showPlayButton();
@@ -359,6 +389,7 @@ public class MediaController extends RoboFragment implements OnControllerTrackCh
             mPlayer.pause(mOperationCallback);
             Spotify.destroyPlayer(mPlayer);
         }
+
     }
 }
 

@@ -46,6 +46,8 @@ public class MusicPlayer implements Player.NotificationCallback {
             });
 
             mPlayer.isInitialized();
+            Log.d("MusicPlayer", "Initialized");
+
             return mPlayer;
         }
     }

@@ -12,6 +12,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -28,6 +29,8 @@ import com.alisonjc.compmusicplayer.tracks.TracksFragment;
 import com.google.inject.Inject;
 import com.spotify.sdk.android.authentication.AuthenticationClient;
 import com.spotify.sdk.android.authentication.AuthenticationResponse;
+import com.squareup.leakcanary.LeakCanary;
+import com.squareup.leakcanary.RefWatcher;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -63,6 +66,7 @@ public class MainActivity extends RoboActionBarActivity
     private TracksFragment mTracksFragment;
     private static final int REQUEST_CODE = 1337;
     private OnControllerTrackChangeListener mOnControllerTrackChangeListener;
+    private static final String TAG = "MainActivity";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,6 +79,7 @@ public class MainActivity extends RoboActionBarActivity
         }
 
         toolbarSetup();
+        LeakCanary.install(getApplication());
     }
 
     private void navigationDrawerSetup() {
@@ -249,13 +254,27 @@ public class MainActivity extends RoboActionBarActivity
 
     @Override
     public void onTrackSelected(String songName, String artistName, String uri) {
-        mMediaController.playSong(songName, artistName, uri); }
+        Log.d(TAG, "onTracksSelected");
+        mMediaController.playSong(songName, artistName, uri);
+        }
 
     @Override
     public void onControllerTrackChange(boolean skipforward) {
         if (mOnControllerTrackChangeListener != null) {
+            Log.d(TAG, "onControllerTackChangeNOTNULL");
             mOnControllerTrackChangeListener.onControllerTrackChange(skipforward);
+        }else {
+            Log.d(TAG, "onControllerTrackChangeNULL");
         }
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        Log.d(TAG, "onDestroy");
+        RefWatcher refWatcher = Application.getRefWatcher(this);
+        refWatcher.watch(this);
+
     }
 }
 
