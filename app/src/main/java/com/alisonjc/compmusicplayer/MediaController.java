@@ -77,7 +77,6 @@ public class MediaController extends RoboFragment implements OnControllerTrackCh
     private int minutes = 0;
     private OnControllerTrackChangeListener mOnControllerTrackChangeListener;
     private static final String TAG = "MediaController";
-//    private MediaPlayer mediaPlayer = new MediaPlayer();
 
     public MediaController() {
     }
@@ -100,7 +99,6 @@ public class MediaController extends RoboFragment implements OnControllerTrackCh
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.media_controls, container, false);
         mPlayerControls = rootView.findViewById(R.id.music_player);
-//        mediaPlayer = MediaPlayer.create(getContext(), R.raw.beep);
         ButterKnife.bind(this, rootView);
 
         return rootView;
@@ -132,13 +130,18 @@ public class MediaController extends RoboFragment implements OnControllerTrackCh
     }
 
     private void setTimer() {
-        
+
         if (mPlayer != null) {
+
             mSongLocation = (int) mPlayer.getPlaybackState().positionMs;
+
             if (mSongLocation >= mPauseTimeAt - 10000 && !mBeepPlayed) {
-                playBeep();
+                Log.d(TAG, "setTimerPlayBeep");
                 mBeepPlayed = true;
+                playBeep();
+
             } else if (mSongLocation >= mPauseTimeAt && mBeepPlayed) {
+                Log.d(TAG, "SetTimeSkipNext");
                 onSkipNextClicked();
             }
             timerHandler.postDelayed(timerRun, 1000);
@@ -156,7 +159,7 @@ public class MediaController extends RoboFragment implements OnControllerTrackCh
 
         if (mPlayer != null) {
 
-            mSeekBar.setMax(120000);
+            mSeekBar.setMax(mPauseTimeAt);
             mSeekBar.setProgress(mSongLocation);
 
             seconds = ((mSongLocation / 1000) % 60);
@@ -211,7 +214,6 @@ public class MediaController extends RoboFragment implements OnControllerTrackCh
         mRadioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
-
                 onRadioButtonClicked(checkedId);
             }
         });
@@ -246,36 +248,34 @@ public class MediaController extends RoboFragment implements OnControllerTrackCh
     }
 
     private void playBeep() {
+        Log.d(TAG, "PlayBeep");
 
-        Log.d(TAG, "playBeep");
         final MediaPlayer mediaPlayer = MediaPlayer.create(getContext(), R.raw.beep);
 
         mediaPlayer.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
             @Override
             public void onPrepared(MediaPlayer mp) {
-                if (mp == mediaPlayer) {
-                    Log.d(TAG, "MediaPlayerSTART");
-                    mediaPlayer.start();
-                }
+                mediaPlayer.start();
+                Log.d(TAG, "MediaPlayerSTART");
             }
         });
 
         mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
             @Override
             public void onCompletion(MediaPlayer mp) {
-                Log.d(TAG, "MediaPlayerRELEASE");
-                mediaPlayer.release();
+                    mediaPlayer.release();
+                    Log.d(TAG, "MediaPlayerRELEASE");
             }
         });
     }
 
     private void onPauseClicked() {
 
-        if (mPlayer == null) {
-            Toast.makeText(getActivity(), "Please select a song", Toast.LENGTH_SHORT).show();
-        } else {
+        if(mPlayer != null){
             mPlayer.pause(mOperationCallback);
             showPlayButton();
+        } else {
+            Toast.makeText(getActivity(), "Please select a song", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -293,21 +293,20 @@ public class MediaController extends RoboFragment implements OnControllerTrackCh
 
     private void onPlayClicked() {
 
-        if (mPlayer == null) {
-        } else {
+        if(mPlayer != null){
             mPlayer.resume(mOperationCallback);
             showPauseButton();
         }
     }
 
     private void onSkipNextClicked() {
-
         Log.d(TAG, "onSkipClicked");
 
         if (mPlayer != null) {
             Log.d(TAG, "onSkipNextClickedPLAYERNOTNULL");
             mPlayer.skipToNext(mOperationCallback);
             onControllerTrackChange(true);
+
         } else {
             Log.d(TAG, "onSkipNextClickedPLAYERNULL");
         }
@@ -373,6 +372,7 @@ public class MediaController extends RoboFragment implements OnControllerTrackCh
         if (mOnControllerTrackChangeListener != null) {
             Log.d(TAG, "onControllerTrackChangeNOTNULL");
             mOnControllerTrackChangeListener.onControllerTrackChange(skipforward);
+
         }else {
             Log.d(TAG, "onControllerTrackChangeNULL");
         }
@@ -381,6 +381,7 @@ public class MediaController extends RoboFragment implements OnControllerTrackCh
 
     public void clearPlayer() {
         Log.d(TAG, "clearPlayer");
+
         setSeekBar();
         setTimer();
         showPlayButton();
@@ -389,7 +390,6 @@ public class MediaController extends RoboFragment implements OnControllerTrackCh
             mPlayer.pause(mOperationCallback);
             Spotify.destroyPlayer(mPlayer);
         }
-
     }
 }
 
