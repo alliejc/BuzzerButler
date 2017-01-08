@@ -10,7 +10,7 @@ For this reason, Competition Practice Player includes these features:
 
   - Populates with the user's Spotify playlists
   - Gives an option to end the song at 1:30 or 2:00
-  - Gives a notification beep 5 seconds before the song ends
+  - Gives a notification beep 10 seconds before the song ends
   - Gives a pause before playing the next song in the list
 
 ### Version

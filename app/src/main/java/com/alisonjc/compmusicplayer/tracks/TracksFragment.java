@@ -151,7 +151,7 @@ public class TracksFragment extends RoboFragment implements OnControllerTrackCha
         if (mListener != null) {
             mListener.onTrackSelected(songName, artistName, uri);
         }
-        Log.d(TAG, "onSongSelected");
+        Log.i(TAG, "onSongSelected");
     }
 
     @Override
@@ -169,7 +169,7 @@ public class TracksFragment extends RoboFragment implements OnControllerTrackCha
     public void onDetach() {
         super.onDetach();
         mListener = null;
-        Log.d(TAG, "onDestroy");
+        Log.i(TAG, "onDestroy");
     }
 
     @Override
@@ -191,11 +191,11 @@ public class TracksFragment extends RoboFragment implements OnControllerTrackCha
                 setCurrentPlayingSong(mItemPosition - 1);
             }
         }
-        Log.d(TAG, "onControllerTackChange");
+        Log.i(TAG, "onControllerTackChange");
     }
 
     @Override
     public void onTrackSelected(String trackName, String artistName, String uri) {
-        Log.d(TAG, "onTackSelected");
+        Log.i(TAG, "onTackSelected");
     }
 }

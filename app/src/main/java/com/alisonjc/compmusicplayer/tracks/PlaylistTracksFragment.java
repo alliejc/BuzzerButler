@@ -155,7 +155,7 @@ public class PlaylistTracksFragment extends RoboFragment implements OnController
     }
 
     private void setCurrentPlayingSong(int itemPosition) {
-        Log.d(TAG, "setCurrentPlayingSong");
+        Log.i(TAG, "setCurrentPlayingSong");
         this.mItemPosition = itemPosition;
         mAdapter.recyclerViewSelector(mItemPosition);
         mRecyclerView.smoothScrollToPosition(mItemPosition);
@@ -163,7 +163,7 @@ public class PlaylistTracksFragment extends RoboFragment implements OnController
     }
 
     public void onSongSelected(String songName, String artistName, String uri) {
-        Log.d(TAG, "onSongSelected");
+        Log.i(TAG, "onSongSelected");
         if (mListener != null) {
             mListener.onTrackSelected(songName, artistName, uri);
         }
@@ -196,7 +196,7 @@ public class PlaylistTracksFragment extends RoboFragment implements OnController
                 setCurrentPlayingSong(mItemPosition);
             } else {
                 setCurrentPlayingSong(mItemPosition + 1);
-                Log.d(TAG, "onControllerTrackChangeFORWARD");
+                Log.i(TAG, "onControllerTrackChangeFORWARD");
             }
         } else {
             if (mItemPosition < 1) {
@@ -204,13 +204,13 @@ public class PlaylistTracksFragment extends RoboFragment implements OnController
                 setCurrentPlayingSong(mItemPosition);
             } else {
                 setCurrentPlayingSong(mItemPosition - 1);
-                Log.d(TAG, "onControllerTrackChangeBACK");
+                Log.i(TAG, "onControllerTrackChangeBACK");
             }
         }
     }
 
     @Override
     public void onTrackSelected(String trackName, String artistName, String uri) {
-        Log.d(TAG, "onTrackSelected");
+        Log.i(TAG, "onTrackSelected");
     }
 }

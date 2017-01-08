@@ -67,14 +67,14 @@ public class MediaController extends RoboFragment implements OnControllerTrackCh
     RadioButton mTwoMin;
 
     private int mSongLocation = 0;
-    private Handler seekHandler = new Handler();
-    private Handler timerHandler = new Handler();
+    private Handler mSeekBarHandler = new Handler();
+    private Handler mMusicTimerHandler = new Handler();
     private SpotifyPlayer mPlayer;
     private int mPauseTimeAt = 90000;
     private boolean mBeepPlayed = false;
     private View mPlayerControls;
-    private int seconds = 0;
-    private int minutes = 0;
+    private int mSeconds = 0;
+    private int mMinutes = 0;
     private OnControllerTrackChangeListener mOnControllerTrackChangeListener;
     private static final String TAG = "MediaController";
 
@@ -144,7 +144,7 @@ public class MediaController extends RoboFragment implements OnControllerTrackCh
                 Log.d(TAG, "SetTimeSkipNext");
                 onSkipNextClicked();
             }
-            timerHandler.postDelayed(timerRun, 1000);
+            mMusicTimerHandler.postDelayed(timerRun, 1000);
         }
     }
 
@@ -162,13 +162,13 @@ public class MediaController extends RoboFragment implements OnControllerTrackCh
             mSeekBar.setMax(mPauseTimeAt);
             mSeekBar.setProgress(mSongLocation);
 
-            seconds = ((mSongLocation / 1000) % 60);
-            minutes = ((mSongLocation / 1000) / 60);
+            mSeconds = ((mSongLocation / 1000) % 60);
+            mMinutes = ((mSongLocation / 1000) / 60);
 
-            mSongLocationView.setText(String.format("%2d:%02d", minutes, seconds, 0));
+            mSongLocationView.setText(String.format("%2d:%02d", mMinutes, mSeconds, 0));
         }
 
-        seekHandler.postDelayed(seekrun, 1000);
+        mSeekBarHandler.postDelayed(seekrun, 1000);
     }
 
     Runnable seekrun = new Runnable() {
@@ -225,11 +225,11 @@ public class MediaController extends RoboFragment implements OnControllerTrackCh
 
                 if (mPlayer != null && fromUser) {
 
-                    seconds = ((progress / 1000) % 60);
-                    minutes = ((progress / 1000) / 60);
+                    mSeconds = ((progress / 1000) % 60);
+                    mMinutes = ((progress / 1000) / 60);
 
                     mPlayer.seekToPosition(mOperationCallback, progress);
-                    mSongLocationView.setText(String.format("%2d:%02d", minutes, seconds, 0));
+                    mSongLocationView.setText(String.format("%2d:%02d", mMinutes, mSeconds, 0));
                     mSeekBar.setProgress(progress);
                     Log.d("Seekbar", "setProgress" + progress);
                 }

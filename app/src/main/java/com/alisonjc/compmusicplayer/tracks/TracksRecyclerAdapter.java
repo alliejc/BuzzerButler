@@ -55,7 +55,7 @@ public class TracksRecyclerAdapter<T> extends RecyclerView.Adapter<TracksRecycle
             mPlaylistTracksItem = (Item)item;
             headerTextView.setText(mPlaylistTracksItem.getTrack().getName());
             subTextView.setText(mPlaylistTracksItem.getTrack().getArtists().get(0).getName());
-            Log.d(TAG, "setText PlaylistTracksItem");
+            Log.i(TAG, "setText PlaylistTracksItem");
 
         } else if (item instanceof com.alisonjc.compmusicplayer.spotify.model.UserTracks.Item){
             mTracksItem = (com.alisonjc.compmusicplayer.spotify.model.UserTracks.Item) item;
@@ -73,7 +73,7 @@ public class TracksRecyclerAdapter<T> extends RecyclerView.Adapter<TracksRecycle
     }
 
     public void recyclerViewSelector(int position) {
-        Log.d(TAG, "recyclerViewSelector");
+        Log.i(TAG, "recyclerViewSelector");
 
         notifyItemChanged(selectedItem);
         selectedItem = position;
@@ -101,7 +101,7 @@ public class TracksRecyclerAdapter<T> extends RecyclerView.Adapter<TracksRecycle
 
                 @Override
                 public void onClick(View v) {
-                    Log.d(TAG, "itemView OnClick");
+                    Log.i(TAG, "itemView OnClick");
 
                     listener.onItemClick(item, getAdapterPosition());
                     notifyItemChanged(selectedItem);

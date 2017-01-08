@@ -254,17 +254,17 @@ public class MainActivity extends RoboActionBarActivity
 
     @Override
     public void onTrackSelected(String songName, String artistName, String uri) {
-        Log.d(TAG, "onTracksSelected");
+        Log.i(TAG, "onTracksSelected");
         mMediaController.playSong(songName, artistName, uri);
         }
 
     @Override
     public void onControllerTrackChange(boolean skipforward) {
         if (mOnControllerTrackChangeListener != null) {
-            Log.d(TAG, "onControllerTackChangeNOTNULL");
+            Log.i(TAG, "onControllerTackChangeNOTNULL");
             mOnControllerTrackChangeListener.onControllerTrackChange(skipforward);
         }else {
-            Log.d(TAG, "onControllerTrackChangeNULL");
+            Log.i(TAG, "onControllerTrackChangeNULL");
         }
     }
 
