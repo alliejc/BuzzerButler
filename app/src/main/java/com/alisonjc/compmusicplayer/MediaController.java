@@ -118,7 +118,7 @@ public class MediaController extends RoboFragment implements OnControllerTrackCh
     }
 
     public void playSong(String songName, String artistName, String uri) {
-        Log.d(TAG, "playSong");
+        Log.i(TAG, "playSong");
 
         mBeepPlayed = false;
         setTimer();
@@ -136,12 +136,12 @@ public class MediaController extends RoboFragment implements OnControllerTrackCh
             mSongLocation = (int) mPlayer.getPlaybackState().positionMs;
 
             if (mSongLocation >= mPauseTimeAt - 10000 && !mBeepPlayed) {
-                Log.d(TAG, "setTimerPlayBeep");
+                Log.i(TAG, "setTimerPlayBeep");
                 mBeepPlayed = true;
                 playBeep();
 
             } else if (mSongLocation >= mPauseTimeAt && mBeepPlayed) {
-                Log.d(TAG, "SetTimeSkipNext");
+                Log.i(TAG, "SetTimeSkipNext");
                 onSkipNextClicked();
             }
             mMusicTimerHandler.postDelayed(timerRun, 1000);
@@ -221,7 +221,7 @@ public class MediaController extends RoboFragment implements OnControllerTrackCh
         mSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                Log.d("Seekbar", "onProgressChanged" + progress);
+                Log.i("Seekbar", "onProgressChanged" + progress);
 
                 if (mPlayer != null && fromUser) {
 
@@ -231,25 +231,25 @@ public class MediaController extends RoboFragment implements OnControllerTrackCh
                     mPlayer.seekToPosition(mOperationCallback, progress);
                     mSongLocationView.setText(String.format("%2d:%02d", mMinutes, mSeconds, 0));
                     mSeekBar.setProgress(progress);
-                    Log.d("Seekbar", "setProgress" + progress);
+                    Log.i("Seekbar", "setProgress" + progress);
                 }
             }
 
             @Override
             public void onStartTrackingTouch(SeekBar seekBar) {
-                Log.d("Seekbar", "START" + seekBar.getProgress());
+                Log.i("Seekbar", "START" + seekBar.getProgress());
             }
 
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
-                Log.d("Seekbar", "STOP" + seekBar.getProgress());
+                Log.i("Seekbar", "STOP" + seekBar.getProgress());
                 //onProgressChanged(seekBar, seekBar.getProgress(), true);
             }
         });
     }
 
     private void playBeep() {
-        Log.d(TAG, "PlayBeep");
+        Log.i(TAG, "PlayBeep");
 
         final MediaPlayer mediaPlayer = MediaPlayer.create(getContext(), R.raw.beep);
 
@@ -257,7 +257,7 @@ public class MediaController extends RoboFragment implements OnControllerTrackCh
             @Override
             public void onPrepared(MediaPlayer mp) {
                 mediaPlayer.start();
-                Log.d(TAG, "MediaPlayerSTART");
+                Log.i(TAG, "MediaPlayerSTART");
             }
         });
 
@@ -265,7 +265,7 @@ public class MediaController extends RoboFragment implements OnControllerTrackCh
             @Override
             public void onCompletion(MediaPlayer mp) {
                     mediaPlayer.release();
-                    Log.d(TAG, "MediaPlayerRELEASE");
+                    Log.i(TAG, "MediaPlayerRELEASE");
             }
         });
     }
@@ -301,15 +301,15 @@ public class MediaController extends RoboFragment implements OnControllerTrackCh
     }
 
     private void onSkipNextClicked() {
-        Log.d(TAG, "onSkipClicked");
+        Log.i(TAG, "onSkipClicked");
 
         if (mPlayer != null) {
-            Log.d(TAG, "onSkipNextClickedPLAYERNOTNULL");
+            Log.i(TAG, "onSkipNextClickedPLAYERNOTNULL");
             mPlayer.skipToNext(mOperationCallback);
             onControllerTrackChange(true);
 
         } else {
-            Log.d(TAG, "onSkipNextClickedPLAYERNULL");
+            Log.i(TAG, "onSkipNextClickedPLAYERNULL");
         }
     }
 
@@ -342,7 +342,7 @@ public class MediaController extends RoboFragment implements OnControllerTrackCh
     @Override
     public void onDetach() {
         super.onDetach();
-        Log.d(TAG, "onDetach");
+        Log.i(TAG, "onDetach");
         clearPlayer();
     }
 
@@ -352,7 +352,7 @@ public class MediaController extends RoboFragment implements OnControllerTrackCh
         if (mPlayer != null) {
             setSeekBar();
         }
-        Log.d(TAG, "onResume");
+        Log.i(TAG, "onResume");
     }
 
     @Override
@@ -371,17 +371,17 @@ public class MediaController extends RoboFragment implements OnControllerTrackCh
     public void onControllerTrackChange(boolean skipforward) {
 
         if (mOnControllerTrackChangeListener != null) {
-            Log.d(TAG, "onControllerTrackChangeNOTNULL");
+            Log.i(TAG, "onControllerTrackChangeNOTNULL");
             mOnControllerTrackChangeListener.onControllerTrackChange(skipforward);
 
         }else {
-            Log.d(TAG, "onControllerTrackChangeNULL");
+            Log.i(TAG, "onControllerTrackChangeNULL");
         }
 
     }
 
     public void clearPlayer() {
-        Log.d(TAG, "clearPlayer");
+        Log.i(TAG, "clearPlayer");
 
         setSeekBar();
         setTimer();
