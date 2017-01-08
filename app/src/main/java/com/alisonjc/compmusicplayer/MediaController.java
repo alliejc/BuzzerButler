@@ -70,7 +70,7 @@ public class MediaController extends RoboFragment implements OnControllerTrackCh
     private Handler mSeekBarHandler = new Handler();
     private Handler mMusicTimerHandler = new Handler();
     private SpotifyPlayer mPlayer;
-    private int mPauseTimeAt = 90000;
+    private int mEndSongAt = 90000;
     private boolean mBeepPlayed = false;
     private View mPlayerControls;
     private int mSeconds = 0;
@@ -109,7 +109,7 @@ public class MediaController extends RoboFragment implements OnControllerTrackCh
         super.onViewCreated(view, savedInstanceState);
 
         playerControlsSetup();
-        setTimer();
+        setMusicTimer();
         setSeekBar();
 
         if (mPlayer == null) {
@@ -121,7 +121,7 @@ public class MediaController extends RoboFragment implements OnControllerTrackCh
         Log.i(TAG, "playSong");
 
         mBeepPlayed = false;
-        setTimer();
+        setMusicTimer();
         showPauseButton();
         setSeekBar();
         mPlayer.playUri(mOperationCallback, uri, 0, 0);
@@ -129,29 +129,29 @@ public class MediaController extends RoboFragment implements OnControllerTrackCh
         mArtistView.setText(artistName);
     }
 
-    private void setTimer() {
+    private void setMusicTimer() {
 
         if (mPlayer != null) {
 
             mSongLocation = (int) mPlayer.getPlaybackState().positionMs;
 
-            if (mSongLocation >= mPauseTimeAt - 10000 && !mBeepPlayed) {
+            if (mSongLocation >= mEndSongAt - 10000 && !mBeepPlayed) {
                 Log.i(TAG, "setTimerPlayBeep");
                 mBeepPlayed = true;
                 playBeep();
 
-            } else if (mSongLocation >= mPauseTimeAt && mBeepPlayed) {
+            } else if (mSongLocation >= mEndSongAt && mBeepPlayed) {
                 Log.i(TAG, "SetTimeSkipNext");
                 onSkipNextClicked();
             }
-            mMusicTimerHandler.postDelayed(timerRun, 1000);
+            mMusicTimerHandler.postDelayed(musicTimerRun, 1000);
         }
     }
 
-    private Runnable timerRun = new Runnable() {
+    private Runnable musicTimerRun = new Runnable() {
         @Override
         public void run() {
-            setTimer();
+            setMusicTimer();
         }
     };
 
@@ -159,7 +159,7 @@ public class MediaController extends RoboFragment implements OnControllerTrackCh
 
         if (mPlayer != null) {
 
-            mSeekBar.setMax(mPauseTimeAt);
+            mSeekBar.setMax(mEndSongAt);
             mSeekBar.setProgress(mSongLocation);
 
             mSeconds = ((mSongLocation / 1000) % 60);
@@ -327,13 +327,13 @@ public class MediaController extends RoboFragment implements OnControllerTrackCh
             case R.id.one_minute_thirty:
                 if (mOneThirtyMin.isChecked()) {
                     mSongDurationView.setText(R.string.one_thirty_radio_button);
-                    mPauseTimeAt = 90000;
+                    mEndSongAt = 90000;
                 }
                 break;
             case R.id.two_minutes:
                 if (mTwoMin.isChecked()) {
                     mSongDurationView.setText(R.string.two_minute_radio_button);
-                    mPauseTimeAt = 120000;
+                    mEndSongAt = 120000;
                 }
                 break;
         }
@@ -384,7 +384,7 @@ public class MediaController extends RoboFragment implements OnControllerTrackCh
         Log.i(TAG, "clearPlayer");
 
         setSeekBar();
-        setTimer();
+        setMusicTimer();
         showPlayButton();
 
         if (mPlayer != null) {
