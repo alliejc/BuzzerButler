@@ -77,7 +77,6 @@ public class MediaController extends RoboFragment implements OnControllerTrackCh
     private int mSeconds = 0;
     private int mMinutes = 0;
     private OnControllerTrackChangeListener mOnControllerTrackChangeListener;
-    private SeekBar.OnSeekBarChangeListener mOnSeekBarChangeListener;
     private static final String TAG = "MediaController";
 
     public MediaController() {
@@ -170,9 +169,6 @@ public class MediaController extends RoboFragment implements OnControllerTrackCh
 
             mSeconds = ((mSongLocation / 1000) % 60);
             mMinutes = ((mSongLocation / 1000) / 60);
-
-            Log.i(TAG, "setSeekBar: SeekLocation " + mSongLocation);
-            Log.i(TAG, "setSeekBar: Progress" + mSeekBar.getProgress());
 
             mSongLocationView.setText(String.format("%2d:%02d", mMinutes, mSeconds, 0));
         }
