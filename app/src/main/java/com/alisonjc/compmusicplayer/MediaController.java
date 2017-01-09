@@ -67,6 +67,7 @@ public class MediaController extends RoboFragment implements OnControllerTrackCh
     RadioButton mTwoMin;
 
     private int mSongLocation = 0;
+    private int mSeekLocation = 0;
     private Handler mSeekBarHandler = new Handler();
     private Handler mMusicTimerHandler = new Handler();
     private SpotifyPlayer mPlayer;
@@ -76,6 +77,7 @@ public class MediaController extends RoboFragment implements OnControllerTrackCh
     private int mSeconds = 0;
     private int mMinutes = 0;
     private OnControllerTrackChangeListener mOnControllerTrackChangeListener;
+    private SeekBar.OnSeekBarChangeListener mOnSeekBarChangeListener;
     private static final String TAG = "MediaController";
 
     public MediaController() {
@@ -101,6 +103,10 @@ public class MediaController extends RoboFragment implements OnControllerTrackCh
         mPlayerControls = rootView.findViewById(R.id.music_player);
         ButterKnife.bind(this, rootView);
 
+        if (mPlayer == null) {
+            mPlayer = mMusicPlayer.getPlayer(getContext());
+        }
+
         return rootView;
     }
 
@@ -109,12 +115,6 @@ public class MediaController extends RoboFragment implements OnControllerTrackCh
         super.onViewCreated(view, savedInstanceState);
 
         playerControlsSetup();
-        setMusicTimer();
-        setSeekBar();
-
-        if (mPlayer == null) {
-            mPlayer = mMusicPlayer.getPlayer(getContext());
-        }
     }
 
     public void playSong(String songName, String artistName, String uri) {
@@ -133,7 +133,7 @@ public class MediaController extends RoboFragment implements OnControllerTrackCh
 
     private void setMusicTimer() {
 
-        if (mPlayer != null) {
+        if (mPlayer != null && mPlayer.getPlaybackState() != null) {
 
             mSongLocation = (int) mPlayer.getPlaybackState().positionMs;
 
@@ -165,11 +165,14 @@ public class MediaController extends RoboFragment implements OnControllerTrackCh
 
         if (mPlayer != null) {
 
-            mSeekBar.setMax(mEndSongAt);
             mSeekBar.setProgress(mSongLocation);
+            mSeekBar.setMax(mEndSongAt);
 
             mSeconds = ((mSongLocation / 1000) % 60);
             mMinutes = ((mSongLocation / 1000) / 60);
+
+            Log.i(TAG, "setSeekBar: SeekLocation " + mSongLocation);
+            Log.i(TAG, "setSeekBar: Progress" + mSeekBar.getProgress());
 
             mSongLocationView.setText(String.format("%2d:%02d", mMinutes, mSeconds, 0));
         }
@@ -231,10 +234,13 @@ public class MediaController extends RoboFragment implements OnControllerTrackCh
 
                 if (mPlayer != null && fromUser) {
 
-                    mSeconds = ((progress / 1000) % 60);
-                    mMinutes = ((progress / 1000) / 60);
-
+                    mSongLocation = progress;
                     mPlayer.seekToPosition(mOperationCallback, progress);
+                    mSeekBar.setProgress(mSongLocation);
+
+                    mSeconds = ((mSongLocation / 1000) % 60);
+                    mMinutes = ((mSongLocation / 1000) / 60);
+
                     mSongLocationView.setText(String.format("%2d:%02d", mMinutes, mSeconds, 0));
                 }
             }
@@ -242,12 +248,14 @@ public class MediaController extends RoboFragment implements OnControllerTrackCh
             @Override
             public void onStartTrackingTouch(SeekBar seekBar) {
                 Log.i("Seekbar", "START" + seekBar.getProgress());
+                mSeekBarHandler.removeCallbacks(seekrun);
+
             }
 
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
                 Log.i("Seekbar", "STOP" + seekBar.getProgress());
-                //onProgressChanged(seekBar, seekBar.getProgress(), true);
+                setSeekBar();
             }
         });
     }
