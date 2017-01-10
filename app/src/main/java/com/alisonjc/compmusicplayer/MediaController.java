@@ -172,8 +172,8 @@ public class MediaController extends RoboFragment implements OnControllerTrackCh
 
             mSongLocationView.setText(String.format("%2d:%02d", mMinutes, mSeconds, 0));
         }
-
         mSeekBarHandler.postDelayed(seekrun, 1000);
+
     }
 
     Runnable seekrun = new Runnable() {
@@ -230,9 +230,13 @@ public class MediaController extends RoboFragment implements OnControllerTrackCh
 
                 if (mPlayer != null && fromUser) {
 
+                    mSeekBarHandler.removeCallbacks(seekrun);
+
                     mSongLocation = progress;
                     mPlayer.seekToPosition(mOperationCallback, progress);
-                    mSeekBar.setProgress(mSongLocation);
+                    seekBar.setProgress(mSongLocation);
+
+                    setSeekBar();
 
                     mSeconds = ((mSongLocation / 1000) % 60);
                     mMinutes = ((mSongLocation / 1000) / 60);
@@ -244,14 +248,12 @@ public class MediaController extends RoboFragment implements OnControllerTrackCh
             @Override
             public void onStartTrackingTouch(SeekBar seekBar) {
                 Log.i("Seekbar", "START" + seekBar.getProgress());
-                mSeekBarHandler.removeCallbacks(seekrun);
-
             }
 
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
                 Log.i("Seekbar", "STOP" + seekBar.getProgress());
-                setSeekBar();
+                onProgressChanged(seekBar, seekBar.getProgress(), true);
             }
         });
     }
