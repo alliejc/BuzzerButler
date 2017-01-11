@@ -67,7 +67,6 @@ public class MediaController extends RoboFragment implements OnControllerTrackCh
     RadioButton mTwoMin;
 
     private int mSongLocation = 0;
-    private int mSeekLocation = 0;
     private Handler mSeekBarHandler = new Handler();
     private Handler mMusicTimerHandler = new Handler();
     private SpotifyPlayer mPlayer;
@@ -160,7 +159,9 @@ public class MediaController extends RoboFragment implements OnControllerTrackCh
         }
     };
 
+
     private void setSeekBar() {
+        Log.i("setSeekBar", "SetSeekBar" + mSongLocation);
 
         if (mPlayer != null) {
 
@@ -231,17 +232,17 @@ public class MediaController extends RoboFragment implements OnControllerTrackCh
                 if (mPlayer != null && fromUser) {
 
                     mSeekBarHandler.removeCallbacks(seekrun);
-
-                    mSongLocation = progress;
+                    Log.i("onProgressChanged", "removeCallbacks - Seek");
+                    
                     mPlayer.seekToPosition(mOperationCallback, progress);
+
                     seekBar.setProgress(mSongLocation);
-
-                    setSeekBar();
-
-                    mSeconds = ((mSongLocation / 1000) % 60);
-                    mMinutes = ((mSongLocation / 1000) / 60);
+                    Log.i("onProgressChanged", "SetProgress" + seekBar.getProgress());
 
                     mSongLocationView.setText(String.format("%2d:%02d", mMinutes, mSeconds, 0));
+
+                    mSongLocation = progress;
+                    setSeekBar();
                 }
             }
 
@@ -253,7 +254,7 @@ public class MediaController extends RoboFragment implements OnControllerTrackCh
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
                 Log.i("Seekbar", "STOP" + seekBar.getProgress());
-                onProgressChanged(seekBar, seekBar.getProgress(), true);
+                //onProgressChanged(seekBar, seekBar.getProgress(), true);
             }
         });
     }
@@ -315,12 +316,18 @@ public class MediaController extends RoboFragment implements OnControllerTrackCh
 
         if (mPlayer != null) {
             Log.i(TAG, "onSkipNextClickedPLAYERNOTNULL");
+            resetHandlers();
             mPlayer.skipToNext(mOperationCallback);
             onControllerTrackChange(true);
 
         } else {
             Log.i(TAG, "onSkipNextClickedPLAYERNULL");
         }
+    }
+
+    private void resetHandlers(){
+        mSeekBarHandler.removeCallbacks(seekrun);
+        mMusicTimerHandler.removeCallbacks(musicTimerRun);
     }
 
     private void onPreviousClicked() {
@@ -392,6 +399,8 @@ public class MediaController extends RoboFragment implements OnControllerTrackCh
 
     public void clearPlayer() {
         Log.i(TAG, "clearPlayer");
+
+        resetHandlers();
 
         setSeekBar();
         setMusicTimer();
