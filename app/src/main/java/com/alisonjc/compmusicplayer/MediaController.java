@@ -147,6 +147,8 @@ public class MediaController extends RoboFragment implements OnControllerTrackCh
                 Log.i(TAG, "SetTimeSkipNext");
 
                 onSkipNextClicked();
+                mBeepPlayed = false;
+                Log.i(TAG, "mBeepPlayed = false");
             }
             mMusicTimerHandler.postDelayed(musicTimerRun, 1000);
         }
@@ -233,7 +235,7 @@ public class MediaController extends RoboFragment implements OnControllerTrackCh
 
                     mSeekBarHandler.removeCallbacks(seekrun);
                     Log.i("onProgressChanged", "removeCallbacks - Seek");
-                    
+
                     mPlayer.seekToPosition(mOperationCallback, progress);
 
                     seekBar.setProgress(mSongLocation);
