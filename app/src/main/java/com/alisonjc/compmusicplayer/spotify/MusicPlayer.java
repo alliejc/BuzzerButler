@@ -10,16 +10,24 @@ import com.spotify.sdk.android.player.Player;
 import com.spotify.sdk.android.player.PlayerEvent;
 import com.spotify.sdk.android.player.SpotifyPlayer;
 
-import javax.inject.Inject;
 import javax.inject.Singleton;
 
 @Singleton
 public class MusicPlayer implements Player.NotificationCallback {
 
-    @Inject
-    private SpotifyService mSpotifyService;
-
     private SpotifyPlayer mPlayer;
+    private SpotifyService mSpotifyService = SpotifyService.getSpotifyService();
+
+    private static MusicPlayer mMusicPlayer;
+
+    public static MusicPlayer getmMusicPlayer() {
+        if (mMusicPlayer != null){
+            return mMusicPlayer;
+        } else {
+            mMusicPlayer = new MusicPlayer();
+            return mMusicPlayer;
+        }
+    }
 
     public SpotifyPlayer getPlayer(Context context) {
 

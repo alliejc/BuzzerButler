@@ -3,6 +3,7 @@ package com.alisonjc.compmusicplayer.playlists;
 import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -15,7 +16,6 @@ import com.alisonjc.compmusicplayer.RecyclerDivider;
 import com.alisonjc.compmusicplayer.spotify.SpotifyService;
 import com.alisonjc.compmusicplayer.spotify.model.playlists.Item;
 import com.alisonjc.compmusicplayer.spotify.model.playlists.UserPlaylists;
-import com.google.inject.Inject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,13 +23,9 @@ import java.util.List;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-import roboguice.fragment.RoboFragment;
 
 
-public class PlaylistFragment extends RoboFragment implements OnPlaylistInteractionListener {
-
-    @Inject
-    private SpotifyService mSpotifyService;
+public class PlaylistFragment extends Fragment implements OnPlaylistInteractionListener {
 
     private RecyclerView mRecyclerView;
     private RecyclerView.LayoutManager mLayoutManager;
@@ -37,6 +33,7 @@ public class PlaylistFragment extends RoboFragment implements OnPlaylistInteract
     private List<Item> mPlaylistItemList;
     private OnPlaylistInteractionListener mListener;
     private Drawable dividerDrawable;
+    private SpotifyService mSpotifyService = SpotifyService.getSpotifyService();
 
 
     public PlaylistFragment() {

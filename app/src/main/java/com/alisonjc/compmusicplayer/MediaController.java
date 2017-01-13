@@ -4,6 +4,7 @@ import android.content.Context;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,9 +17,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.alisonjc.compmusicplayer.spotify.MusicPlayer;
-import com.alisonjc.compmusicplayer.spotify.SpotifyService;
 import com.alisonjc.compmusicplayer.tracks.OnControllerTrackChangeListener;
-import com.google.inject.Inject;
 import com.spotify.sdk.android.player.Error;
 import com.spotify.sdk.android.player.Player;
 import com.spotify.sdk.android.player.Spotify;
@@ -26,15 +25,9 @@ import com.spotify.sdk.android.player.SpotifyPlayer;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import roboguice.fragment.RoboFragment;
 
-public class MediaController extends RoboFragment implements OnControllerTrackChangeListener {
+public class MediaController extends Fragment implements OnControllerTrackChangeListener {
 
-    @Inject
-    private SpotifyService mSpotifyService;
-
-    @Inject
-    private MusicPlayer mMusicPlayer;
 
     @BindView(R.id.song_title)
     TextView mSongView;
@@ -77,6 +70,7 @@ public class MediaController extends RoboFragment implements OnControllerTrackCh
     private int mMinutes = 0;
     private OnControllerTrackChangeListener mOnControllerTrackChangeListener;
     private static final String TAG = "MediaController";
+    private MusicPlayer mMusicPlayer = MusicPlayer.getmMusicPlayer();
 
     public MediaController() {
     }

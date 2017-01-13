@@ -11,6 +11,7 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
@@ -26,7 +27,6 @@ import com.alisonjc.compmusicplayer.tracks.OnControllerTrackChangeListener;
 import com.alisonjc.compmusicplayer.tracks.OnTrackSelectedListener;
 import com.alisonjc.compmusicplayer.tracks.PlaylistTracksFragment;
 import com.alisonjc.compmusicplayer.tracks.TracksFragment;
-import com.google.inject.Inject;
 import com.spotify.sdk.android.authentication.AuthenticationClient;
 import com.spotify.sdk.android.authentication.AuthenticationResponse;
 import com.squareup.leakcanary.LeakCanary;
@@ -37,15 +37,10 @@ import butterknife.ButterKnife;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-import roboguice.activity.RoboActionBarActivity;
-import roboguice.inject.ContentView;
 
-@ContentView(R.layout.activity_main)
-public class MainActivity extends RoboActionBarActivity
+
+public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, OnPlaylistInteractionListener, OnControllerTrackChangeListener, OnTrackSelectedListener {
-
-    @Inject
-    SpotifyService mSpotifyService;
 
     @BindView(R.id.toolbar)
     Toolbar mToolbar;
@@ -67,12 +62,15 @@ public class MainActivity extends RoboActionBarActivity
     private static final int REQUEST_CODE = 1337;
     private OnControllerTrackChangeListener mOnControllerTrackChangeListener;
     private static final String TAG = "MainActivity";
+    private SpotifyService mSpotifyService = SpotifyService.getSpotifyService();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
+
+//        mNetworkComponent.inject(this);
 
         if (mSpotifyService.isLoggedIn()) {
             userLogin();

@@ -3,6 +3,7 @@ package com.alisonjc.compmusicplayer.tracks;
 import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -17,7 +18,6 @@ import com.alisonjc.compmusicplayer.RecyclerDivider;
 import com.alisonjc.compmusicplayer.spotify.SpotifyService;
 import com.alisonjc.compmusicplayer.spotify.model.UserTracks.Item;
 import com.alisonjc.compmusicplayer.spotify.model.UserTracks.UserTracks;
-import com.google.inject.Inject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,13 +26,9 @@ import butterknife.ButterKnife;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-import roboguice.fragment.RoboFragment;
 
 
-public class TracksFragment extends RoboFragment implements OnControllerTrackChangeListener, OnTrackSelectedListener {
-
-    @Inject
-    private SpotifyService mSpotifyService;
+public class TracksFragment extends Fragment implements OnControllerTrackChangeListener, OnTrackSelectedListener {
 
     private OnTrackSelectedListener mListener;
     private RecyclerView mRecyclerView;
@@ -45,6 +41,7 @@ public class TracksFragment extends RoboFragment implements OnControllerTrackCha
     private int mOffset;
     private int mLimit = 20;
     private static final String TAG = "TracksFragment";
+    private SpotifyService mSpotifyService = SpotifyService.getSpotifyService();
 
     public TracksFragment() {
     }
