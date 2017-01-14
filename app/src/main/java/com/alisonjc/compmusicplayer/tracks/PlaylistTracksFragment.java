@@ -92,13 +92,10 @@ public class PlaylistTracksFragment extends Fragment implements OnControllerTrac
         mRecyclerView.setLayoutManager(mLayoutManager);
         mRecyclerView.setHasFixedSize(true);
 
-        mAdapter = new TracksRecyclerAdapter<Item>(mPlaylistTracksList, getContext(), new TracksRecyclerAdapter.OnItemClickListener() {
-            @Override
-            public void onItemClick(Object item, int position) {
+        mAdapter = new TracksRecyclerAdapter<>(mPlaylistTracksList, getContext(), (item, position) ->  {
                 mItemPosition = position;
                 setCurrentPlayingSong(mItemPosition);
-            }
-        });
+            });
 
         mRecyclerView.setAdapter(mAdapter);
 

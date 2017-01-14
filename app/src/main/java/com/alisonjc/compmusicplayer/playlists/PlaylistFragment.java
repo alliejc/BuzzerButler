@@ -67,15 +67,12 @@ public class PlaylistFragment extends Fragment implements OnPlaylistInteractionL
             RecyclerView.ItemDecoration dividerItemDecoration = new RecyclerDivider(dividerDrawable);
             mRecyclerView.addItemDecoration(dividerItemDecoration);
 
-            mAdapter = new PlaylistRecyclerAdapter(getContext(), mPlaylistItemList, new PlaylistRecyclerAdapter.onItemClickListener() {
-                @Override
-                public void onItemClick(Item item) {
+            mAdapter = new PlaylistRecyclerAdapter(getContext(), mPlaylistItemList, item ->  {
 
                     String userId = item.getOwner().getId();
                     String playlistId = item.getId();
                     String playlistTitle = item.getName();
                     mListener.onPlaylistSelected(userId, playlistId, playlistTitle);
-                }
             });
             mRecyclerView.setAdapter(mAdapter);
             mAdapter.updateAdapter(mPlaylistItemList);

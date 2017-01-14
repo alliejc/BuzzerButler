@@ -28,9 +28,7 @@ public class LoginDialogFrag extends DialogFragment {
         getDialog().setCanceledOnTouchOutside(false);
         View mLoginButton = v.findViewById(R.id.spotifyLoginButton);
         mLoginButton.setVisibility(View.VISIBLE);
-        mLoginButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        mLoginButton.setOnClickListener(view ->  {
 
                 AuthenticationRequest.Builder builder = new AuthenticationRequest.Builder(CLIENT_ID, AuthenticationResponse.Type.TOKEN, REDIRECT_URI);
                 builder.setScopes(new String[]{"playlist-read-private", "playlist-read-collaborative", "playlist-modify-public", "playlist-modify-private", "streaming",
@@ -40,8 +38,6 @@ public class LoginDialogFrag extends DialogFragment {
                 AuthenticationClient.openLoginActivity(getActivity(), REQUEST_CODE, request);
 
                 onDestroyView();
-
-            }
         });
 
         return v;

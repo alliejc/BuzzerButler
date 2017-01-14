@@ -61,19 +61,12 @@ public class MainActivity extends AppCompatActivity
     private OnControllerTrackChangeListener mOnControllerTrackChangeListener;
     private static final String TAG = "MainActivity";
     private SpotifyService mSpotifyService = SpotifyService.getSpotifyService();
-    //private Subscription subscription;
-    //private Observable observable;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
-
-        // this.subscription = observable.subscribe(this);
-
-
-//        mNetworkComponent.inject(this);
 
         if (mSpotifyService.isLoggedIn()) {
             userLogin();

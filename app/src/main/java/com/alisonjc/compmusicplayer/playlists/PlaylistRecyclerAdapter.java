@@ -81,12 +81,9 @@ public class PlaylistRecyclerAdapter extends RecyclerView.Adapter<PlaylistRecycl
         }
 
         public void bind(final Item item, final onItemClickListener listener) {
-            itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    listener.onItemClick(item);
-                }
-            });
-        }
+            itemView.setOnClickListener(view ->
+
+                    listener.onItemClick(item));
+            }
     }
 }

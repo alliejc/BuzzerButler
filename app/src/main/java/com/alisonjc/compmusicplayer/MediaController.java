@@ -148,11 +148,8 @@ public class MediaController extends Fragment implements OnControllerTrackChange
         }
     }
 
-    private Runnable musicTimerRun = new Runnable() {
-        @Override
-        public void run() {
-            setMusicTimer();
-        }
+    private Runnable musicTimerRun = () -> {
+        setMusicTimer();
     };
 
 
@@ -173,11 +170,8 @@ public class MediaController extends Fragment implements OnControllerTrackChange
 
     }
 
-    Runnable seekrun = new Runnable() {
-        @Override
-        public void run() {
-            setSeekBar();
-        }
+    Runnable seekrun = () -> {
+        setSeekBar();
     };
 
     private void playerControlsSetup() {
@@ -185,39 +179,24 @@ public class MediaController extends Fragment implements OnControllerTrackChange
         mSongLocationView.setText(R.string.start_time);
         mSongDurationView.setText(R.string.one_thirty_radio_button);
 
-        mPlayerControls.findViewById(R.id.skip_previous).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onPreviousClicked();
-            }
+        mPlayerControls.findViewById(R.id.skip_previous).setOnClickListener(view -> {
+            onPreviousClicked();
         });
 
-        mPlayerControls.findViewById(R.id.play).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onPlayClicked();
-            }
+        mPlayerControls.findViewById(R.id.play).setOnClickListener(view -> {
+            onPlayClicked();
         });
 
-        mPlayerControls.findViewById(R.id.pause).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onPauseClicked();
-            }
+        mPlayerControls.findViewById(R.id.pause).setOnClickListener(view -> {
+            onPauseClicked();
         });
 
-        mPlayerControls.findViewById(R.id.skip_next).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onSkipNextClicked();
-            }
+        mPlayerControls.findViewById(R.id.skip_next).setOnClickListener(view -> {
+            onSkipNextClicked();
         });
 
-        mRadioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(RadioGroup group, int checkedId) {
-                onRadioButtonClicked(checkedId);
-            }
+        mRadioGroup.setOnCheckedChangeListener((radioGroup, i) -> {
+            onRadioButtonClicked(i);
         });
 
         mSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
@@ -260,26 +239,20 @@ public class MediaController extends Fragment implements OnControllerTrackChange
 
         final MediaPlayer mediaPlayer = MediaPlayer.create(getContext(), R.raw.beep);
 
-        mediaPlayer.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
-            @Override
-            public void onPrepared(MediaPlayer mp) {
-                mediaPlayer.start();
-                Log.i(TAG, "MediaPlayerSTART");
-            }
+        mediaPlayer.setOnPreparedListener(mediaPlayer1 -> {
+            mediaPlayer.start();
+            Log.i(TAG, "MediaPlayerSTART");
         });
 
-        mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
-            @Override
-            public void onCompletion(MediaPlayer mp) {
-                    mediaPlayer.release();
-                    Log.i(TAG, "MediaPlayerRELEASE");
-            }
+        mediaPlayer.setOnCompletionListener(mediaPlayer1 -> {
+            mediaPlayer.release();
+            Log.i(TAG, "MediaPlayerRELEASE");
         });
     }
 
     private void onPauseClicked() {
 
-        if(mPlayer != null){
+        if (mPlayer != null) {
             mPlayer.pause(mOperationCallback);
             showPlayButton();
         } else {
@@ -301,7 +274,7 @@ public class MediaController extends Fragment implements OnControllerTrackChange
 
     private void onPlayClicked() {
 
-        if(mPlayer != null){
+        if (mPlayer != null) {
             mPlayer.resume(mOperationCallback);
             showPauseButton();
         }
@@ -321,7 +294,7 @@ public class MediaController extends Fragment implements OnControllerTrackChange
         }
     }
 
-    private void resetHandlers(){
+    private void resetHandlers() {
         mSeekBarHandler.removeCallbacks(seekrun);
         mMusicTimerHandler.removeCallbacks(musicTimerRun);
     }
@@ -387,7 +360,7 @@ public class MediaController extends Fragment implements OnControllerTrackChange
             Log.i(TAG, "onControllerTrackChangeNOTNULL");
             mOnControllerTrackChangeListener.onControllerTrackChange(skipforward);
 
-        }else {
+        } else {
             Log.i(TAG, "onControllerTrackChangeNULL");
         }
 

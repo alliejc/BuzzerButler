@@ -97,20 +97,14 @@ public class TracksRecyclerAdapter<T> extends RecyclerView.Adapter<TracksRecycle
 
         public void bind(final Object item, final TracksRecyclerAdapter.OnItemClickListener listener) {
 
-            itemView.setOnClickListener(new View.OnClickListener() {
-
-                @Override
-                public void onClick(View v) {
+            itemView.setOnClickListener(view ->  {
                     Log.i(TAG, "itemView OnClick");
 
                     listener.onItemClick(item, getAdapterPosition());
                     notifyItemChanged(selectedItem);
                     selectedItem = getLayoutPosition();
                     notifyItemChanged(selectedItem);
-                }
             });
         }
     }
-
-
 }
