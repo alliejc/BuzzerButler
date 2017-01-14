@@ -17,16 +17,14 @@ import com.alisonjc.compmusicplayer.R;
 import com.alisonjc.compmusicplayer.RecyclerDivider;
 import com.alisonjc.compmusicplayer.spotify.SpotifyService;
 import com.alisonjc.compmusicplayer.spotify.model.playlist_tracklists.Item;
-import com.alisonjc.compmusicplayer.spotify.model.playlist_tracklists.PlaylistTracksList;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
 
 public class PlaylistTracksFragment extends Fragment implements OnControllerTrackChangeListener, OnTrackSelectedListener {
 
@@ -104,24 +102,22 @@ public class PlaylistTracksFragment extends Fragment implements OnControllerTrac
 
         mRecyclerView.setAdapter(mAdapter);
 
-        mSpotifyService.getPlaylistTracks(mUserId, mPlaylistId, mOffset, mLimit).enqueue(new Callback<PlaylistTracksList>() {
-            @Override
-            public void onResponse(Call<PlaylistTracksList> call, Response<PlaylistTracksList> response) {
-                if (response.isSuccess() && response.body() != null) {
-                    mTotalTracks = response.body().getTotal();
-                    mAdapter.notifyDataSetChanged();
-                    mPlaylistTracksList.addAll(response.body().getItems());
-                    mAdapter.notifyDataSetChanged();
+        mSpotifyService.getPlaylistTracks(mUserId, mPlaylistId, mOffset, mLimit)
+                .subscribeOn(Schedulers.newThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(playlistTracksList -> {
+                    if (playlistTracksList != null) {
+                        mTotalTracks = playlistTracksList.getTotal();
+                        mAdapter.notifyDataSetChanged();
+                        mPlaylistTracksList.addAll(playlistTracksList.getItems());
+                        mAdapter.notifyDataSetChanged();
 
-                } else if (response.code() == 401) {
-                    mSpotifyService.userLogout(getContext());
-                }
-            }
-
-            @Override
-            public void onFailure(Call<PlaylistTracksList> call, Throwable t) {
-            }
-        });
+                    } else {
+                        mSpotifyService.userLogout(getContext());
+                    }
+                }, throwable -> {
+                }, () -> {
+                });
 
         mRecyclerView.addOnScrollListener(new EndlessScrollListener(mLayoutManager, mTotalTracks) {
             @Override
@@ -134,21 +130,21 @@ public class PlaylistTracksFragment extends Fragment implements OnControllerTrac
 
     public void loadMoreDataFromApi(final int offset) {
 
-        mSpotifyService.getPlaylistTracks(mUserId, mPlaylistId, offset, mLimit).enqueue(new Callback<PlaylistTracksList>() {
-            @Override
-            public void onResponse(Call<PlaylistTracksList> call, Response<PlaylistTracksList> response) {
-                if (response.isSuccess() && response.body() != null) {
-                    mAdapter.notifyDataSetChanged();
-                    mPlaylistTracksList.addAll(response.body().getItems());
-                    mAdapter.notifyDataSetChanged();
-                }
-            }
+        mSpotifyService.getPlaylistTracks(mUserId, mPlaylistId, offset, mLimit)
+                .subscribeOn(Schedulers.newThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(playlistTracksList -> {
+                    if (playlistTracksList != null) {
+                        mAdapter.notifyDataSetChanged();
+                        mPlaylistTracksList.addAll(playlistTracksList.getItems());
+                        mAdapter.notifyDataSetChanged();
+                    } else {
+                        mSpotifyService.userLogout(getContext());
+                    }
+                }, throwable -> {
+                }, () -> {
 
-            @Override
-            public void onFailure(Call<PlaylistTracksList> call, Throwable t) {
-                mSpotifyService.userLogout(getContext());
-            }
-        });
+                });
     }
 
     private void setCurrentPlayingSong(int itemPosition) {

@@ -14,9 +14,10 @@ import com.spotify.sdk.android.player.Config;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
-import retrofit2.Call;
 import retrofit2.Retrofit;
+import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
+import rx.Observable;
 
 @Singleton
 public class SpotifyService {
@@ -42,42 +43,31 @@ public class SpotifyService {
     @Inject
     public SpotifyService() {
 
+        RxJavaCallAdapterFactory rxAdapter = RxJavaCallAdapterFactory.create();
+
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl("https://api.spotify.com")
                 .addConverterFactory(GsonConverterFactory.create())
+                .addCallAdapterFactory(rxAdapter)
                 .build();
 
         mSpotifyServiceInterface = retrofit.create(SpotifyServiceInterface.class);
     }
 
-    public void setUserId(String userId, Context context) {
-
-        mUserId = userId;
-        myPrefs = context.getSharedPreferences("myPrefs", Context.MODE_PRIVATE);
-        myPrefs.edit().putString("userId", mUserId).apply();
-    }
-
-    public void setToken(String token, Context context) {
-
-        mToken = token;
-        myPrefs = context.getSharedPreferences("myPrefs", Context.MODE_PRIVATE);
-        myPrefs.edit().putString("token", mToken).apply();
-    }
-
-    public Call<PlaylistTracksList> getPlaylistTracks(String userId, String playlistId, int offset, int limit) {
+    public Observable<PlaylistTracksList> getPlaylistTracks(String userId, String playlistId, int offset, int limit) {
         return mSpotifyServiceInterface.getPlaylistTracks("Bearer " + mToken, userId, playlistId, offset, limit);
     }
 
-    public Call<UserPlaylists> getUserPlayLists() {
+    public Observable<UserPlaylists> getUserPlayLists() {
         return mSpotifyServiceInterface.getUserPlayLists("Bearer " + mToken, mUserId);
     }
 
-    public Call<SpotifyUser> getCurrentUser(String token) {
+    public Observable<SpotifyUser> getCurrentUser(String token) {
         mToken = token;
         return mSpotifyServiceInterface.getCurrentUser("Bearer " + mToken);
     }
 
-    public Call<UserTracks> getUserTracks(int offset, int limit) {
+    public Observable<UserTracks> getUserTracks(int offset, int limit) {
         return mSpotifyServiceInterface.getUserTracks("Bearer " + mToken, offset, limit);
     }
 
@@ -96,6 +86,20 @@ public class SpotifyService {
         SharedPreferences.Editor editor = myPrefs.edit();
         editor.remove("userId").apply();
         editor.remove("token").apply();
+    }
+
+    public void setUserId(String userId, Context context) {
+
+        mUserId = userId;
+        myPrefs = context.getSharedPreferences("myPrefs", Context.MODE_PRIVATE);
+        myPrefs.edit().putString("userId", mUserId).apply();
+    }
+
+    public void setToken(String token, Context context) {
+
+        mToken = token;
+        myPrefs = context.getSharedPreferences("myPrefs", Context.MODE_PRIVATE);
+        myPrefs.edit().putString("token", mToken).apply();
     }
 }
 

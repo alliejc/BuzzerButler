@@ -22,7 +22,6 @@ import android.widget.TextView;
 import com.alisonjc.compmusicplayer.playlists.OnPlaylistInteractionListener;
 import com.alisonjc.compmusicplayer.playlists.PlaylistFragment;
 import com.alisonjc.compmusicplayer.spotify.SpotifyService;
-import com.alisonjc.compmusicplayer.spotify.model.playlists.SpotifyUser;
 import com.alisonjc.compmusicplayer.tracks.OnControllerTrackChangeListener;
 import com.alisonjc.compmusicplayer.tracks.OnTrackSelectedListener;
 import com.alisonjc.compmusicplayer.tracks.PlaylistTracksFragment;
@@ -34,9 +33,8 @@ import com.squareup.leakcanary.RefWatcher;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
 
 
 public class MainActivity extends AppCompatActivity
@@ -63,12 +61,17 @@ public class MainActivity extends AppCompatActivity
     private OnControllerTrackChangeListener mOnControllerTrackChangeListener;
     private static final String TAG = "MainActivity";
     private SpotifyService mSpotifyService = SpotifyService.getSpotifyService();
+    //private Subscription subscription;
+    //private Observable observable;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
+
+        // this.subscription = observable.subscribe(this);
+
 
 //        mNetworkComponent.inject(this);
 
@@ -195,16 +198,15 @@ public class MainActivity extends AppCompatActivity
 
                 case TOKEN:
                     final String mToken = authResponse.getAccessToken();
-                    mSpotifyService.getCurrentUser(mToken).enqueue(new Callback<SpotifyUser>() {
+                    mSpotifyService.getCurrentUser(mToken)
+                            .subscribeOn(Schedulers.newThread())
+                            .observeOn(AndroidSchedulers.mainThread())
+                            .subscribe(spotifyUser -> {
 
-                        @Override
-                        public void onResponse(Call<SpotifyUser> call, Response<SpotifyUser> response) {
-                            if (response.isSuccess()) {
-
-                                mSpotifyService.setUserId(response.body().getId(), getBaseContext());
+                                mSpotifyService.setUserId(spotifyUser.getId(), getBaseContext());
                                 mSpotifyService.setToken(mToken, getBaseContext());
-                                mUserName = response.body().getDisplayName();
-                                mUserEmail = response.body().getEmail();
+                                mUserName = spotifyUser.getDisplayName();
+                                mUserEmail = spotifyUser.getEmail();
                                 navigationDrawerSetup();
 
                                 FragmentManager fragmentManager = getSupportFragmentManager();
@@ -219,24 +221,22 @@ public class MainActivity extends AppCompatActivity
                                 fragmentManager.beginTransaction()
                                         .replace(R.id.media_controls_frame, mMediaController, "mediaController")
                                         .commit();
-                            }
 
-                            mActionBar.setTitle(R.string.playlists_drawer);
-                        }
+                                mActionBar.setTitle(R.string.playlists_drawer);
+                            }, throwable -> {
 
-                    @Override
-                    public void onFailure (Call < SpotifyUser > call, Throwable t){
-                }
-            });
-            break;
+                            }, () -> {
 
-            case ERROR:
-                break;
+                            });
+                    break;
 
-            default:
+                case ERROR:
+                    break;
+
+                default:
+            }
         }
     }
-}
 
     @Override
     public void onPlaylistSelected(String userId, String playlistId, String playlistTitle) {
@@ -254,14 +254,14 @@ public class MainActivity extends AppCompatActivity
     public void onTrackSelected(String songName, String artistName, String uri) {
         Log.i(TAG, "onTracksSelected");
         mMediaController.playSong(songName, artistName, uri);
-        }
+    }
 
     @Override
     public void onControllerTrackChange(boolean skipforward) {
         if (mOnControllerTrackChangeListener != null) {
             Log.i(TAG, "onControllerTackChangeNOTNULL");
             mOnControllerTrackChangeListener.onControllerTrackChange(skipforward);
-        }else {
+        } else {
             Log.i(TAG, "onControllerTrackChangeNULL");
         }
     }

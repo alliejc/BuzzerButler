@@ -22,7 +22,7 @@ Competition Practice Player uses a number of open source projects to work proper
 
 * [Retrofit 2.0] - A type-safe HTTP client for Android and Java
 * [OKHttp] - Request/response API
-* [RoboGuice] - Dependency injection
+* [Dagger2] - Dependency injection
 
 
 And of course Competition Practice Player itself is open source with a [public repository](https://github.com/alliejc/compeitionpracticeplayer)
@@ -67,4 +67,4 @@ CLIENT_ID="{your key}"
 
    [OkHttp]: http://square.github.io/okhttp/
    [Retrofit 2.0]: http://square.github.io/retrofit/
-   [RoboGuice]: https://github.com/roboguice/roboguice
+   [Dagger2]: https://github.com/google/dagger

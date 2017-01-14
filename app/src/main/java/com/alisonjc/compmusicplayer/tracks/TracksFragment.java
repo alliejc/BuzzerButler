@@ -17,15 +17,13 @@ import com.alisonjc.compmusicplayer.R;
 import com.alisonjc.compmusicplayer.RecyclerDivider;
 import com.alisonjc.compmusicplayer.spotify.SpotifyService;
 import com.alisonjc.compmusicplayer.spotify.model.UserTracks.Item;
-import com.alisonjc.compmusicplayer.spotify.model.UserTracks.UserTracks;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.ButterKnife;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
 
 
 public class TracksFragment extends Fragment implements OnControllerTrackChangeListener, OnTrackSelectedListener {
@@ -90,24 +88,21 @@ public class TracksFragment extends Fragment implements OnControllerTrackChangeL
 
         mRecyclerView.setAdapter(mAdapter);
 
-        mSpotifyService.getUserTracks(mOffset, mLimit).enqueue(new Callback<UserTracks>() {
-            @Override
-            public void onResponse(Call<UserTracks> call, Response<UserTracks> response) {
-                if (response.isSuccess() && response.body() != null) {
-                    mTotalTracks = response.body().getTotal();
-                    mAdapter.notifyDataSetChanged();
-                    mTracksList.addAll(response.body().getItems());
-                    mAdapter.notifyDataSetChanged();
-                } else if (response.code() == 401) {
-
-                }
-            }
-
-            @Override
-            public void onFailure(Call<UserTracks> call, Throwable t) {
-                mSpotifyService.userLogout(getContext());
-            }
-        });
+        mSpotifyService.getUserTracks(mOffset, mLimit)
+                .subscribeOn(Schedulers.newThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(userTracks -> {
+                    if (userTracks != null) {
+                        mTotalTracks = userTracks.getTotal();
+                        mAdapter.notifyDataSetChanged();
+                        mTracksList.addAll(userTracks.getItems());
+                        mAdapter.notifyDataSetChanged();
+                    } else {
+                        mSpotifyService.userLogout(getContext());
+                    }
+                }, throwable -> {
+                }, () -> {
+                });
 
         mRecyclerView.addOnScrollListener(new EndlessScrollListener(mLayoutManager, mTotalTracks) {
             @Override
@@ -120,21 +115,20 @@ public class TracksFragment extends Fragment implements OnControllerTrackChangeL
 
     public void loadMoreDataFromApi(final int offset) {
 
-        mSpotifyService.getUserTracks(offset, mLimit).enqueue(new Callback<UserTracks>() {
-            @Override
-            public void onResponse(Call<UserTracks> call, Response<UserTracks> response) {
-                if (response.isSuccess() && response.body() != null) {
-                    mAdapter.notifyDataSetChanged();
-                    mTracksList.addAll(response.body().getItems());
-                    mAdapter.notifyDataSetChanged();
-                }
-            }
-
-            @Override
-            public void onFailure(Call<UserTracks> call, Throwable t) {
-                mSpotifyService.userLogout(getContext());
-            }
-        });
+        mSpotifyService.getUserTracks(offset, mLimit)
+                .subscribeOn(Schedulers.newThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(userTracks -> {
+                    if (userTracks != null) {
+                        mAdapter.notifyDataSetChanged();
+                        mTracksList.addAll(userTracks.getItems());
+                        mAdapter.notifyDataSetChanged();
+                    } else {
+                        mSpotifyService.userLogout(getContext());
+                    }
+                }, throwable -> {
+                }, () -> {
+                });
     }
 
     private void setCurrentPlayingSong(int itemPosition) {

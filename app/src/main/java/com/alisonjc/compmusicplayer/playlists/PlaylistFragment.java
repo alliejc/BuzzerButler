@@ -15,14 +15,12 @@ import com.alisonjc.compmusicplayer.R;
 import com.alisonjc.compmusicplayer.RecyclerDivider;
 import com.alisonjc.compmusicplayer.spotify.SpotifyService;
 import com.alisonjc.compmusicplayer.spotify.model.playlists.Item;
-import com.alisonjc.compmusicplayer.spotify.model.playlists.UserPlaylists;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
 
 
 public class PlaylistFragment extends Fragment implements OnPlaylistInteractionListener {
@@ -88,23 +86,18 @@ public class PlaylistFragment extends Fragment implements OnPlaylistInteractionL
 
     private void recyclerViewSetup() {
 
-        mSpotifyService.getUserPlayLists().enqueue(new Callback<UserPlaylists>() {
-            @Override
-            public void onResponse(Call<UserPlaylists> call, Response<UserPlaylists> response) {
-
-                if (response.isSuccess() && response.body() != null) {
-                    mAdapter.updateAdapter(response.body().getItems());
-
-                } else if (response.code() == 401) {
-                    //userLogout();
-                }
-            }
-
-            @Override
-            public void onFailure(Call<UserPlaylists> call, Throwable t) {
-
-            }
-        });
+        mSpotifyService.getUserPlayLists()
+                .subscribeOn(Schedulers.newThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(userPlaylists -> {
+                    if (userPlaylists != null) {
+                        mAdapter.updateAdapter(userPlaylists.getItems());
+                    } else {
+                        mSpotifyService.userLogout(getContext());
+                    }
+                }, throwable -> {
+                }, () -> {
+                });
     }
 
     @Override
