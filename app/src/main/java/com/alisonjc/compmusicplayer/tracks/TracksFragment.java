@@ -16,7 +16,7 @@ import com.alisonjc.compmusicplayer.EndlessScrollListener;
 import com.alisonjc.compmusicplayer.R;
 import com.alisonjc.compmusicplayer.RecyclerDivider;
 import com.alisonjc.compmusicplayer.spotify.SpotifyService;
-import com.alisonjc.compmusicplayer.spotify.model.UserTracks.Item;
+import com.alisonjc.compmusicplayer.spotify.TrackItem;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,7 +31,7 @@ public class TracksFragment extends Fragment implements OnControllerTrackChangeL
     private OnTrackSelectedListener mListener;
     private RecyclerView mRecyclerView;
     private LinearLayoutManager mLayoutManager;
-    private List<Item> mTracksList;
+    private List<TrackItem> mTracksList;
     private TracksRecyclerAdapter mAdapter;
     private View rootView;
     private int mItemPosition = 0;
@@ -67,66 +67,50 @@ public class TracksFragment extends Fragment implements OnControllerTrackChangeL
         recyclerViewSetup();
     }
 
-    private void recyclerViewSetup(){
+    private void recyclerViewSetup() {
 
         Drawable dividerDrawable = ContextCompat.getDrawable(getContext(), R.drawable.recycler_view_divider);
+        RecyclerView.ItemDecoration dividerItemDecoration = new RecyclerDivider(dividerDrawable);
+        mRecyclerView.addItemDecoration(dividerItemDecoration);
 
         mTracksList = new ArrayList<>();
         mLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
         mRecyclerView.setLayoutManager(mLayoutManager);
-        RecyclerView.ItemDecoration dividerItemDecoration = new RecyclerDivider(dividerDrawable);
-        mRecyclerView.addItemDecoration(dividerItemDecoration);
         mRecyclerView.setHasFixedSize(true);
+        loadDataFromApi(mOffset);
 
-        mAdapter = new TracksRecyclerAdapter<>(mTracksList, getContext(), new TracksRecyclerAdapter.OnItemClickListener() {
-            @Override
-            public void onItemClick(Object item, int position) {
+        mAdapter = new TracksRecyclerAdapter<>(mTracksList, getContext(), (item, position)-> {
+
                 mItemPosition = position;
                 setCurrentPlayingSong(position);
-            }
         });
 
         mRecyclerView.setAdapter(mAdapter);
-
-        mSpotifyService.getUserTracks(mOffset, mLimit)
-                .subscribeOn(Schedulers.newThread())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(userTracks -> {
-                    if (userTracks != null) {
-                        mTotalTracks = userTracks.getTotal();
-                        mAdapter.notifyDataSetChanged();
-                        mTracksList.addAll(userTracks.getItems());
-                        mAdapter.notifyDataSetChanged();
-                    } else {
-                        mSpotifyService.userLogout(getContext());
-                    }
-                }, throwable -> {
-                }, () -> {
-                });
 
         mRecyclerView.addOnScrollListener(new EndlessScrollListener(mLayoutManager, mTotalTracks) {
             @Override
             public void onLoadMore(int offset) {
                 mOffset = offset;
-                loadMoreDataFromApi(mOffset);
+                loadDataFromApi(mOffset);
             }
         });
     }
 
-    public void loadMoreDataFromApi(final int offset) {
+    public void loadDataFromApi(final int offset) {
 
         mSpotifyService.getUserTracks(offset, mLimit)
+                .flatMapIterable(userTracks -> {
+                    mTotalTracks = userTracks.getTotal();
+                    return userTracks.getItems();
+                })
+                .map(item -> new TrackItem(item))
+                .toList()
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(userTracks -> {
-                    if (userTracks != null) {
-                        mAdapter.notifyDataSetChanged();
-                        mTracksList.addAll(userTracks.getItems());
-                        mAdapter.notifyDataSetChanged();
-                    } else {
-                        mSpotifyService.userLogout(getContext());
-                    }
+                    mAdapter.updateAdapter(userTracks);
                 }, throwable -> {
+                    mSpotifyService.userLogout(getContext());
                 }, () -> {
                 });
     }
@@ -135,7 +119,7 @@ public class TracksFragment extends Fragment implements OnControllerTrackChangeL
         this.mItemPosition = itemPosition;
         mAdapter.recyclerViewSelector(mItemPosition);
         mRecyclerView.smoothScrollToPosition(mItemPosition);
-        onSongSelected(mTracksList.get(itemPosition).getTrack().getName(), mTracksList.get(itemPosition).getTrack().getArtists().get(0).getName(), mTracksList.get(itemPosition).getTrack().getUri());
+        onSongSelected(mTracksList.get(itemPosition).getSongName(), mTracksList.get(itemPosition).getArtist(), mTracksList.get(itemPosition).getUri());
     }
 
     public void onSongSelected(String songName, String artistName, String uri) {

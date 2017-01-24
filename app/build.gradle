@@ -6,6 +6,10 @@ android {
     compileSdkVersion 25
     buildToolsVersion "25.0.2"
 
+    dataBinding {
+        enabled = true
+    }
+
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
@@ -29,6 +33,9 @@ android {
 
 repositories {
     mavenCentral()
+    maven {
+        url "http://repo.bodar.com/"
+    }
     flatDir {
         dirs 'libs'
     }
@@ -37,29 +44,34 @@ repositories {
 
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
-    testCompile 'junit:junit:4.12'
-    testCompile 'org.mockito:mockito-core:1.10.19'
+    compile group:'com.googlecode.totallylazy', name:'totallylazy', version:'1.86'
+
+    compile 'com.spotify.sdk:spotify-auth-beta23-noconnect-2.20b@aar'
+    compile 'com.spotify.sdk:spotify-player-24-noconnect-2.20b@aar'
 
     compile 'com.android.support:appcompat-v7:25.1.0'
     compile 'com.android.support:design:25.1.0'
     compile 'com.android.support:support-v4:25.1.0'
-    compile 'com.spotify.sdk:spotify-auth-beta23-noconnect-2.20b@aar'
-    compile 'com.spotify.sdk:spotify-player-24-noconnect-2.20b@aar'
+    compile 'com.android.support:recyclerview-v7:25.1.0'
+
     compile 'com.squareup.retrofit2:retrofit:2.0.0-beta4'
     compile 'com.squareup.retrofit2:converter-gson:2.0.0-beta4'
     compile 'com.squareup.retrofit2:adapter-rxjava:2.0.0-beta4'
+
     compile 'io.reactivex:rxjava:1.1'
     compile 'io.reactivex:rxandroid:1.1.0'
+    apt 'com.android.databinding:compiler:1.0-rc0'
     compile 'org.glassfish:javax.annotation:10.0-b28'
     compile 'com.squareup.okhttp3:logging-interceptor:3.0.1'
     compile 'com.jakewharton:butterknife:8.4.0'
+    compile 'com.google.dagger:dagger:2.8'
+    testCompile 'junit:junit:4.12'
+    testCompile 'org.mockito:mockito-core:1.10.19'
+    testCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.5'
+    annotationProcessor 'com.google.dagger:dagger-compiler:2.8'
     apt 'com.jakewharton:butterknife-compiler:8.4.0'
-    compile 'com.android.support:recyclerview-v7:25.1.0'
     debugCompile 'com.squareup.leakcanary:leakcanary-android:1.5'
     releaseCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.5'
-    testCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.5'
-    compile 'com.google.dagger:dagger:2.8'
-    annotationProcessor 'com.google.dagger:dagger-compiler:2.8'
 }
 
 

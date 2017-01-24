@@ -31,10 +31,13 @@
     <string name="skip_next_song">Skip to next song</string>
     <string name="play_song">Play song</string>
     <string name="pause_song">Pause song</string>
-    
+
     <string-array name="nav_drawer_array">
         <item>Playlists</item>
         <item>Songs</item>
     </string-array>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 
 </resources>
