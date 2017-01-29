@@ -3,7 +3,7 @@
     <data>
         <variable
             name="recycler_view_item"
-            type="com.alisonjc.compmusicplayer.databinding.RecyclerItemModel">
+            type="com.alisonjc.compmusicplayer.databinding.TrackRecyclerItemModel">
             </variable>
         </data>
 

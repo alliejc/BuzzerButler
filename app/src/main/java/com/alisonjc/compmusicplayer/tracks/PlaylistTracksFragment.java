@@ -16,7 +16,6 @@ import com.alisonjc.compmusicplayer.EndlessScrollListener;
 import com.alisonjc.compmusicplayer.R;
 import com.alisonjc.compmusicplayer.RecyclerDivider;
 import com.alisonjc.compmusicplayer.spotify.SpotifyService;
-import com.alisonjc.compmusicplayer.spotify.TrackItem;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,7 +32,7 @@ public class PlaylistTracksFragment extends Fragment implements OnControllerTrac
     private OnTrackSelectedListener mListener;
     private RecyclerView mRecyclerView;
     private LinearLayoutManager mLayoutManager;
-    private List<TrackItem> mPlaylistTracksList;
+    private List<TrackItemModel> mPlaylistTracksList;
     private TracksRecyclerAdapter mAdapter;
     private View rootView;
     private String mPlaylistId;
@@ -119,7 +118,7 @@ public class PlaylistTracksFragment extends Fragment implements OnControllerTrac
                     mTotalTracks = playlistTracksList.getTotal();
                     return playlistTracksList.getItems();
                 })
-                .map(item -> new TrackItem(item))
+                .map(item -> new TrackItemModel(item))
                 .toList()
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
