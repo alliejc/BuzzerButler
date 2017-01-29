@@ -15,6 +15,7 @@ import android.view.ViewGroup;
 import com.alisonjc.compmusicplayer.EndlessScrollListener;
 import com.alisonjc.compmusicplayer.R;
 import com.alisonjc.compmusicplayer.RecyclerDivider;
+import com.alisonjc.compmusicplayer.databinding.TrackItemModel;
 import com.alisonjc.compmusicplayer.spotify.SpotifyService;
 
 import java.util.ArrayList;

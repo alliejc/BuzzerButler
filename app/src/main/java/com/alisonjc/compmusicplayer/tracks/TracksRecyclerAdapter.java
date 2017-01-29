@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 
 import com.alisonjc.compmusicplayer.BR;
 import com.alisonjc.compmusicplayer.R;
+import com.alisonjc.compmusicplayer.databinding.TrackItemModel;
 import com.alisonjc.compmusicplayer.databinding.TrackRecyclerItemModel;
 import com.alisonjc.compmusicplayer.databinding.RecyclerviewItemBinding;
 
@@ -48,7 +49,7 @@ public class TracksRecyclerAdapter<T> extends RecyclerView.Adapter<TracksRecycle
         TrackRecyclerItemModel trackRecyclerItemModel = new TrackRecyclerItemModel(item);
 
         holder.bindItem(trackRecyclerItemModel);
-        holder.bind(item, mListener);
+        holder.bindItemListener(item, mListener);
         holder.itemView.setSelected(selectedItem == position);
     }
 
@@ -85,7 +86,7 @@ public class TracksRecyclerAdapter<T> extends RecyclerView.Adapter<TracksRecycle
             mRecyclerviewItemBinding.executePendingBindings();
         }
 
-        public void bind(TrackItemModel item, final TracksRecyclerAdapter.OnItemClickListener listener) {
+        public void bindItemListener(TrackItemModel item, final TracksRecyclerAdapter.OnItemClickListener listener) {
 
             itemView.setOnClickListener(view -> {
                 Log.i(TAG, "itemView OnClick");

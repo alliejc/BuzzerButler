@@ -16,7 +16,7 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.alisonjc.compmusicplayer.spotify.MusicPlayer;
+import com.alisonjc.compmusicplayer.spotify.SpotifyMusicPlayer;
 import com.alisonjc.compmusicplayer.tracks.OnControllerTrackChangeListener;
 import com.spotify.sdk.android.player.Error;
 import com.spotify.sdk.android.player.Player;
@@ -70,7 +70,7 @@ public class MediaController extends Fragment implements OnControllerTrackChange
     private int mMinutes = 0;
     private OnControllerTrackChangeListener mOnControllerTrackChangeListener;
     private static final String TAG = "MediaController";
-    private MusicPlayer mMusicPlayer = MusicPlayer.getmMusicPlayer();
+    private SpotifyMusicPlayer mSpotifyMusicPlayer = SpotifyMusicPlayer.getmSpotifyMusicPlayer();
 
     public MediaController() {
     }
@@ -96,7 +96,7 @@ public class MediaController extends Fragment implements OnControllerTrackChange
         ButterKnife.bind(this, rootView);
 
         if (mPlayer == null) {
-            mPlayer = mMusicPlayer.getPlayer(getContext());
+            mPlayer = mSpotifyMusicPlayer.getPlayer(getContext());
         }
 
         return rootView;

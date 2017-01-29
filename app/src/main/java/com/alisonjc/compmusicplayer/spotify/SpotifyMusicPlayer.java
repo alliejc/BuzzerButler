@@ -13,19 +13,19 @@ import com.spotify.sdk.android.player.SpotifyPlayer;
 import javax.inject.Singleton;
 
 @Singleton
-public class MusicPlayer implements Player.NotificationCallback {
+public class SpotifyMusicPlayer implements Player.NotificationCallback {
 
     private SpotifyPlayer mPlayer;
     private SpotifyService mSpotifyService = SpotifyService.getSpotifyService();
 
-    private static MusicPlayer mMusicPlayer;
+    private static SpotifyMusicPlayer mSpotifyMusicPlayer;
 
-    public static MusicPlayer getmMusicPlayer() {
-        if (mMusicPlayer != null){
-            return mMusicPlayer;
+    public static SpotifyMusicPlayer getmSpotifyMusicPlayer() {
+        if (mSpotifyMusicPlayer != null){
+            return mSpotifyMusicPlayer;
         } else {
-            mMusicPlayer = new MusicPlayer();
-            return mMusicPlayer;
+            mSpotifyMusicPlayer = new SpotifyMusicPlayer();
+            return mSpotifyMusicPlayer;
         }
     }
 
@@ -42,7 +42,7 @@ public class MusicPlayer implements Player.NotificationCallback {
             mPlayer = SpotifyPlayer.create(playerConfig, new SpotifyPlayer.InitializationObserver() {
                 @Override
                 public void onInitialized(SpotifyPlayer spotifyPlayer) {
-                    spotifyPlayer.addNotificationCallback(MusicPlayer.this);
+                    spotifyPlayer.addNotificationCallback(SpotifyMusicPlayer.this);
 
                 }
 
@@ -54,7 +54,7 @@ public class MusicPlayer implements Player.NotificationCallback {
             });
 
             mPlayer.isInitialized();
-            Log.i("MusicPlayer", "Initialized");
+            Log.i("SpotifyMusicPlayer", "Initialized");
 
             return mPlayer;
         }
