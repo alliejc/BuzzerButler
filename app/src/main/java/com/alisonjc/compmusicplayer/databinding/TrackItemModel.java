@@ -1,6 +1,6 @@
 package com.alisonjc.compmusicplayer.databinding;
 
-import com.alisonjc.compmusicplayer.spotify.model.playlist_tracklists.Item;
+import com.alisonjc.compmusicplayer.spotify.spotify_model.PlaylistTracksModel.Item;
 import com.alisonjc.compmusicplayer.tracks.TrackItemInterface;
 
 
@@ -16,7 +16,7 @@ public class TrackItemModel implements TrackItemInterface {
         this.mUri = playlistTrackItem.getTrack().getUri();
     }
 
-    public TrackItemModel(com.alisonjc.compmusicplayer.spotify.model.UserTracks.Item userTrackItem) {
+    public TrackItemModel(com.alisonjc.compmusicplayer.spotify.spotify_model.UserTracksModel.Item userTrackItem) {
         this.mArtist = userTrackItem.getTrack().getArtists().get(0).getName();
         this.mSongName = userTrackItem.getTrack().getName();
         this.mUri = userTrackItem.getTrack().getUri();

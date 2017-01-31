@@ -5,10 +5,10 @@ import android.content.Context;
 import android.content.SharedPreferences;
 
 import com.alisonjc.compmusicplayer.BuildConfig;
-import com.alisonjc.compmusicplayer.spotify.model.UserTracks.UserTracks;
-import com.alisonjc.compmusicplayer.spotify.model.playlist_tracklists.PlaylistTracksList;
-import com.alisonjc.compmusicplayer.spotify.model.playlists.SpotifyUser;
-import com.alisonjc.compmusicplayer.spotify.model.playlists.UserPlaylists;
+import com.alisonjc.compmusicplayer.spotify.spotify_model.PlaylistModel.SpotifyUser;
+import com.alisonjc.compmusicplayer.spotify.spotify_model.PlaylistModel.UserPlaylists;
+import com.alisonjc.compmusicplayer.spotify.spotify_model.PlaylistTracksModel.PlaylistTracksList;
+import com.alisonjc.compmusicplayer.spotify.spotify_model.UserTracksModel.UserTracks;
 import com.spotify.sdk.android.player.Config;
 
 import javax.inject.Inject;
@@ -74,6 +74,14 @@ public class SpotifyService {
     public Config getPlayerConfig(Context context) {
         return new Config(context, mToken, CLIENT_ID);
     }
+
+//    public Observable<UserArtists> getUserAlbums() {
+//        return mSpotifyServiceInterface.getUserArtists("Bearer " + mToken);
+//    }
+//
+//    public Observable<ArtistTracksList> getArtistTracksList(String albumId){
+//        return mSpotifyService.getAlbumTracks()"Bearer" + mToken, albumId;
+//    }
 
     public boolean isLoggedIn() {
         return (mUserId.equals("") || mToken.equals(""));

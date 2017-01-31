@@ -1,10 +1,10 @@
 package com.alisonjc.compmusicplayer.spotify;
 
 
-import com.alisonjc.compmusicplayer.spotify.model.UserTracks.UserTracks;
-import com.alisonjc.compmusicplayer.spotify.model.playlist_tracklists.PlaylistTracksList;
-import com.alisonjc.compmusicplayer.spotify.model.playlists.SpotifyUser;
-import com.alisonjc.compmusicplayer.spotify.model.playlists.UserPlaylists;
+import com.alisonjc.compmusicplayer.spotify.spotify_model.PlaylistModel.SpotifyUser;
+import com.alisonjc.compmusicplayer.spotify.spotify_model.PlaylistModel.UserPlaylists;
+import com.alisonjc.compmusicplayer.spotify.spotify_model.PlaylistTracksModel.PlaylistTracksList;
+import com.alisonjc.compmusicplayer.spotify.spotify_model.UserTracksModel.UserTracks;
 
 import retrofit2.http.GET;
 import retrofit2.http.Header;
@@ -35,4 +35,11 @@ public interface SpotifyServiceInterface {
     Observable<PlaylistTracksList> getPlaylistTracks(@Header("Authorization") String bearerToken,
                                                @Path("user_id") String userId, @Path("playlist_id") String playlistId, @Query("offset") int offset, @Query("limit") int limit);
 
+//    //logged in users albums
+//    @GET("v1/me/albums")
+//    Observable<UserAlbums> getUserAlbums(@Header("Authorization") String bearerToken);
+//
+//    //album tracks
+//    @GET("v1/albums/{id}/tracks")
+//    Observable<AlbumTracksList> getAlbumTracks(@Header("Authorization") String bearerToken, @Path("album_id") String albumId);
 }

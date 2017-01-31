@@ -8,7 +8,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.alisonjc.compmusicplayer.R;
-import com.alisonjc.compmusicplayer.spotify.model.playlists.Item;
+import com.alisonjc.compmusicplayer.spotify.spotify_model.PlaylistModel.Item;
 
 import java.util.List;
 

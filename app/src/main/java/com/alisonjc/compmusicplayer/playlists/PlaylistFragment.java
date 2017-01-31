@@ -14,7 +14,7 @@ import android.view.ViewGroup;
 import com.alisonjc.compmusicplayer.R;
 import com.alisonjc.compmusicplayer.RecyclerDivider;
 import com.alisonjc.compmusicplayer.spotify.SpotifyService;
-import com.alisonjc.compmusicplayer.spotify.model.playlists.Item;
+import com.alisonjc.compmusicplayer.spotify.spotify_model.PlaylistModel.Item;
 
 import java.util.ArrayList;
 import java.util.List;

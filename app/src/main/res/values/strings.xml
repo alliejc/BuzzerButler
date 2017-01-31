@@ -9,6 +9,7 @@
     <string name="playlists_drawer">Playlists</string>
     <string name="songs_drawer">Songs</string>
     <string name="artist_drawer">Artists</string>
+    <string name="album_drawer">Albums</string>
 
     <string name="action_settings">Settings</string>
     <string name="logout">Logout</string>
@@ -35,6 +36,7 @@
     <string-array name="nav_drawer_array">
         <item>Playlists</item>
         <item>Songs</item>
+        <item>Albums</item>
     </string-array>
 
     <!-- TODO: Remove or change this placeholder text -->

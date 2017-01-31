@@ -36,7 +36,7 @@ import rx.schedulers.Schedulers;
 
 
 public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener, OnPlaylistInteractionListener, OnControllerTrackChangeListener, OnTrackSelectedListener {
+        implements NavigationView.OnNavigationItemSelectedListener, OnPlaylistInteractionListener, OnControllerTrackChangeListener, OnTrackSelectedListener{
 
     @BindView(R.id.toolbar)
     Toolbar mToolbar;

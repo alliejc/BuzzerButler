@@ -137,12 +137,10 @@ public class MediaController extends Fragment implements OnControllerTrackChange
 
                 Log.i(TAG, "mBeepPlayed = true");
 
-            } else if (mSongLocation >= mEndSongAt && mBeepPlayed) {
+            } else if (mSongLocation >= mEndSongAt) {
                 Log.i(TAG, "SetTimeSkipNext");
 
                 onSkipNextClicked();
-                mBeepPlayed = false;
-                Log.i(TAG, "mBeepPlayed = false");
             }
             mMusicTimerHandler.postDelayed(musicTimerRun, 1000);
         }
@@ -285,7 +283,7 @@ public class MediaController extends Fragment implements OnControllerTrackChange
 
         if (mPlayer != null) {
             Log.i(TAG, "onSkipNextClickedPLAYERNOTNULL");
-            resetHandlers();
+            //resetHandlers();
             mPlayer.skipToNext(mOperationCallback);
             onControllerTrackChange(true);
 
