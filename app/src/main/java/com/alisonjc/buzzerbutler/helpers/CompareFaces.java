@@ -86,7 +86,7 @@ public class CompareFaces {
 //            }
 //        }
 //        return false;
-    }
+//    }
 
 }
 

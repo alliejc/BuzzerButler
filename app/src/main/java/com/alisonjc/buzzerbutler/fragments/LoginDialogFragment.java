@@ -17,7 +17,7 @@ public class LoginDialogFragment extends DialogFragment {
     private SharedPreferences mSharedPreferences;
     public static final String PREFS_FILE = "MyPrefsFile";
 
-    static LoginDialogFragment newInstance() {
+    public static LoginDialogFragment newInstance() {
         return new LoginDialogFragment();
     }
 

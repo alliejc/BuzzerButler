@@ -22,21 +22,17 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
-<<<<<<< HEAD:app/src/main/java/com/alisonjc/buzzerbutler/MainActivity.java
 import com.alisonjc.buzzerbutler.helpers.SavedUserFragment;
-=======
 import com.alisonjc.buzzerbutler.fragments.LoginDialogFragment;
 import com.alisonjc.buzzerbutler.ProfileFragment;
 import com.alisonjc.buzzerbutler.R;
->>>>>>> add aws library:app/src/main/java/com/alisonjc/buzzerbutler/activities/MainActivity.java
 
 import butterknife.BindView;
-<<<<<<< HEAD
-=======
 import butterknife.ButterKnife;
->>>>>>> update background color
 
-public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
+import static android.R.attr.src;
+
+public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
     @BindView(R.id.toolbar)
     Toolbar mToolbar;
@@ -111,7 +107,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     private void userLogin() {
-
         FragmentTransaction ft = getFragmentManager().beginTransaction();
         DialogFragment dialogFragment = LoginDialogFragment.newInstance();
         dialogFragment.show(ft, "dialog");
@@ -148,7 +143,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public boolean onNavigationItemSelected(final MenuItem item) {
         int id = item.getItemId();
 
-<<<<<<< HEAD:app/src/main/java/com/alisonjc/buzzerbutler/MainActivity.java
         switch (id) {
 
             case R.id.profile_drawer:
@@ -160,15 +154,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 addFragmentOnTop(SavedUserFragment.newInstance());
                 mActionBar.setTitle(R.string.saved_drawer);
                 break;
-
-                default:
-                    break;
-
-
+            default:
+                break;
         }
 
-=======
->>>>>>> add aws library:app/src/main/java/com/alisonjc/buzzerbutler/activities/MainActivity.java
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
