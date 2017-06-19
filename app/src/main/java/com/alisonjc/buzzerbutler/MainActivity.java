@@ -1,4 +1,4 @@
-package com.alisonjc.compmusicplayer;
+package com.alisonjc.buzzerbutler;
 
 
 import android.app.DialogFragment;
@@ -26,7 +26,7 @@ import rx.schedulers.Schedulers;
 
 
 public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener, OnPlaylistInteractionListener, OnControllerTrackChangeListener, OnTrackSelectedListener{
+        implements NavigationView.OnNavigationItemSelectedListener{
 
     @BindView(R.id.toolbar)
     Toolbar mToolbar;
@@ -106,9 +106,7 @@ public class MainActivity extends AppCompatActivity
         switch (item.getItemId()) {
 
             case R.id.nav_logout:
-                mSpotifyService.userLogout(getApplicationContext());
-                mNavigationView.setCheckedItem(R.id.nav_playlists);
-                mMediaController.clearPlayer();
+
                 userLogin();
                 break;
 
@@ -126,21 +124,6 @@ public class MainActivity extends AppCompatActivity
         int id = item.getItemId();
         FragmentManager fragmentManager = getSupportFragmentManager();
 
-        if (id == R.id.nav_playlists) {
-
-            fragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
-            PlaylistFragment playlistFragment = PlaylistFragment.newInstance();
-            fragmentManager.beginTransaction().replace(R.id.main_framelayout, playlistFragment, "playlistFragment").addToBackStack(null).commit();
-            mActionBar.setTitle(R.string.playlists_drawer);
-
-        } else if (id == R.id.nav_songs) {
-
-            fragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
-            mTracksFragment = TracksFragment.newInstance();
-            mOnControllerTrackChangeListener = mTracksFragment;
-            fragmentManager.beginTransaction().replace(R.id.main_framelayout, mTracksFragment, "tracksFragment").addToBackStack(null).commit();
-            mActionBar.setTitle(R.string.songs_drawer);
-        }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
@@ -161,78 +144,6 @@ public class MainActivity extends AppCompatActivity
     protected void onActivityResult(final int requestCode, int resultCode, Intent intent) {
         super.onActivityResult(requestCode, resultCode, intent);
 
-        if (requestCode == REQUEST_CODE) {
-            AuthenticationResponse authResponse = AuthenticationClient.getResponse(resultCode, intent);
-            switch (authResponse.getType()) {
-
-                case TOKEN:
-                    final String mToken = authResponse.getAccessToken();
-                    mSpotifyService.getCurrentUser(mToken)
-                            .subscribeOn(Schedulers.newThread())
-                            .observeOn(AndroidSchedulers.mainThread())
-                            .subscribe(spotifyUser -> {
-
-                                mSpotifyService.setUserId(spotifyUser.getId(), getBaseContext());
-                                mSpotifyService.setToken(mToken, getBaseContext());
-                                mUserName = spotifyUser.getDisplayName();
-                                mUserEmail = spotifyUser.getEmail();
-                                navigationDrawerSetup();
-
-                                FragmentManager fragmentManager = getSupportFragmentManager();
-                                PlaylistFragment playlistFragment = PlaylistFragment.newInstance();
-
-
-                                fragmentManager.beginTransaction()
-                                        .replace(R.id.main_framelayout, playlistFragment, "playlistTracksFragment").addToBackStack(null)
-                                        .commit();
-
-                                mMediaController = MediaController.newInstance();
-                                fragmentManager.beginTransaction()
-                                        .replace(R.id.media_controls_frame, mMediaController, "mediaController")
-                                        .commit();
-
-                                mActionBar.setTitle(R.string.playlists_drawer);
-                            }, throwable -> {
-
-                            }, () -> {
-
-                            });
-                    break;
-
-                case ERROR:
-                    break;
-
-                default:
-            }
-        }
-    }
-
-    @Override
-    public void onPlaylistSelected(String userId, String playlistId, String playlistTitle) {
-
-        mPlaylistTitle = playlistTitle;
-        mActionBar.setTitle(mPlaylistTitle);
-
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        mPlaylistTracksFragment = PlaylistTracksFragment.newInstance(userId, playlistId);
-        mOnControllerTrackChangeListener = mPlaylistTracksFragment;
-        fragmentManager.beginTransaction().replace(R.id.main_framelayout, mPlaylistTracksFragment, "playlistTracksFragment").addToBackStack(null).commit();
-    }
-
-    @Override
-    public void onTrackSelected(String songName, String artistName, String uri) {
-        Log.i(TAG, "onTracksSelected");
-        mMediaController.playSong(songName, artistName, uri);
-    }
-
-    @Override
-    public void onControllerTrackChange(boolean skipforward) {
-        if (mOnControllerTrackChangeListener != null) {
-            Log.i(TAG, "onControllerTackChangeNOTNULL");
-            mOnControllerTrackChangeListener.onControllerTrackChange(skipforward);
-        } else {
-            Log.i(TAG, "onControllerTrackChangeNULL");
-        }
     }
 
     @Override

@@ -1,14 +1,10 @@
-package com.alisonjc.compmusicplayer;
+package com.alisonjc.buzzerbutler;
 
 import android.app.DialogFragment;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-
-import com.spotify.sdk.android.authentication.AuthenticationClient;
-import com.spotify.sdk.android.authentication.AuthenticationRequest;
-import com.spotify.sdk.android.authentication.AuthenticationResponse;
 
 public class LoginDialogFrag extends DialogFragment {
 
@@ -22,7 +18,7 @@ public class LoginDialogFrag extends DialogFragment {
         View v = inflater.inflate(R.layout.fragment_login_dialog, container, false);
 
         getDialog().setCanceledOnTouchOutside(false);
-        View mLoginButton = v.findViewById(R.id.spotifyLoginButton);
+        View mLoginButton = v.findViewById(R.id.LoginButton);
         mLoginButton.setVisibility(View.VISIBLE);
         mLoginButton.setOnClickListener(view ->  {
 

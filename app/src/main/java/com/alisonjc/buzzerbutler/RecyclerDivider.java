@@ -1,4 +1,4 @@
-package com.alisonjc.compmusicplayer;
+package com.alisonjc.buzzerbutler;
 
 import android.graphics.Canvas;
 import android.graphics.Rect;
