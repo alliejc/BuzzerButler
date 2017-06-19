@@ -121,8 +121,8 @@ public class MainActivity extends AppCompatActivity
         switch (item.getItemId()) {
 
             case R.id.nav_logout:
-                mSharedPreferences.edit().remove("username");
-                mSharedPreferences.edit().remove("email");
+                mSharedPreferences.edit().remove("username").apply();
+                mSharedPreferences.edit().remove("email").apply();
 
                 userLogin();
                 break;
@@ -139,20 +139,17 @@ public class MainActivity extends AppCompatActivity
     @Override
     public boolean onNavigationItemSelected(final MenuItem item) {
         int id = item.getItemId();
-        FragmentManager fragmentManager = getSupportFragmentManager();
 
         switch (id) {
 
             case R.id.profile_drawer:
                 addFragmentOnTop(ProfileFragment.newInstance());
                 mActionBar.setTitle(R.string.profile_drawer);
-
                 break;
 
             case R.id.saved_drawer:
                 addFragmentOnTop(SavedUserFragment.newInstance());
                 mActionBar.setTitle(R.string.saved_drawer);
-
                 break;
 
                 default:
@@ -160,7 +157,6 @@ public class MainActivity extends AppCompatActivity
 
 
         }
-
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
