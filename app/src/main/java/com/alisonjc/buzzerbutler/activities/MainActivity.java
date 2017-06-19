@@ -30,8 +30,6 @@ import com.alisonjc.buzzerbutler.R;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-import static android.R.attr.src;
-
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
     @BindView(R.id.toolbar)
@@ -59,10 +57,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        ButterKnife.bind(this);
 
         mSharedPreferences = getApplicationContext().getSharedPreferences(PREFS_FILE, Context.MODE_PRIVATE);
 
-        userLogin();
+        final String userEmail = mSharedPreferences.getString("email", null);
+        if (userEmail != null) {
+            userLogin();
+        }
 
         toolbarSetup();
         navigationDrawerSetup();
@@ -109,7 +111,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private void userLogin() {
         FragmentTransaction ft = getFragmentManager().beginTransaction();
         DialogFragment dialogFragment = LoginDialogFragment.newInstance();
-        dialogFragment.show(ft, "dialog");
+        dialogFragment.show(ft, "LoginDialog");
     }
 
     @Override
@@ -124,8 +126,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         switch (item.getItemId()) {
 
             case R.id.nav_logout:
-                mSharedPreferences.edit().remove("username").apply();
                 mSharedPreferences.edit().remove("email").apply();
+                mSharedPreferences.edit().remove("pass").apply();
 
                 userLogin();
                 break;

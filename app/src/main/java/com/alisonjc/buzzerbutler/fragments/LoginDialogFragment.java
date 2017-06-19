@@ -23,30 +23,30 @@ public class LoginDialogFragment extends DialogFragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+            Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_login_dialog, container, false);
 
         mSharedPreferences = getContext().getSharedPreferences(PREFS_FILE, Context.MODE_PRIVATE);
 
         getDialog().setCanceledOnTouchOutside(false);
         Button mLoginButton = (Button) v.findViewById(R.id.LoginButton);
-        EditText userName = (EditText) v.findViewById(R.id.username);
+        EditText userName = (EditText) v.findViewById(R.id.pass);
         EditText email = (EditText) v.findViewById(R.id.email);
 
         mLoginButton.setVisibility(View.VISIBLE);
 
-        if(mSharedPreferences.contains("username") && mSharedPreferences.contains("email")){
-            mLoginButton.setText("Login");
+        if (mSharedPreferences.contains("email")) {
+            mLoginButton.setText(R.string.login);
         } else {
-            mLoginButton.setText("Register");
+            mLoginButton.setText(R.string.register);
         }
 
-        mLoginButton.setOnClickListener(view ->  {
+        mLoginButton.setOnClickListener(view -> {
 
-            mSharedPreferences.edit().putString("username", userName.toString()).apply();
             mSharedPreferences.edit().putString("email", email.toString()).apply();
+            mSharedPreferences.edit().putString("pass", userName.toString()).apply();
 
-                onDestroyView();
+            onDestroyView();
         });
 
         return v;
