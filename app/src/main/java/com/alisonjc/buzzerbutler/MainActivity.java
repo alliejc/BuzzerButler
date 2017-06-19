@@ -22,9 +22,6 @@ import android.view.View;
 import android.widget.TextView;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.schedulers.Schedulers;
 
 
 public class MainActivity extends AppCompatActivity
@@ -51,7 +48,6 @@ public class MainActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        ButterKnife.bind(this);
 
         mSharedPreferences = getApplicationContext().getSharedPreferences(PREFS_FILE, Context.MODE_PRIVATE);
 
@@ -137,12 +133,22 @@ public class MainActivity extends AppCompatActivity
         int id = item.getItemId();
         FragmentManager fragmentManager = getSupportFragmentManager();
 
-        if (id == R.id.profile_drawer) {
+        switch (id) {
 
-            fragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
-            ProfileFragment playlistFragment = ProfileFragment.newInstance();
-            fragmentManager.beginTransaction().replace(R.id.main_framelayout, playlistFragment, "playlistFragment").addToBackStack(null).commit();
-            mActionBar.setTitle(R.string.profile_drawer);
+            case R.id.profile_drawer:
+
+                fragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+                ProfileFragment playlistFragment = ProfileFragment.newInstance();
+                fragmentManager.beginTransaction().replace(R.id.main_framelayout, playlistFragment, "profileFragment").addToBackStack(null).commit();
+                mActionBar.setTitle(R.string.profile_drawer);
+
+            case R.id.saved_drawer:
+
+                fragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+                SavedUserFragment savedUserFragment = SavedUserFragment.newInstance();
+                fragmentManager.beginTransaction().replace(R.id.main_framelayout, savedUserFragment, "savedUserFragment").addToBackStack(null).commit();
+                mActionBar.setTitle(R.string.profile_drawer);
+
         }
 
 
