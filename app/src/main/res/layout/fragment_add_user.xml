@@ -4,21 +4,33 @@
     android:layout_height="match_parent"
     tools:context="com.alisonjc.buzzerbutler.fragments.AddUserFragment"
     android:orientation="vertical"
+    android:weightSum="130"
     >
+
+    <ImageView
+        android:id="@+id/profile_image"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/profile_default_image"
+        android:maxHeight="20dp"
+        android:maxWidth="20dp"
+        android:layout_weight="30"
+        android:layout_gravity="center"
+        android:layout_margin="5dp"/>
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
         android:orientation="vertical"
-        android:layout_weight="25"
-        android:padding="5dp">
+        android:layout_weight="20"
+        android:layout_margin="5dp">
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="First Name:"
             android:gravity="top"
-            android:textAlignment="center"
+            android:textAlignment="gravity"
             android:textColor="@color/color_default"
             android:textSize="20sp"
             android:textStyle="bold" />
@@ -26,25 +38,27 @@
         <EditText
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:hint="John"
-            android:textAlignment="center"
             android:gravity="bottom"
-            android:textColorHint="@color/color_light_gray"/>
+            android:hint="John"
+            android:selectAllOnFocus="true"
+            android:singleLine="false"
+            android:textAlignment="gravity"
+            android:textColorHint="@color/color_light_gray" />
 
     </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
         android:orientation="vertical"
-        android:layout_weight="25"
-        android:padding="5dp">
+        android:layout_weight="20"
+        android:layout_margin="5dp">
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="top"
-            android:textAlignment="center"
+            android:textAlignment="gravity"
             android:text="Last Name:"
             android:textColor="@color/color_default"
             android:textSize="20sp"
@@ -54,7 +68,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:hint="Doe"
-            android:textAlignment="center"
+            android:textAlignment="gravity"
             android:gravity="bottom"
             android:textColorHint="@color/color_light_gray"/>
 
@@ -62,16 +76,16 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
         android:orientation="vertical"
-        android:layout_weight="25"
-        android:padding="5dp">
+        android:layout_weight="20"
+        android:layout_margin="5dp">
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="top"
-            android:textAlignment="center"
+            android:textAlignment="gravity"
             android:text="Phone #:"
             android:textColor="@color/color_default"
             android:textSize="20sp"
@@ -81,7 +95,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:hint="206-123-4567"
-            android:textAlignment="center"
+            android:textAlignment="gravity"
             android:gravity="bottom"
             android:textColorHint="@color/color_light_gray"/>
 
@@ -89,17 +103,17 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
         android:orientation="vertical"
-        android:layout_weight="25"
-        android:padding="5dp">
+        android:layout_weight="20"
+        android:layout_margin="5dp">
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Dial Code"
             android:gravity="top"
-            android:textAlignment="center"
+            android:textAlignment="gravity"
             android:textColor="@color/color_default"
             android:textSize="20sp"
             android:textStyle="bold"/>
@@ -108,11 +122,17 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:hint="2"
-            android:textAlignment="center"
+            android:textAlignment="gravity"
             android:gravity="bottom"
             android:textColorHint="@color/color_light_gray"/>
-
     </LinearLayout>
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:text="SAVE"
+        android:layout_weight="20"
+        android:layout_margin="5dp"/>
 
 
 </LinearLayout>

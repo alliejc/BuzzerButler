@@ -4,7 +4,6 @@
 <LinearLayout
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@drawable/selector_item"
     android:orientation="vertical"
     android:weightSum="100"
     >
@@ -17,7 +16,6 @@
         android:layout_marginEnd="15dp"
         android:layout_marginStart="15dp"
         android:maxLines="1"
-        android:textColor="@color/color_white"
         android:textSize="20sp"
         android:layout_weight="33.3"
         android:text="NAME"/>
@@ -31,7 +29,6 @@
         android:layout_marginTop="10dp"
         android:gravity="bottom"
         android:maxLines="1"
-        android:textColor="@color/color_light_gray"
         android:textSize="15sp"
         android:layout_weight="33.3"
         android:text="PHONE NUMBER"/>
@@ -45,7 +42,6 @@
         android:layout_marginTop="10dp"
         android:gravity="bottom"
         android:maxLines="1"
-        android:textColor="@color/color_light_gray"
         android:textSize="15sp"
         android:layout_weight="33.3"
         android:text="DIAL CODE"/>
@@ -58,7 +54,6 @@
         android:layout_marginTop="10dp"
         android:gravity="bottom"
         android:maxLines="1"
-        android:textColor="@color/color_light_gray"
         android:textSize="15sp"
         android:layout_weight="33.3" />
 </LinearLayout>

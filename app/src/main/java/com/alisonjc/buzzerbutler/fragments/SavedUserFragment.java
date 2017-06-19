@@ -20,7 +20,7 @@ import com.alisonjc.buzzerbutler.helpers.RecyclerDivider;
 import java.util.ArrayList;
 import java.util.List;
 
-//TODO: Get Saved Users from DB
+//TODO: Get Saved Users from DB, replace mDummyList
 public class SavedUserFragment extends Fragment {
 
     private OnFragmentInteractionListener mListener;
