@@ -7,7 +7,7 @@
     android:background="@color/color_default"
     >
     <ImageButton
-        android:id="@+id/spotifyLoginButton"
+        android:id="@+id/LoginButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:contentDescription="@string/login_Dialog_Fragment"

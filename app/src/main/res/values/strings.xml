@@ -6,8 +6,8 @@
     <string name="navigation_drawer_close">Close navigation drawer</string>
 
     <string name="profile_drawer">Profile</string>
-    <string name="saved_users_drawer">Saved</string>
-    <string name="add_new_drawer">Add</string>
+    <string name="saved_drawer">Saved</string>
+    <string name="add_drawer">Add</string>
 
     <string name="action_settings">Settings</string>
     <string name="logout">Logout</string>
@@ -20,5 +20,8 @@
         <item>Saved</item>
         <item>Add</item>
     </string-array>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 
 </resources>
