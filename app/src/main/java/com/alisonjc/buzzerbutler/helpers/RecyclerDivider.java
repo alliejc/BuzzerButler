@@ -1,4 +1,4 @@
-package com.alisonjc.buzzerbutler;
+package com.alisonjc.buzzerbutler.helpers;
 
 import android.graphics.Canvas;
 import android.graphics.Rect;

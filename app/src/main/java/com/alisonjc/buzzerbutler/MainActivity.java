@@ -133,23 +133,24 @@ public class MainActivity extends AppCompatActivity
         int id = item.getItemId();
         FragmentManager fragmentManager = getSupportFragmentManager();
 
-        switch (id) {
-
-            case R.id.profile_drawer:
-
-                fragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
-                ProfileFragment playlistFragment = ProfileFragment.newInstance();
-                fragmentManager.beginTransaction().replace(R.id.main_framelayout, playlistFragment, "profileFragment").addToBackStack(null).commit();
-                mActionBar.setTitle(R.string.profile_drawer);
-
-            case R.id.saved_drawer:
-
-                fragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
-                SavedUserFragment savedUserFragment = SavedUserFragment.newInstance();
-                fragmentManager.beginTransaction().replace(R.id.main_framelayout, savedUserFragment, "savedUserFragment").addToBackStack(null).commit();
-                mActionBar.setTitle(R.string.profile_drawer);
-
-        }
+//        switch (id) {
+//
+//            case R.id.profile_drawer:
+//
+//                fragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+//                ProfileFragment playlistFragment = ProfileFragment.newInstance();
+//                fragmentManager.beginTransaction().replace(R.id.main_framelayout, playlistFragment, "profileFragment").addToBackStack(null).commit();
+//                mActionBar.setTitle(R.string.profile_drawer);
+//
+////            case R.id.saved_drawer:
+////
+////                fragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+////                SavedUserFragment savedUserFragment = SavedUserFragment.newInstance();
+////                fragmentManager.beginTransaction().replace(R.id.main_framelayout, savedUserFragment, "savedUserFragment").addToBackStack(null).commit();
+////                mActionBar.setTitle(R.string.profile_drawer);
+//
+//
+//        }
 
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -158,7 +159,6 @@ public class MainActivity extends AppCompatActivity
     }
 
     private void toolbarSetup() {
-
         Toolbar myToolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(myToolbar);
         mActionBar = getSupportActionBar();
