@@ -33,11 +33,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class MainActivity extends AppCompatActivity
-<<<<<<< HEAD
         implements NavigationView.OnNavigationItemSelectedListener, SavedUserFragment.OnFragmentInteractionListener, AddUserFragment.OnAddUserInteraction{
-=======
-        implements NavigationView.OnNavigationItemSelectedListener, SavedUserFragment.OnFragmentInteractionListener{
->>>>>>> 5072fe193faef794a388ac8738ff99014f85609d
 
     @BindView(R.id.toolbar)
     Toolbar mToolbar;
