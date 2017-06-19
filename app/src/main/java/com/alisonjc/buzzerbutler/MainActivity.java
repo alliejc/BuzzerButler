@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -21,6 +22,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
+import com.alisonjc.buzzerbutler.helpers.SavedUserFragment;
+
 import butterknife.BindView;
 
 
@@ -30,11 +33,14 @@ public class MainActivity extends AppCompatActivity
     @BindView(R.id.toolbar)
     Toolbar mToolbar;
 
-    @BindView(R.id.drawer_layout)
-    DrawerLayout mDrawerLayout;
+//    @BindView(R.id.drawer_layout)
+//    DrawerLayout mDrawerLayout;
+//
+//    @BindView(R.id.nav_view)
+//    NavigationView mNavigationView;
 
-    @BindView(R.id.nav_view)
-    NavigationView mNavigationView;
+    private NavigationView mNavigationView;
+    private DrawerLayout mDrawerLayout;
 
     private ActionBarDrawerToggle mActionBarDrawerToggle;
     private ActionBar mActionBar;
@@ -43,6 +49,7 @@ public class MainActivity extends AppCompatActivity
     private static final String TAG = "MainActivity";
     private SharedPreferences mSharedPreferences;
     public static final String PREFS_FILE = "MyPrefsFile";
+    private static final String BACK_STACK_ROOT_TAG = "root_fragment";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,14 +58,16 @@ public class MainActivity extends AppCompatActivity
 
         mSharedPreferences = getApplicationContext().getSharedPreferences(PREFS_FILE, Context.MODE_PRIVATE);
 
-        if(!mSharedPreferences.contains("username") || !mSharedPreferences.contains("email")){
-            userLogin();
-        }
+        userLogin();
 
         toolbarSetup();
+        navigationDrawerSetup();
     }
 
     private void navigationDrawerSetup() {
+
+        mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+        mNavigationView = (NavigationView) findViewById(R.id.nav_view);
 
         mActionBarDrawerToggle = new ActionBarDrawerToggle(
                 this, mDrawerLayout, mToolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
@@ -132,29 +141,41 @@ public class MainActivity extends AppCompatActivity
         int id = item.getItemId();
         FragmentManager fragmentManager = getSupportFragmentManager();
 
-//        switch (id) {
-//
-//            case R.id.profile_drawer:
-//
-//                fragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
-//                ProfileFragment playlistFragment = ProfileFragment.newInstance();
-//                fragmentManager.beginTransaction().replace(R.id.main_framelayout, playlistFragment, "profileFragment").addToBackStack(null).commit();
-//                mActionBar.setTitle(R.string.profile_drawer);
-//
-////            case R.id.saved_drawer:
-////
-////                fragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
-////                SavedUserFragment savedUserFragment = SavedUserFragment.newInstance();
-////                fragmentManager.beginTransaction().replace(R.id.main_framelayout, savedUserFragment, "savedUserFragment").addToBackStack(null).commit();
-////                mActionBar.setTitle(R.string.profile_drawer);
-//
-//
-//        }
+        switch (id) {
+
+            case R.id.profile_drawer:
+                addFragmentOnTop(ProfileFragment.newInstance());
+                mActionBar.setTitle(R.string.profile_drawer);
+
+                break;
+
+            case R.id.saved_drawer:
+                addFragmentOnTop(SavedUserFragment.newInstance());
+                mActionBar.setTitle(R.string.saved_drawer);
+
+                break;
+
+                default:
+                    break;
+
+
+        }
 
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    public void addFragmentOnTop(Fragment fragment) {
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        fragmentManager.popBackStack(BACK_STACK_ROOT_TAG, android.app.FragmentManager.POP_BACK_STACK_INCLUSIVE);
+
+        fragmentManager
+                .beginTransaction()
+                .replace(R.id.main_framelayout, fragment)
+                .addToBackStack(BACK_STACK_ROOT_TAG)
+                .commit();
     }
 
     private void toolbarSetup() {
