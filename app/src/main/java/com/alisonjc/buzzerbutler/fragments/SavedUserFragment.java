@@ -41,7 +41,6 @@ public class SavedUserFragment extends Fragment {
         mDummyList.add("John Doe");
         mDummyList.add("206-123-4567");
         mDummyList.add("1234");
-
     }
 
     @Override
