@@ -11,11 +11,11 @@ import java.util.List;
 
 public class CustomRecyclerViewAdapter extends RecyclerView.Adapter<CustomRecyclerViewAdapter.CustomViewHolder> {
 
-    private List mInstructionList;
+    private List mList;
     private Context mContext;
 
     public CustomRecyclerViewAdapter(List list, Context context) {
-        this.mInstructionList = list;
+        this.mList = list;
         this.mContext = context;
     }
 
@@ -32,25 +32,34 @@ public class CustomRecyclerViewAdapter extends RecyclerView.Adapter<CustomRecycl
     @Override
     public void onBindViewHolder(CustomViewHolder holder, int position) {
 
-        String exerciseItem = mInstructionList.get(position).toString();
-        TextView instructionText = holder.instructionText;
+        holder.headerText.setText(mList.get(0).toString());
+        holder.subText1.setText(mList.get(1).toString());
+        holder.subText2.setText(mList.get(2).toString());
 
-        instructionText.setText(exerciseItem);
     }
 
     @Override
     public int getItemCount() {
-        return mInstructionList.size();
+        return mList.size();
     }
 
     public class CustomViewHolder extends RecyclerView.ViewHolder {
 
-        public TextView instructionText;
+        public TextView headerText;
+        public TextView subText1;
+        public TextView subText2;
+        public TextView subText3;
 
         public CustomViewHolder(View itemView) {
             super(itemView);
 
-            instructionText = (TextView) itemView.findViewById(R.id.recyclerview_header_text);
+            headerText = (TextView) itemView.findViewById(R.id.header_text);
+            subText1 = (TextView) itemView.findViewById(R.id.sub_text1);
+            subText2 = (TextView) itemView.findViewById(R.id.sub_text2);
+            subText3 = (TextView) itemView.findViewById(R.id.sub_text3);
+
+
+
         }
     }
 }

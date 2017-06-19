@@ -10,7 +10,7 @@
     >
 
     <TextView
-        android:id="@+id/recyclerview_header_text"
+        android:id="@+id/header_text"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:gravity="center_vertical|center|start"
@@ -19,10 +19,11 @@
         android:maxLines="1"
         android:textColor="@color/color_white"
         android:textSize="20sp"
-        android:layout_weight="50" />
+        android:layout_weight="33.3"
+        android:text="NAME"/>
 
     <TextView
-        android:id="@+id/recyclerview_sub_text"
+        android:id="@+id/sub_text1"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_marginEnd="30dp"
@@ -32,7 +33,34 @@
         android:maxLines="1"
         android:textColor="@color/color_light_gray"
         android:textSize="15sp"
-        android:layout_weight="50" />
+        android:layout_weight="33.3"
+        android:text="PHONE NUMBER"/>
 
+    <TextView
+        android:id="@+id/sub_text2"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginEnd="30dp"
+        android:layout_marginStart="45dp"
+        android:layout_marginTop="10dp"
+        android:gravity="bottom"
+        android:maxLines="1"
+        android:textColor="@color/color_light_gray"
+        android:textSize="15sp"
+        android:layout_weight="33.3"
+        android:text="DIAL CODE"/>
+    <TextView
+        android:id="@+id/sub_text3"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginEnd="30dp"
+        android:layout_marginStart="45dp"
+        android:layout_marginTop="10dp"
+        android:gravity="bottom"
+        android:maxLines="1"
+        android:textColor="@color/color_light_gray"
+        android:textSize="15sp"
+        android:layout_weight="33.3"
+        android:text="PRIVATE PIN"/>
 </LinearLayout>
 </layout>
