@@ -1,4 +1,4 @@
-package com.alisonjc.buzzerbutler;
+package com.alisonjc.buzzerbutler.fragments;
 
 import android.app.DialogFragment;
 import android.content.Context;
@@ -10,13 +10,15 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 
-public class LoginDialogFrag extends DialogFragment {
+import com.alisonjc.buzzerbutler.R;
+
+public class LoginDialogFragment extends DialogFragment {
 
     private SharedPreferences mSharedPreferences;
     public static final String PREFS_FILE = "MyPrefsFile";
 
-    static LoginDialogFrag newInstance() {
-        return new LoginDialogFrag();
+    static LoginDialogFragment newInstance() {
+        return new LoginDialogFragment();
     }
 
     @Override

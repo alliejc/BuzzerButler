@@ -1,4 +1,4 @@
-package com.alisonjc.buzzerbutler;
+package com.alisonjc.buzzerbutler.activities;
 
 
 import android.app.DialogFragment;
@@ -22,7 +22,13 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
+<<<<<<< HEAD:app/src/main/java/com/alisonjc/buzzerbutler/MainActivity.java
 import com.alisonjc.buzzerbutler.helpers.SavedUserFragment;
+=======
+import com.alisonjc.buzzerbutler.fragments.LoginDialogFragment;
+import com.alisonjc.buzzerbutler.ProfileFragment;
+import com.alisonjc.buzzerbutler.R;
+>>>>>>> add aws library:app/src/main/java/com/alisonjc/buzzerbutler/activities/MainActivity.java
 
 import butterknife.BindView;
 <<<<<<< HEAD
@@ -107,7 +113,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private void userLogin() {
 
         FragmentTransaction ft = getFragmentManager().beginTransaction();
-        DialogFragment dialogFragment = LoginDialogFrag.newInstance();
+        DialogFragment dialogFragment = LoginDialogFragment.newInstance();
         dialogFragment.show(ft, "dialog");
     }
 
@@ -142,6 +148,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public boolean onNavigationItemSelected(final MenuItem item) {
         int id = item.getItemId();
 
+<<<<<<< HEAD:app/src/main/java/com/alisonjc/buzzerbutler/MainActivity.java
         switch (id) {
 
             case R.id.profile_drawer:
@@ -160,6 +167,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         }
 
+=======
+>>>>>>> add aws library:app/src/main/java/com/alisonjc/buzzerbutler/activities/MainActivity.java
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;

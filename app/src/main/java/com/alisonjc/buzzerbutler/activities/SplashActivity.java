@@ -1,8 +1,11 @@
-package com.alisonjc.buzzerbutler;
+package com.alisonjc.buzzerbutler.activities;
 
 import android.content.Intent;
 import android.util.Log;
 
+import com.alisonjc.buzzerbutler.BuildConfig;
+import com.alisonjc.buzzerbutler.R;
+import com.alisonjc.buzzerbutler.activities.MainActivity;
 import com.daimajia.androidanimations.library.Techniques;
 import com.viksaa.sssplash.lib.activity.AwesomeSplash;
 import com.viksaa.sssplash.lib.cnst.Flags;
