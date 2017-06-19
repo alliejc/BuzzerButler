@@ -1,7 +1,6 @@
-package com.alisonjc.buzzerbutler.helpers;
+package com.alisonjc.buzzerbutler.fragments;
 
 import android.content.Context;
-import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
@@ -16,11 +15,12 @@ import android.view.ViewGroup;
 
 import com.alisonjc.buzzerbutler.CustomRecyclerViewAdapter;
 import com.alisonjc.buzzerbutler.R;
+import com.alisonjc.buzzerbutler.helpers.RecyclerDivider;
 
 import java.util.ArrayList;
 import java.util.List;
 
-
+//TODO: Get Saved Users from DB
 public class SavedUserFragment extends Fragment {
 
     private OnFragmentInteractionListener mListener;

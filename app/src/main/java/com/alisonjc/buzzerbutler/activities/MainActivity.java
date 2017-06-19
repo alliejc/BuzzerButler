@@ -23,7 +23,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
-import com.alisonjc.buzzerbutler.helpers.SavedUserFragment;
+import com.alisonjc.buzzerbutler.fragments.AddUserFragment;
+import com.alisonjc.buzzerbutler.fragments.SavedUserFragment;
 import com.alisonjc.buzzerbutler.fragments.LoginDialogFragment;
 import com.alisonjc.buzzerbutler.ProfileFragment;
 import com.alisonjc.buzzerbutler.R;
@@ -31,13 +32,8 @@ import com.alisonjc.buzzerbutler.R;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-<<<<<<< HEAD:app/src/main/java/com/alisonjc/buzzerbutler/MainActivity.java
-
 public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener, SavedUserFragment.OnFragmentInteractionListener{
-=======
-public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
->>>>>>> 0c08b6e0acb7c7e73349692aea40155013d17b19:app/src/main/java/com/alisonjc/buzzerbutler/activities/MainActivity.java
+        implements NavigationView.OnNavigationItemSelectedListener, SavedUserFragment.OnFragmentInteractionListener, AddUserFragment.OnAddUserInteraction{
 
     @BindView(R.id.toolbar)
     Toolbar mToolbar;
@@ -163,6 +159,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 addFragmentOnTop(SavedUserFragment.newInstance());
                 mActionBar.setTitle(R.string.saved_drawer);
                 break;
+
+            case R.id.add_drawer:
+                addFragmentOnTop(AddUserFragment.newInstance());
+                mActionBar.setTitle(R.string.add_drawer);
+                break;
             default:
                 break;
         }
@@ -207,6 +208,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     @Override
     public void onFragmentInteraction(Uri uri) {
+    }
+
+    @Override
+    public void onAddUserInteraction(Uri uri) {
+
     }
 }
 
