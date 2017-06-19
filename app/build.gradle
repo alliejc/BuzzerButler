@@ -44,6 +44,7 @@ dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     compile group: 'com.googlecode.totallylazy', name: 'totallylazy', version: '1.86'
 
+    compile 'org.greenrobot:eventbus:3.0.0'
     compile 'com.github.ViksaaSkool:AwesomeSplash:v1.0.0'
     compile 'com.afollestad.material-dialogs:core:0.9.4.5'
     compile 'com.android.support:appcompat-v7:25.3.1'
