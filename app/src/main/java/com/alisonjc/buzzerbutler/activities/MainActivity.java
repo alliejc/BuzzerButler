@@ -1,4 +1,4 @@
-package com.alisonjc.buzzerbutler;
+package com.alisonjc.buzzerbutler.activities;
 
 
 import android.app.DialogFragment;
@@ -24,12 +24,20 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.alisonjc.buzzerbutler.helpers.SavedUserFragment;
+import com.alisonjc.buzzerbutler.fragments.LoginDialogFragment;
+import com.alisonjc.buzzerbutler.ProfileFragment;
+import com.alisonjc.buzzerbutler.R;
 
 import butterknife.BindView;
+import butterknife.ButterKnife;
 
+<<<<<<< HEAD:app/src/main/java/com/alisonjc/buzzerbutler/MainActivity.java
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, SavedUserFragment.OnFragmentInteractionListener{
+=======
+public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
+>>>>>>> 0c08b6e0acb7c7e73349692aea40155013d17b19:app/src/main/java/com/alisonjc/buzzerbutler/activities/MainActivity.java
 
     @BindView(R.id.toolbar)
     Toolbar mToolbar;
@@ -56,10 +64,14 @@ public class MainActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        ButterKnife.bind(this);
 
         mSharedPreferences = getApplicationContext().getSharedPreferences(PREFS_FILE, Context.MODE_PRIVATE);
 
-        userLogin();
+        final String userEmail = mSharedPreferences.getString("email", null);
+        if (userEmail != null) {
+            userLogin();
+        }
 
         toolbarSetup();
         navigationDrawerSetup();
@@ -104,10 +116,9 @@ public class MainActivity extends AppCompatActivity
     }
 
     private void userLogin() {
-
         FragmentTransaction ft = getFragmentManager().beginTransaction();
-        DialogFragment dialogFragment = LoginDialogFrag.newInstance();
-        dialogFragment.show(ft, "dialog");
+        DialogFragment dialogFragment = LoginDialogFragment.newInstance();
+        dialogFragment.show(ft, "LoginDialog");
     }
 
     @Override
@@ -122,8 +133,8 @@ public class MainActivity extends AppCompatActivity
         switch (item.getItemId()) {
 
             case R.id.nav_logout:
-                mSharedPreferences.edit().remove("username").apply();
                 mSharedPreferences.edit().remove("email").apply();
+                mSharedPreferences.edit().remove("pass").apply();
 
                 userLogin();
                 break;
@@ -152,11 +163,8 @@ public class MainActivity extends AppCompatActivity
                 addFragmentOnTop(SavedUserFragment.newInstance());
                 mActionBar.setTitle(R.string.saved_drawer);
                 break;
-
-                default:
-                    break;
-
-
+            default:
+                break;
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
