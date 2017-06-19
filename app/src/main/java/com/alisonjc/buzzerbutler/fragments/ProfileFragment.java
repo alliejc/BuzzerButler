@@ -1,4 +1,4 @@
-package com.alisonjc.buzzerbutler;
+package com.alisonjc.buzzerbutler.fragments;
 
 import android.content.Context;
 import android.net.Uri;
@@ -7,6 +7,8 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import com.alisonjc.buzzerbutler.R;
 
 
 public class ProfileFragment extends Fragment {
@@ -17,10 +19,8 @@ public class ProfileFragment extends Fragment {
         // Required empty public constructor
     }
 
-    // TODO: Rename and change types and number of parameters
     public static ProfileFragment newInstance() {
-        ProfileFragment fragment = new ProfileFragment();
-        return fragment;
+        return new ProfileFragment();
     }
 
     @Override
