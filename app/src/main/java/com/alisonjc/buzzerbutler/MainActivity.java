@@ -56,7 +56,6 @@ public class MainActivity extends AppCompatActivity
         }
 
         toolbarSetup();
-        navigationDrawerSetup();
     }
 
     private void navigationDrawerSetup() {

@@ -4,25 +4,32 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:weightSum="50"
+    android:minWidth="1000dp"
+    android:minHeight="450dp"
     >
 
     <EditText
         android:id="@+id/username"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="User Name" />
+        android:layout_height="0dp"
+        android:hint="User Name"
+        android:layout_weight="20"/>
 
     <EditText
         android:id="@+id/email"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Email"/>
+        android:layout_height="0dp"
+        android:hint="Email"
+        android:layout_weight="20"/>
 
-    <ImageButton
+    <Button
         android:id="@+id/LoginButton"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
         android:contentDescription="@string/login_Dialog_Fragment"
-        android:scaleType="fitCenter"
+        android:layout_weight="10"
+        android:text="Login"
         />
+
 </LinearLayout>
