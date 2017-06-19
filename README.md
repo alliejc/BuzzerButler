@@ -1,22 +1,24 @@
-# Competition Practice Player
+# BuzzerButler 
 
 
 ### Overview
-Competition Practice Player is an Android application intended for West Coast Swing dancers who are practicing and preparing for competitions.
 
-In West Coast Swing competitions, you receive your partner and song draw when you step onto the competition floor.  In competition, each song is played for either 1min 30sec or 2mins, so practicing to the remaining time in the song is generally undesirable.
+BuzzerButler 
 
-For this reason, Competition Practice Player includes these features:
-
-  - Populates with the user's Spotify playlists
-  - Gives an option to end the song at 1:30 or 2:00
-  - Gives a notification beep 10 seconds before the song ends
-  - Gives a pause before playing the next song in the list
+BuzzerButler is an application for controlling 3rd party access/authentication to commercial buildings and 
+apartments digitally via a mobile device.
 
 ### Version
-2.2.0
+0.0.1
 
-### Tech
+### Dev Notes
+
+```sh
+$ git clone [git-repo-url] Competition Practice Player
+```
+Open in Android studio
+
+#### Tech
 
 Competition Practice Player uses a number of open source projects to work properly:
 
@@ -25,40 +27,22 @@ Competition Practice Player uses a number of open source projects to work proper
 * [Dagger2] - Dependency injection
 * [Butter Knife] - View binding
 
-
-And of course Competition Practice Player itself is open source with a [public repository](https://github.com/alliejc/compeitionpracticeplayer)
- on GitHub.
-
-### Installation
-
-```sh
-$ git clone [git-repo-url] Competition Practice Player
-```
-Open in Android studio
-
-### Development
-
-Want to contribute? Great!
-
-Add your spotify api key to the gradle.properties file. You need the following key:
-
-{ProjectDirectory}/gradle.properties
-CLIENT_ID="{your key}"
-
 ### Todos
 
  - Write Tests
- - Add an Artist list and Album List
  - Add a search bar
- - Add customizeable time and beep options
  - Add alphabetization/organization option
   
 ### Known Issues
 
-  - Only available for paid Spotify accounts (Spotify limitation)
-  - The Spotify OAuth token only lasts 1 hour, without a refresh token option for the Android SDK, meaning the user must login every hour (Spotify Limitation)
-  - Also see the "Issues" tab in GitHub
-  
+
+#### Other Features:
+* Allows additional users for potential routing for buzzing in.
+* Android app allows configuration of possible buzz recipients on the fly (doesn't require contacting your management agent to add/remove users).
+* Can be used in corporate settings to replace the need for security guards in corporate settings (doormen).
+* Can add pin entry known user for entry
+* Can add temporary pin for temp known user entry
+
 ### Privacy Policy
 
   - Any information provided by a user, collected about a user, and collected about a user’s use of the app or device is not stored or kept for any purpose, and is only aquired to provide a personalized experience within the app (ie. displaying your name and e-mail address)
