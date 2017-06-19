@@ -26,7 +26,7 @@ import android.widget.TextView;
 import com.alisonjc.buzzerbutler.fragments.AddUserFragment;
 import com.alisonjc.buzzerbutler.fragments.SavedUserFragment;
 import com.alisonjc.buzzerbutler.fragments.LoginDialogFragment;
-import com.alisonjc.buzzerbutler.ProfileFragment;
+import com.alisonjc.buzzerbutler.fragments.ProfileFragment;
 import com.alisonjc.buzzerbutler.R;
 
 import butterknife.BindView;

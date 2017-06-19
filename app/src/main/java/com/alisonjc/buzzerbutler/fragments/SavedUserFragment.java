@@ -32,8 +32,7 @@ public class SavedUserFragment extends Fragment {
     }
 
     public static SavedUserFragment newInstance() {
-        SavedUserFragment fragment = new SavedUserFragment();
-        return fragment;
+        return new SavedUserFragment();
     }
 
     @Override
