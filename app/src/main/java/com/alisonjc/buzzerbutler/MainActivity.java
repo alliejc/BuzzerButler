@@ -25,10 +25,12 @@ import android.widget.TextView;
 import com.alisonjc.buzzerbutler.helpers.SavedUserFragment;
 
 import butterknife.BindView;
+<<<<<<< HEAD
+=======
+import butterknife.ButterKnife;
+>>>>>>> update background color
 
-
-public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener{
+public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
 
     @BindView(R.id.toolbar)
     Toolbar mToolbar;
