@@ -17,51 +17,14 @@ import java.nio.ByteBuffer;
 import java.util.List;
 
 public class CompareFaces {
-//
-//    public static boolean compareFaces() {
-//        Float similarityThreshold = 70F;
-//        String sourceImage = "source.jpg";
-//        String targetImage = "target.jpg";
-//        ByteBuffer sourceImageBytes = null;
-//        ByteBuffer targetImageBytes = null;
-//
-//        AWSCredentials credentials;
-//        try {
-//            credentials = new ProfileCredentialsProvider("AdminUser").getCredentials();
-//        } catch (Exception e) {
-//            throw new AmazonClientException("Cannot load the credentials from the credential profiles file. "
-//                    + "Please make sure that your credentials file is at the correct "
-//                    + "location (/Users/userid/.aws/credentials), and is in valid format.", e);
-//        }
-//
-//        EndpointConfiguration endpoint = new EndpointConfiguration("endpoint",
-//                "us-east-1");
-//
-//        AmazonRekognition rekognitionClient = AmazonRekognitionClientBuilder
-//                .standard()
-//                .withEndpointConfiguration(endpoint)
-//                .withCredentials(new AWSStaticCredentialsProvider(credentials))
-//                .build();
-//
-//        //Load source and target images and create input parameters
-//        try (InputStream inputStream = new FileInputStream(new File(sourceImage))) {
-//            sourceImageBytes = ByteBuffer.wrap(IOUtils.toByteArray(inputStream));
-//        } catch (Exception e) {
-//            System.out.println("Failed to load source image " + sourceImage);
-//            System.exit(1);
-//        }
-//        try (InputStream inputStream = new FileInputStream(new File(targetImage))) {
-//            targetImageBytes = ByteBuffer.wrap(IOUtils.toByteArray(inputStream));
-//        } catch (Exception e) {
-//            System.out.println("Failed to load target images: " + targetImage);
-//            System.exit(1);
-//        }
-//
-//        Image source = new Image()
-//                .withBytes(sourceImageBytes);
-//        Image target = new Image()
-//                .withBytes(targetImageBytes);
-//
+
+    public static boolean verifyPhoto(byte[] photoData) {
+        Float similarityThreshold = 70F;
+        String sourceImage = "source.jpg";
+        String targetImage = "target.jpg";
+        ByteBuffer sourceImageBytes = null;
+        ByteBuffer targetImageBytes = null;
+
 //        CompareFacesRequest request = new CompareFacesRequest()
 //                .withSourceImage(source)
 //                .withTargetImage(target)
@@ -85,8 +48,9 @@ public class CompareFaces {
 //                return true;
 //            }
 //        }
+        return true;
 //        return false;
-//    }
+    }
 
 }
 

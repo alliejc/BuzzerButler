@@ -4,6 +4,8 @@ import android.app.IntentService;
 import android.content.Intent;
 import android.util.Log;
 
+import org.greenrobot.eventbus.EventBus;
+
 import java.io.IOException;
 
 import okhttp3.MediaType;
@@ -23,10 +25,13 @@ public class WebService extends IntentService {
 
     public static final MediaType JSON = MediaType.parse("application/json; charset=utf-8");
 
+    // API routes.
     private static final String BASE_URL = "http://34.211.130.118";
-    public static final String QUIZ_API = BASE_URL + "/ra/quiz";
+    public static final String USER_API = BASE_URL + "/api/users";
+    public static final String ACCESS_API = BASE_URL + "/api/accesscodes";
 
-    private static OkHttpClient client = new OkHttpClient.Builder().build();
+    private static final OkHttpClient client = new OkHttpClient.Builder().build();
+    private static final EventBus eventBus = EventBus.getDefault();
 
     public WebService() {
         super("WebService");
@@ -44,6 +49,9 @@ public class WebService extends IntentService {
                 result = e.toString();
             } finally {
                 // No need to broadcast.
+                switch (url) {
+                    case USER_API:
+                }
                 Log.d(TAG, "Response: " + result);
             }
         }

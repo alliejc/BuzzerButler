@@ -2,6 +2,7 @@ package com.alisonjc.buzzerbutler.fragments;
 
 import android.app.DialogFragment;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -11,6 +12,7 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import com.alisonjc.buzzerbutler.R;
+import com.alisonjc.buzzerbutler.activities.CameraActivity;
 
 public class LoginDialogFragment extends DialogFragment {
 
@@ -46,7 +48,10 @@ public class LoginDialogFragment extends DialogFragment {
             mSharedPreferences.edit().putString("email", email.toString()).apply();
             mSharedPreferences.edit().putString("pass", userName.toString()).apply();
 
-            onDestroyView();
+            // Start the camera login activity.
+            Intent intent = new Intent(getActivity(), CameraActivity.class);
+            startActivity(intent);
+
         });
 
         return v;
