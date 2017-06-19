@@ -19,16 +19,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
-import com.alisonjc.compmusicplayer.playlists.OnPlaylistInteractionListener;
-import com.alisonjc.compmusicplayer.playlists.PlaylistFragment;
-import com.alisonjc.compmusicplayer.spotify.SpotifyService;
-import com.alisonjc.compmusicplayer.tracks.OnControllerTrackChangeListener;
-import com.alisonjc.compmusicplayer.tracks.OnTrackSelectedListener;
-import com.alisonjc.compmusicplayer.tracks.PlaylistTracksFragment;
-import com.alisonjc.compmusicplayer.tracks.TracksFragment;
-import com.spotify.sdk.android.authentication.AuthenticationClient;
-import com.spotify.sdk.android.authentication.AuthenticationResponse;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import rx.android.schedulers.AndroidSchedulers;
@@ -49,26 +39,15 @@ public class MainActivity extends AppCompatActivity
 
     private ActionBarDrawerToggle mActionBarDrawerToggle;
     private ActionBar mActionBar;
-    private String mPlaylistTitle;
     private String mUserName;
     private String mUserEmail;
-    private MediaController mMediaController;
-    private PlaylistTracksFragment mPlaylistTracksFragment;
-    private TracksFragment mTracksFragment;
-    private static final int REQUEST_CODE = 1337;
-    private OnControllerTrackChangeListener mOnControllerTrackChangeListener;
     private static final String TAG = "MainActivity";
-    private SpotifyService mSpotifyService = SpotifyService.getSpotifyService();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
-
-        if (mSpotifyService.isLoggedIn()) {
-            userLogin();
-        }
 
         toolbarSetup();
     }

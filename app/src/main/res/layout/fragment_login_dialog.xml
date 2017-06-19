@@ -12,7 +12,6 @@
         android:layout_height="wrap_content"
         android:contentDescription="@string/login_Dialog_Fragment"
         android:scaleType="fitCenter"
-        android:src="@drawable/spotify_login_button_image"
         />
 
     <LinearLayout
@@ -24,7 +23,6 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="DUE TO SPOTIFY LIMITATIONS YOUR LOGIN WILL EXPIRE EVERY HOUR, SORRY FOR THE INCONVENIENCE"
             android:textColor="@color/color_light_gray"
             android:background="@color/color_default"
             android:textSize="20dp"
