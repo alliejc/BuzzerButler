@@ -3,7 +3,9 @@ package com.alisonjc.buzzerbutler;
 
 import android.app.DialogFragment;
 import android.app.FragmentTransaction;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.FragmentManager;
@@ -42,6 +44,8 @@ public class MainActivity extends AppCompatActivity
     private String mUserName;
     private String mUserEmail;
     private static final String TAG = "MainActivity";
+    private SharedPreferences mSharedPreferences;
+    public static final String PREFS_FILE = "MyPrefsFile";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,7 +53,14 @@ public class MainActivity extends AppCompatActivity
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
 
+        mSharedPreferences = getApplicationContext().getSharedPreferences(PREFS_FILE, Context.MODE_PRIVATE);
+
+        if(!mSharedPreferences.contains("username") || !mSharedPreferences.contains("email")){
+            userLogin();
+        }
+
         toolbarSetup();
+        navigationDrawerSetup();
     }
 
     private void navigationDrawerSetup() {
@@ -106,6 +117,8 @@ public class MainActivity extends AppCompatActivity
         switch (item.getItemId()) {
 
             case R.id.nav_logout:
+                mSharedPreferences.edit().remove("username");
+                mSharedPreferences.edit().remove("email");
 
                 userLogin();
                 break;
@@ -123,6 +136,14 @@ public class MainActivity extends AppCompatActivity
     public boolean onNavigationItemSelected(final MenuItem item) {
         int id = item.getItemId();
         FragmentManager fragmentManager = getSupportFragmentManager();
+
+        if (id == R.id.profile_drawer) {
+
+            fragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+            ProfileFragment playlistFragment = ProfileFragment.newInstance();
+            fragmentManager.beginTransaction().replace(R.id.main_framelayout, playlistFragment, "playlistFragment").addToBackStack(null).commit();
+            mActionBar.setTitle(R.string.profile_drawer);
+        }
 
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
