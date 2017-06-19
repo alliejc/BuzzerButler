@@ -7,6 +7,9 @@
         <item name="colorPrimaryDark">@color/color_dark_gray</item>
         <item name="colorAccent">@color/color_light_pink</item>
         <item name="android:fitsSystemWindows">true</item>
+        <!--hide action bar by default-->
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
     </style>
 
     <style name="AppTheme.NoActionBar">
