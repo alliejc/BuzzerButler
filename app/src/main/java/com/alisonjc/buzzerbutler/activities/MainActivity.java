@@ -31,13 +31,8 @@ import com.alisonjc.buzzerbutler.R;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-<<<<<<< HEAD:app/src/main/java/com/alisonjc/buzzerbutler/MainActivity.java
-
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, SavedUserFragment.OnFragmentInteractionListener{
-=======
-public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
->>>>>>> 0c08b6e0acb7c7e73349692aea40155013d17b19:app/src/main/java/com/alisonjc/buzzerbutler/activities/MainActivity.java
 
     @BindView(R.id.toolbar)
     Toolbar mToolbar;
