@@ -2,7 +2,6 @@ package com.alisonjc.buzzerbutler.fragments;
 
 import android.content.Context;
 import android.graphics.drawable.Drawable;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -63,7 +62,7 @@ public class SavedUserFragment extends Fragment {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        geData();
+        getData();
         setRecyclerView();
     }
 
@@ -93,7 +92,7 @@ public class SavedUserFragment extends Fragment {
         }
     }
 
-    public List<UserItem> geData(){
+    public List<UserItem> getData(){
         if (mList == null) {
             String json = null;
             try {

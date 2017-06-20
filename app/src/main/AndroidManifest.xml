@@ -2,6 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.alisonjc.buzzerbutler">
 
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
     <uses-permission android:name="android.permission.READ_PROFILE" />
     <uses-permission android:name="android.permission.READ_CONTACTS" />
@@ -15,7 +16,6 @@
 
 
     <application
-        android:allowBackup="false"
         android:allowClearUserData="true"
         android:fullBackupContent="false"
         android:icon="@drawable/buzzer_butler_165"
