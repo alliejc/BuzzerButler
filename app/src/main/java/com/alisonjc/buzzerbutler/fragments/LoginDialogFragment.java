@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.support.v4.app.FragmentManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,12 +15,14 @@ import android.widget.EditText;
 
 import com.alisonjc.buzzerbutler.R;
 import com.alisonjc.buzzerbutler.activities.CameraActivity;
+import com.alisonjc.buzzerbutler.activities.MainActivity;
 
 public class LoginDialogFragment extends DialogFragment {
 
     private SharedPreferences mSharedPreferences;
     public static final String PREFS_FILE = "MyPrefsFile";
     static final int REQUEST_IMAGE_CAPTURE = 1;
+    private OnCompleteListener mListener;
 
     public static LoginDialogFragment newInstance() {
         return new LoginDialogFragment();
@@ -39,10 +42,10 @@ public class LoginDialogFragment extends DialogFragment {
         EditText name = (EditText) v.findViewById(R.id.name_login);
         EditText phoneNumber = (EditText) v.findViewById(R.id.phone_number_login);
 
-        mLoginButton.setVisibility(View.VISIBLE);
-
         if (mSharedPreferences.getAll().containsKey("email") && mSharedPreferences.getAll().containsKey("pass")) {
             mLoginButton.setText(R.string.login);
+            name.setVisibility(View.GONE);
+            phoneNumber.setVisibility(View.GONE);
 
             mLoginButton.setOnClickListener(view -> {
 
@@ -51,7 +54,10 @@ public class LoginDialogFragment extends DialogFragment {
 //                Intent cameraIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
 //                Intent intent = new Intent("android.media.action.IMAGE_CAPTURE");
 //                startActivity(intent);
+//                startActivity(intent);
+
                 onDestroyView();
+                mListener.onComplete();
 
             });
         } else {
@@ -67,12 +73,38 @@ public class LoginDialogFragment extends DialogFragment {
 //                Intent intent = new Intent(getActivity(), CameraActivity.class);
 //                startActivity(intent);
 
-
                 onDestroyView();
+                mListener.onComplete();
+
             });
         }
 
         return v;
     }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+
+        if (context instanceof SavedUserFragment.OnSavedUserInteractionListener) {
+            mListener = (LoginDialogFragment.OnCompleteListener) context;
+        }
+        else {
+            throw new RuntimeException(context.toString()
+                    + " must implement OnFragmentInteractionListener");
+        }
+    }
+
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        mListener = null;
+    }
+
+    public interface OnCompleteListener {
+        void onComplete();
+    }
+
 }
 

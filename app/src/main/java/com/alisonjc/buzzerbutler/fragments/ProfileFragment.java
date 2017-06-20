@@ -54,9 +54,11 @@ public class ProfileFragment extends Fragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        email.setText(mSharedPreferences.getAll().get("email").toString());
-        name.setText(mSharedPreferences.getAll().get("name").toString());
-        phoneNumber.setText(mSharedPreferences.getAll().get("phone_number").toString());
+        if(mSharedPreferences.getAll().get("email") != null) {
+            email.setText(mSharedPreferences.getAll().get("email").toString());
+            name.setText(mSharedPreferences.getAll().get("name").toString());
+            phoneNumber.setText(mSharedPreferences.getAll().get("phone_number").toString());
+        }
     }
 
     // TODO: Rename method, update argument and hook method into UI event

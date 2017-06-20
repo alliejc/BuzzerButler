@@ -39,6 +39,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:hint="John Doe"
+            android:maxLines="1"
             android:textAlignment="gravity"
             android:gravity="bottom"
             android:textColorHint="@color/color_light_gray"/>
@@ -68,6 +69,7 @@
             android:layout_height="match_parent"
             android:inputType="phone"
             android:hint="2061234567"
+            android:maxLength="10"
             android:textAlignment="gravity"
             android:gravity="bottom"
             android:textColorHint="@color/color_light_gray"/>

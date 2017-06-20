@@ -30,6 +30,8 @@
             android:layout_height="wrap_content"
             android:padding="2dp"
             android:text=" NAME"
+            android:textSize="25dp"
+            android:textStyle="bold"
             android:textColor="@color/color_default"/>
 
         <TextView
@@ -38,6 +40,8 @@
             android:layout_height="wrap_content"
             android:padding="2dp"
             android:text="PHONE NUMBER"
+            android:textSize="25dp"
+            android:textStyle="bold"
             android:textColor="@color/color_default"/>
 
         <TextView
@@ -46,7 +50,37 @@
             android:layout_height="wrap_content"
             android:padding="2dp"
             android:text="EMAIL"
+            android:textSize="25dp"
+            android:textStyle="bold"
             android:textColor="@color/color_default"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="2dp"
+                android:text="PROMPT: "
+                android:textSize="25dp"
+                android:textStyle="bold"
+                android:textColor="@color/color_default"/>
+
+            <TextView
+                android:id="@+id/profile_prompt"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="2dp"
+                android:text="1"
+                android:textSize="25dp"
+                android:textStyle="bold"
+                android:textColor="@color/color_default"/>
+
+        </LinearLayout>
+
+
 
     </LinearLayout>
 

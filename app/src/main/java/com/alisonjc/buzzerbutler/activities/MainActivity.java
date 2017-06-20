@@ -41,7 +41,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener, SavedUserFragment.OnSavedUserInteractionListener, AddUserFragment.OnAddUserInteraction, ProfileFragment.OnFragmentInteractionListener {
+        implements NavigationView.OnNavigationItemSelectedListener, SavedUserFragment.OnSavedUserInteractionListener, AddUserFragment.OnAddUserInteraction, ProfileFragment.OnFragmentInteractionListener, LoginDialogFragment.OnCompleteListener {
 
     @BindView(R.id.toolbar)
     Toolbar mToolbar;
@@ -49,6 +49,8 @@ public class MainActivity extends AppCompatActivity
     private NavigationView mNavigationView;
     private DrawerLayout mDrawerLayout;
 
+    private TextView name;
+    private TextView email;
     private ActionBarDrawerToggle mActionBarDrawerToggle;
     private ActionBar mActionBar;
     private static final String TAG = "MainActivity";
@@ -87,8 +89,8 @@ public class MainActivity extends AppCompatActivity
         mNavigationView.setNavigationItemSelectedListener(this);
         View header = mNavigationView.getHeaderView(0);
 
-        TextView name = (TextView) header.findViewById(R.id.nav_header_top);
-        TextView email = (TextView) header.findViewById(R.id.nav_header_bottom);
+        name = (TextView) header.findViewById(R.id.nav_header_top);
+        email = (TextView) header.findViewById(R.id.nav_header_bottom);
         name.setText(mSharedPreferences.getString("name", null));
         email.setText(mSharedPreferences.getString("email", null));
     }
@@ -116,6 +118,7 @@ public class MainActivity extends AppCompatActivity
         FragmentTransaction ft = getFragmentManager().beginTransaction();
         DialogFragment dialogFragment = LoginDialogFragment.newInstance();
         dialogFragment.show(ft, "LoginDialog");
+
     }
 
     @Override
@@ -130,11 +133,7 @@ public class MainActivity extends AppCompatActivity
         switch (item.getItemId()) {
 
             case R.id.nav_logout:
-                mSharedPreferences.edit().remove("email").apply();
-                mSharedPreferences.edit().remove("pass").apply();
-                mSharedPreferences.edit().remove("name").apply();
-                mSharedPreferences.edit().remove("phone_number").apply();
-
+                removeSharedPreferences();
                 userLogin();
                 break;
 
@@ -144,6 +143,13 @@ public class MainActivity extends AppCompatActivity
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    private void removeSharedPreferences(){
+        mSharedPreferences.edit().remove("email").apply();
+        mSharedPreferences.edit().remove("pass").apply();
+        mSharedPreferences.edit().remove("name").apply();
+        mSharedPreferences.edit().remove("phone_number").apply();
     }
 
     @SuppressWarnings("StatementWithEmptyBody")
@@ -200,7 +206,6 @@ public class MainActivity extends AppCompatActivity
     @Override
     protected void onActivityResult(final int requestCode, int resultCode, Intent intent) {
         super.onActivityResult(requestCode, resultCode, intent);
-
     }
 
     @Override
@@ -209,7 +214,6 @@ public class MainActivity extends AppCompatActivity
         Log.d(TAG, "onDestroy");
 
     }
-
 
     @Override
     public void onAddUserInteraction(UserItem item) {
@@ -226,5 +230,9 @@ public class MainActivity extends AppCompatActivity
 
     }
 
+    @Override
+    public void onComplete() {
+        addFragmentOnTop(ProfileFragment.newInstance());
+    }
 }
 
