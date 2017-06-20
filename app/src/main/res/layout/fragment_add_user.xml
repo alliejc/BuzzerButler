@@ -39,7 +39,6 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:hint="John Doe"
-            android:maxLines="1"
             android:textAlignment="gravity"
             android:gravity="bottom"
             android:textColorHint="@color/color_light_gray"/>

@@ -114,7 +114,7 @@ public class SavedUserFragment extends Fragment {
 
             for (UserItem userItem : mList) {
                 Log.d("List", mList.toString());
-                Log.i("WUser Detauls", userItem.getName() + userItem.getEmail());
+                Log.i("WUser Details", userItem.getName() + userItem.getEmail());
             }
         }
         return mList;

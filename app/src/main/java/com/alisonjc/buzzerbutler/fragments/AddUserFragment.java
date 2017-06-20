@@ -46,7 +46,6 @@ public class AddUserFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_add_user, container, false);
         mSaveButton = (Button) v.findViewById(R.id.save_button);
         mName = (EditText) v.findViewById(R.id.name_edit_text);
