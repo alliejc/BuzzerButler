@@ -67,7 +67,7 @@ public class MainActivity extends AppCompatActivity
 
         mSharedPreferences = getApplicationContext().getSharedPreferences(PREFS_FILE, Context.MODE_PRIVATE);
 
-        final String userEmail = mSharedPreferences.getAll().get("email").toString();
+        final String userEmail = mSharedPreferences.getString("email", null);
         if (userEmail != null) {
             userLogin();
         }
