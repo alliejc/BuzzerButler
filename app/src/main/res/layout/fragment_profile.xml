@@ -20,45 +20,34 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:id="@+id/profile_list"
         android:layout_weight="70"
         android:layout_gravity="center"
         android:padding="10dp">
 
         <TextView
-            android:id="@+id/profile_first_name"
+            android:id="@+id/profile_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:padding="2dp"
-            android:text="FIRST NAME" />
-
-        <TextView
-            android:id="@+id/profile_last_name"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:padding="2dp"
-            android:text="LAST NAME"/>
+            android:text=" NAME"
+            android:textColor="@color/color_default"/>
 
         <TextView
             android:id="@+id/profile_phone_number"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:padding="2dp"
-            android:text="PHONE NUMBER"/>
+            android:text="PHONE NUMBER"
+            android:textColor="@color/color_default"/>
 
         <TextView
             android:id="@+id/profile_email"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:padding="2dp"
-            android:text="EMAIL"/>
+            android:text="EMAIL"
+            android:textColor="@color/color_default"/>
 
-        <TextView
-            android:id="@+id/profile_dial_code"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:padding="2dp"
-            android:text="DIAL CODE"/>
     </LinearLayout>
 
 </LinearLayout>

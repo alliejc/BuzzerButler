@@ -43,7 +43,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 
-import static com.alisonjc.buzzerbutler.R.id.email;
+//import static com.alisonjc.buzzerbutler.R.id.email;
 
 public class CameraActivity extends AppCompatActivity {
 
@@ -83,27 +83,27 @@ public class CameraActivity extends AppCompatActivity {
 
         Toast.makeText(ctx, "Take personal photo to complete login", Toast.LENGTH_LONG).show();
 
-        //		buttonClick = (Button) findViewById(R.id.btnCapture);
-        //
-        //		buttonClick.setOnClickListener(new OnClickListener() {
-        //			public void onClick(View v) {
-        ////				preview.camera.takePicture(shutterCallback, rawCallback, jpegCallback);
-        //				camera.takePicture(shutterCallback, rawCallback, jpegCallback);
-        //			}
-        //		});
-        //
-        //		buttonClick.setOnLongClickListener(new OnLongClickListener(){
-        //			@Override
-        //			public boolean onLongClick(View arg0) {
-        //				camera.autoFocus(new AutoFocusCallback(){
-        //					@Override
-        //					public void onAutoFocus(boolean arg0, Camera arg1) {
-        //						//camera.takePicture(shutterCallback, rawCallback, jpegCallback);
-        //					}
-        //				});
-        //				return true;
-        //			}
-        //		});
+        		buttonClick = (Button) findViewById(R.id.btnCapture);
+
+        		buttonClick.setOnClickListener(new OnClickListener() {
+        			public void onClick(View v) {
+        //				preview.camera.takePicture(shutterCallback, rawCallback, jpegCallback);
+        				camera.takePicture(shutterCallback, rawCallback, jpegCallback);
+        			}
+        		});
+
+        		buttonClick.setOnLongClickListener(new View.OnLongClickListener(){
+        			@Override
+        			public boolean onLongClick(View arg0) {
+        				camera.autoFocus(new Camera.AutoFocusCallback(){
+        					@Override
+        					public void onAutoFocus(boolean arg0, Camera arg1) {
+        						//camera.takePicture(shutterCallback, rawCallback, jpegCallback);
+        					}
+        				});
+        				return true;
+        			}
+        		});
     }
 
     @Override
@@ -119,6 +119,17 @@ public class CameraActivity extends AppCompatActivity {
                 Toast.makeText(ctx, "Camera not found", Toast.LENGTH_LONG).show();
             }
         }
+    }
+
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+
+        Toast.makeText(ctx, "Activity Result", Toast.LENGTH_LONG).show();
+
+//        if (requestCode == CAMERA_PIC_REQUEST) {
+//            Bitmap image = (Bitmap) data.getExtras().get("data");
+//            ImageView imageview = (ImageView) findViewById(R.id.ImageView01);
+//            imageview.setImageBitmap(image);
+//        }
     }
 
     @Override

@@ -1,12 +1,14 @@
 package com.alisonjc.buzzerbutler.fragments;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.alisonjc.buzzerbutler.R;
 
@@ -14,6 +16,8 @@ import com.alisonjc.buzzerbutler.R;
 public class ProfileFragment extends Fragment {
 
     private OnFragmentInteractionListener mListener;
+    private SharedPreferences mSharedPreferences;
+    public static final String PREFS_FILE = "MyPrefsFile";
 
     public ProfileFragment() {
         // Required empty public constructor
@@ -26,13 +30,24 @@ public class ProfileFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        mSharedPreferences = getContext().getSharedPreferences(PREFS_FILE, Context.MODE_PRIVATE);
+
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_profile, container, false);
+        View v = inflater.inflate(R.layout.fragment_profile, container, false);
+        TextView email = (TextView) v.findViewById(R.id.profile_email);
+        TextView name = (TextView) v.findViewById(R.id.profile_name);
+        TextView phoneNumber = (TextView) v.findViewById(R.id.profile_phone_number);
+
+        email.setText(mSharedPreferences.getString("email", null));
+        name.setText(mSharedPreferences.getString("name", null));
+        phoneNumber.setText(mSharedPreferences.getString("phone_number", null));
+        
+        return v;
     }
 
     // TODO: Rename method, update argument and hook method into UI event

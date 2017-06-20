@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,6 +19,7 @@ public class LoginDialogFragment extends DialogFragment {
 
     private SharedPreferences mSharedPreferences;
     public static final String PREFS_FILE = "MyPrefsFile";
+    static final int REQUEST_IMAGE_CAPTURE = 1;
 
     public static LoginDialogFragment newInstance() {
         return new LoginDialogFragment();
@@ -32,30 +34,44 @@ public class LoginDialogFragment extends DialogFragment {
 
         getDialog().setCanceledOnTouchOutside(false);
         Button mLoginButton = (Button) v.findViewById(R.id.LoginButton);
-        EditText userName = (EditText) v.findViewById(R.id.pass);
-        EditText email = (EditText) v.findViewById(R.id.email);
+        EditText userName = (EditText) v.findViewById(R.id.pass_login);
+        EditText email = (EditText) v.findViewById(R.id.email_login);
+        EditText name = (EditText) v.findViewById(R.id.name_login);
+        EditText phoneNumber = (EditText) v.findViewById(R.id.phone_number_login);
 
         mLoginButton.setVisibility(View.VISIBLE);
 
-        if (mSharedPreferences.contains("email")) {
+        if (mSharedPreferences.getAll().containsKey("email") && mSharedPreferences.getAll().containsKey("pass")) {
             mLoginButton.setText(R.string.login);
+
+            mLoginButton.setOnClickListener(view -> {
+
+                // Start the camera login activity.
+//                Intent intent = new Intent(getActivity(), CameraActivity.class);
+//                Intent cameraIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
+                Intent intent = new Intent("android.media.action.IMAGE_CAPTURE");
+                startActivity(intent);
+
+            });
         } else {
             mLoginButton.setText(R.string.register);
+
+            mLoginButton.setOnClickListener(view -> {
+                mSharedPreferences.edit().putString("email", email.getText().toString()).apply();
+                mSharedPreferences.edit().putString("pass", userName.getText().toString()).apply();
+                mSharedPreferences.edit().putString("name", name.getText().toString()).apply();
+                mSharedPreferences.edit().putString("phone_number", phoneNumber.getText().toString()).apply();
+
+                // Start the camera login activity.
+//                Intent intent = new Intent(getActivity(), CameraActivity.class);
+//                startActivity(intent);
+
+
+                onDestroyView();
+            });
         }
-
-        mLoginButton.setOnClickListener(view -> {
-
-            mSharedPreferences.edit().putString("email", email.toString()).apply();
-            mSharedPreferences.edit().putString("pass", userName.toString()).apply();
-
-            // Start the camera login activity.
-            Intent intent = new Intent(getActivity(), CameraActivity.class);
-            startActivity(intent);
-
-        });
 
         return v;
     }
-
 }
 

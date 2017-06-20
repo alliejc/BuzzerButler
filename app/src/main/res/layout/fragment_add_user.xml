@@ -4,8 +4,7 @@
     android:layout_height="match_parent"
     tools:context="com.alisonjc.buzzerbutler.fragments.AddUserFragment"
     android:orientation="vertical"
-    android:weightSum="130"
-    >
+    android:weightSum="130">
 
     <ImageView
         android:id="@+id/profile_image"
@@ -22,36 +21,7 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:orientation="vertical"
-        android:layout_weight="20"
-        android:layout_margin="5dp">
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="First Name:"
-            android:gravity="top"
-            android:textAlignment="gravity"
-            android:textColor="@color/color_default"
-            android:textSize="20sp"
-            android:textStyle="bold" />
-
-        <EditText
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:gravity="bottom"
-            android:hint="John"
-            android:selectAllOnFocus="true"
-            android:singleLine="false"
-            android:textAlignment="gravity"
-            android:textColorHint="@color/color_light_gray" />
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:orientation="vertical"
-        android:layout_weight="20"
+        android:layout_weight="25"
         android:layout_margin="5dp">
 
         <TextView
@@ -59,15 +29,16 @@
             android:layout_height="wrap_content"
             android:gravity="top"
             android:textAlignment="gravity"
-            android:text="Last Name:"
+            android:text="Name: "
             android:textColor="@color/color_default"
             android:textSize="20sp"
             android:textStyle="bold"/>
 
         <EditText
+            android:id="@+id/name_edit_text"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:hint="Doe"
+            android:hint="John Doe"
             android:textAlignment="gravity"
             android:gravity="bottom"
             android:textColorHint="@color/color_light_gray"/>
@@ -78,7 +49,7 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:orientation="vertical"
-        android:layout_weight="20"
+        android:layout_weight="25"
         android:layout_margin="5dp">
 
         <TextView
@@ -86,15 +57,17 @@
             android:layout_height="wrap_content"
             android:gravity="top"
             android:textAlignment="gravity"
-            android:text="Phone #:"
+            android:text="Phone #: "
             android:textColor="@color/color_default"
             android:textSize="20sp"
             android:textStyle="bold"/>
 
         <EditText
+            android:id="@+id/phone_edit_text"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:hint="206-123-4567"
+            android:inputType="phone"
+            android:hint="2061234567"
             android:textAlignment="gravity"
             android:gravity="bottom"
             android:textColorHint="@color/color_light_gray"/>
@@ -105,13 +78,13 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:orientation="vertical"
-        android:layout_weight="20"
+        android:layout_weight="25"
         android:layout_margin="5dp">
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Dial Code"
+            android:text="Pin Code: "
             android:gravity="top"
             android:textAlignment="gravity"
             android:textColor="@color/color_default"
@@ -119,19 +92,23 @@
             android:textStyle="bold"/>
 
         <EditText
+            android:id="@+id/pincode_edit_text"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:hint="2"
+            android:hint="2222"
+            android:inputType="number"
+            android:maxLength="4"
             android:textAlignment="gravity"
             android:gravity="bottom"
             android:textColorHint="@color/color_light_gray"/>
     </LinearLayout>
 
     <Button
+        android:id="@+id/save_button"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:text="SAVE"
-        android:layout_weight="20"
+        android:layout_weight="25"
         android:layout_margin="5dp"/>
 
 

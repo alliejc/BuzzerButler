@@ -38,19 +38,11 @@ public class MainActivity extends AppCompatActivity
     @BindView(R.id.toolbar)
     Toolbar mToolbar;
 
-//    @BindView(R.id.drawer_layout)
-//    DrawerLayout mDrawerLayout;
-//
-//    @BindView(R.id.nav_view)
-//    NavigationView mNavigationView;
-
     private NavigationView mNavigationView;
     private DrawerLayout mDrawerLayout;
 
     private ActionBarDrawerToggle mActionBarDrawerToggle;
     private ActionBar mActionBar;
-    private String mUserName;
-    private String mUserEmail;
     private static final String TAG = "MainActivity";
     private SharedPreferences mSharedPreferences;
     public static final String PREFS_FILE = "MyPrefsFile";
@@ -88,8 +80,8 @@ public class MainActivity extends AppCompatActivity
 
         TextView name = (TextView) header.findViewById(R.id.nav_header_top);
         TextView email = (TextView) header.findViewById(R.id.nav_header_bottom);
-        name.setText(mUserName);
-        email.setText(mUserEmail);
+        name.setText(mSharedPreferences.getString("name", null));
+        email.setText(mSharedPreferences.getString("email", null));
     }
 
     @Override
@@ -131,6 +123,8 @@ public class MainActivity extends AppCompatActivity
             case R.id.nav_logout:
                 mSharedPreferences.edit().remove("email").apply();
                 mSharedPreferences.edit().remove("pass").apply();
+                mSharedPreferences.edit().remove("name").apply();
+                mSharedPreferences.edit().remove("phone_number").apply();
 
                 userLogin();
                 break;

@@ -55,6 +55,6 @@
         android:gravity="bottom"
         android:maxLines="1"
         android:textSize="15sp"
-        android:layout_weight="33.3" />
+        android:layout_weight="33.3"/>
 </LinearLayout>
 </layout>
