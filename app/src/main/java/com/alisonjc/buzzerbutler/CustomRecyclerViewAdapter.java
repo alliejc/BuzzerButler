@@ -75,7 +75,8 @@ public class CustomRecyclerViewAdapter extends RecyclerView.Adapter<CustomRecycl
 
             deleteButton.setOnClickListener(v -> {
                 //TODO: delete item from list
-                listener.onDeleteClick(getAdapterPosition());
+                mList.remove(getAdapterPosition());
+//                listener.onDeleteClick(mList.get(getAdapterPosition()));
             });
 
         }
