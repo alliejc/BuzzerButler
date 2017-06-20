@@ -69,12 +69,12 @@ public class LoginDialogFragment extends DialogFragment {
                 mSharedPreferences.edit().putString("name", name.getText().toString()).apply();
                 mSharedPreferences.edit().putString("phone_number", phoneNumber.getText().toString()).apply();
 
+                mListener.onComplete();
                 // Start the camera login activity.
-//                Intent intent = new Intent(getActivity(), CameraActivity.class);
+//                Intent intent = new Intent(getActivity(), MainActivity.class);
 //                startActivity(intent);
 
-                onDestroyView();
-                mListener.onComplete();
+                 onDestroyView();
 
             });
         }

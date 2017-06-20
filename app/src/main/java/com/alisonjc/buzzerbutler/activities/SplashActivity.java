@@ -51,7 +51,7 @@ public class SplashActivity extends AwesomeSplash {
         //Customize Title -- Currently off.
         configSplash.setTitleSplash(getString(R.string.app_slogan));
         configSplash.setTitleTextColor(R.color.black);
-        configSplash.setTitleTextSize(30f); //float value
+        configSplash.setTitleTextSize(24f); //float value
         configSplash.setAnimTitleDuration(duration);
         configSplash.setAnimTitleTechnique(Techniques.BounceInLeft);
 //         configSplash.setTitleFont("fonts/myfont.ttf"); //provide string to your font located in assets/fonts/

@@ -6,6 +6,7 @@ import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
@@ -29,14 +30,7 @@ import com.alisonjc.buzzerbutler.fragments.SavedUserFragment;
 import com.alisonjc.buzzerbutler.fragments.LoginDialogFragment;
 import com.alisonjc.buzzerbutler.fragments.ProfileFragment;
 import com.alisonjc.buzzerbutler.R;
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
-
-import java.io.IOException;
-import java.io.InputStream;
-import java.lang.reflect.Type;
-import java.util.List;
-
+import com.alisonjc.buzzerbutler.helpers.PrefManager;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
@@ -54,22 +48,28 @@ public class MainActivity extends AppCompatActivity
     private ActionBarDrawerToggle mActionBarDrawerToggle;
     private ActionBar mActionBar;
     private static final String TAG = "MainActivity";
-    private SharedPreferences mSharedPreferences;
     private SavedUserFragment mSavedUserFragment;
     public static final String PREFS_FILE = "MyPrefsFile";
     private static final String BACK_STACK_ROOT_TAG = "root_fragment";
+
+    private PrefManager prefManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
+        prefManager = PrefManager.getInstance();
 
-        mSharedPreferences = getApplicationContext().getSharedPreferences(PREFS_FILE, Context.MODE_PRIVATE);
-
-        final String userEmail = mSharedPreferences.getString("email", null);
-        if (userEmail != null) {
+        final String userEmail = prefManager.getString("email", null);
+        Log.d(TAG, "userEmail: " + userEmail);
+        if (userEmail == null) {
             userLogin();
+        } else {
+            // load the saved users list if we already logged in.
+            mSavedUserFragment = SavedUserFragment.newInstance();
+            addFragmentOnTop(mSavedUserFragment);
+            mActionBar.setTitle(R.string.saved_drawer);
         }
 
         toolbarSetup();
@@ -91,8 +91,9 @@ public class MainActivity extends AppCompatActivity
 
         name = (TextView) header.findViewById(R.id.nav_header_top);
         email = (TextView) header.findViewById(R.id.nav_header_bottom);
-        name.setText(mSharedPreferences.getAll().get("name").toString());
-        email.setText(mSharedPreferences.getAll().get("email").toString());
+
+//        name.setText(mSharedPreferences.getAll().get("name").toString());
+//        email.setText(mSharedPreferences.getAll().get("email").toString());
     }
 
     @Override
@@ -146,10 +147,10 @@ public class MainActivity extends AppCompatActivity
     }
 
     private void removeSharedPreferences(){
-        mSharedPreferences.edit().remove("email").apply();
-        mSharedPreferences.edit().remove("pass").apply();
-        mSharedPreferences.edit().remove("name").apply();
-        mSharedPreferences.edit().remove("phone_number").apply();
+        prefManager.saveString("email", null);
+        prefManager.saveString("pass", null);
+        prefManager.saveString("name", null);
+        prefManager.saveString("phone_number", null);
     }
 
     @SuppressWarnings("StatementWithEmptyBody")

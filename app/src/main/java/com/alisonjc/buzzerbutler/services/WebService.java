@@ -8,6 +8,7 @@ import org.greenrobot.eventbus.EventBus;
 
 import java.io.IOException;
 
+import okhttp3.FormBody;
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -43,17 +44,39 @@ public class WebService extends IntentService {
             final String body = intent.getStringExtra("body");
             final String url = intent.getStringExtra("url");
             String result = "";
+
+            switch (url) {
+
+            }
+
             try {
                 result = post(url, body);
             } catch (Exception e) {
                 result = e.toString();
             } finally {
                 // No need to broadcast.
-                switch (url) {
-                    case USER_API:
-                }
+
                 Log.d(TAG, "Response: " + result);
             }
+        }
+    }
+
+    private void put(String url) {
+        RequestBody formBody = new FormBody.Builder()
+                .add("message", "Your message")
+                .build();
+
+        Request request = new Request.Builder()
+                .url(BASE_URL)
+                .put(formBody) // PUT here.
+                .build();
+
+        try {
+            Response response = client.newCall(request).execute();
+
+            // Do something with the response.
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 
