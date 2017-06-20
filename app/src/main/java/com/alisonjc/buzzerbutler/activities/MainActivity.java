@@ -23,17 +23,25 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
+import com.alisonjc.buzzerbutler.UserItem;
 import com.alisonjc.buzzerbutler.fragments.AddUserFragment;
 import com.alisonjc.buzzerbutler.fragments.SavedUserFragment;
 import com.alisonjc.buzzerbutler.fragments.LoginDialogFragment;
 import com.alisonjc.buzzerbutler.fragments.ProfileFragment;
 import com.alisonjc.buzzerbutler.R;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.lang.reflect.Type;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener, SavedUserFragment.OnFragmentInteractionListener, AddUserFragment.OnAddUserInteraction, ProfileFragment.OnFragmentInteractionListener{
+        implements NavigationView.OnNavigationItemSelectedListener, SavedUserFragment.OnSavedUserInteractionListener, AddUserFragment.OnAddUserInteraction, ProfileFragment.OnFragmentInteractionListener {
 
     @BindView(R.id.toolbar)
     Toolbar mToolbar;
@@ -45,6 +53,7 @@ public class MainActivity extends AppCompatActivity
     private ActionBar mActionBar;
     private static final String TAG = "MainActivity";
     private SharedPreferences mSharedPreferences;
+    private SavedUserFragment mSavedUserFragment;
     public static final String PREFS_FILE = "MyPrefsFile";
     private static final String BACK_STACK_ROOT_TAG = "root_fragment";
 
@@ -150,7 +159,8 @@ public class MainActivity extends AppCompatActivity
                 break;
 
             case R.id.saved_drawer:
-                addFragmentOnTop(SavedUserFragment.newInstance());
+                mSavedUserFragment = SavedUserFragment.newInstance();
+                addFragmentOnTop(mSavedUserFragment);
                 mActionBar.setTitle(R.string.saved_drawer);
                 break;
 
@@ -200,13 +210,21 @@ public class MainActivity extends AppCompatActivity
 
     }
 
+
+    @Override
+    public void onAddUserInteraction(UserItem item) {
+        mSavedUserFragment.addItem(item);
+    }
+
     @Override
     public void onFragmentInteraction(Uri uri) {
+
     }
 
     @Override
-    public void onAddUserInteraction(Uri uri) {
+    public void onSavedUserInteraction() {
 
     }
+
 }
 

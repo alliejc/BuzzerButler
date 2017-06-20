@@ -1,0 +1,58 @@
+[
+  {
+    "email": "email.email@gmail.com",
+    "password": "1234567",
+    "name": "John Doe",
+    "phone_number": "1234567890",
+    "pin_code": "1234"
+  },
+  {
+    "email": "email.email@gmail.com",
+    "password": "1234567",
+    "name": "Jane Doe",
+    "phone_number": "1234567890",
+    "pin_code": "1234"
+  },
+  {
+    "email": "email.email@gmail.com",
+    "password": "1234567",
+    "name": "Max Doe",
+    "phone_number": "1234567890",
+    "pin_code": "1234"
+  },
+  {
+    "email": "email.email@gmail.com",
+    "password": "1234567",
+    "name": "Mark Doe",
+    "phone_number": "1234567890",
+    "pin_code": "1234"
+  },
+  {
+    "email": "email.email@gmail.com",
+    "password": "1234567",
+    "name": "Eric Doe",
+    "phone_number": "1234567890",
+    "pin_code": "1234"
+  },
+  {
+    "email": "email.email@gmail.com",
+    "password": "1234567",
+    "name": "Allie Doe",
+    "phone_number": "1234567890",
+    "pin_code": "1234"
+  },
+  {
+    "email": "email.email@gmail.com",
+    "password": "1234567",
+    "name": "Mary Doe",
+    "phone_number": "1234567890",
+    "pin_code": "1234"
+  },
+  {
+    "email": "email.email@gmail.com",
+    "password": "1234567",
+    "name": "Jo Doe",
+    "phone_number": "1234567890",
+    "pin_code": "1234"
+  }
+]

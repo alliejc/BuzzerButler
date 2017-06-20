@@ -49,8 +49,9 @@ public class LoginDialogFragment extends DialogFragment {
                 // Start the camera login activity.
 //                Intent intent = new Intent(getActivity(), CameraActivity.class);
 //                Intent cameraIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
-                Intent intent = new Intent("android.media.action.IMAGE_CAPTURE");
-                startActivity(intent);
+//                Intent intent = new Intent("android.media.action.IMAGE_CAPTURE");
+//                startActivity(intent);
+                onDestroyView();
 
             });
         } else {

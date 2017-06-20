@@ -5,18 +5,26 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import java.util.List;
 
 public class CustomRecyclerViewAdapter extends RecyclerView.Adapter<CustomRecyclerViewAdapter.CustomViewHolder> {
 
-    private List mList;
+    private List<UserItem> mList;
     private Context mContext;
 
-    public CustomRecyclerViewAdapter(List list, Context context) {
-        this.mList = list;
+    private final OnDeleteClickListener listener;
+
+    public interface OnDeleteClickListener {
+        void onDeleteClick(int index);
+    }
+
+    public CustomRecyclerViewAdapter(List<UserItem>list, Context context, OnDeleteClickListener listener) {
         this.mContext = context;
+        this.listener = listener;
+        this.mList = list;
     }
 
     @Override
@@ -32,10 +40,17 @@ public class CustomRecyclerViewAdapter extends RecyclerView.Adapter<CustomRecycl
     @Override
     public void onBindViewHolder(CustomViewHolder holder, int position) {
 
-        holder.headerText.setText(mList.get(0).toString());
-        holder.subText1.setText(mList.get(1).toString());
-        holder.subText2.setText(mList.get(2).toString());
+        holder.headerText.setText(mList.get(position).getName());
+        holder.subText1.setText(mList.get(position).getPhoneNumber());
+        holder.subText2.setText(mList.get(position).getPinCode());
+        holder.deleteButton.setImageResource(R.drawable.delete);
 
+    }
+
+    public void updateAdapter(List<UserItem> list) {
+
+        mList.addAll(list);
+        notifyDataSetChanged();
     }
 
     @Override
@@ -48,7 +63,7 @@ public class CustomRecyclerViewAdapter extends RecyclerView.Adapter<CustomRecycl
         public TextView headerText;
         public TextView subText1;
         public TextView subText2;
-        public TextView subText3;
+        public ImageButton deleteButton;
 
         public CustomViewHolder(View itemView) {
             super(itemView);
@@ -56,9 +71,12 @@ public class CustomRecyclerViewAdapter extends RecyclerView.Adapter<CustomRecycl
             headerText = (TextView) itemView.findViewById(R.id.header_text);
             subText1 = (TextView) itemView.findViewById(R.id.sub_text1);
             subText2 = (TextView) itemView.findViewById(R.id.sub_text2);
-            subText3 = (TextView) itemView.findViewById(R.id.sub_text3);
+            deleteButton = (ImageButton) itemView.findViewById(R.id.delete_button);
 
-
+            deleteButton.setOnClickListener(v -> {
+                //TODO: delete item from list
+                listener.onDeleteClick(getAdapterPosition());
+            });
 
         }
     }

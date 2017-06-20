@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,6 +19,9 @@ public class ProfileFragment extends Fragment {
     private OnFragmentInteractionListener mListener;
     private SharedPreferences mSharedPreferences;
     public static final String PREFS_FILE = "MyPrefsFile";
+    private TextView email;
+    private TextView name;
+    private TextView phoneNumber;
 
     public ProfileFragment() {
         // Required empty public constructor
@@ -39,15 +43,20 @@ public class ProfileFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_profile, container, false);
-        TextView email = (TextView) v.findViewById(R.id.profile_email);
-        TextView name = (TextView) v.findViewById(R.id.profile_name);
-        TextView phoneNumber = (TextView) v.findViewById(R.id.profile_phone_number);
-
-        email.setText(mSharedPreferences.getString("email", null));
-        name.setText(mSharedPreferences.getString("name", null));
-        phoneNumber.setText(mSharedPreferences.getString("phone_number", null));
+        email = (TextView) v.findViewById(R.id.profile_email);
+        name = (TextView) v.findViewById(R.id.profile_name);
+        phoneNumber = (TextView) v.findViewById(R.id.profile_phone_number);
         
         return v;
+    }
+
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        email.setText(mSharedPreferences.getAll().get("email").toString());
+        name.setText(mSharedPreferences.getAll().get("name").toString());
+        phoneNumber.setText(mSharedPreferences.getAll().get("phone_number").toString());
     }
 
     // TODO: Rename method, update argument and hook method into UI event
