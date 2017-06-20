@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.alisonjc.buzzerbutler.R;
 import com.alisonjc.buzzerbutler.activities.CameraActivity;
@@ -37,7 +38,7 @@ public class LoginDialogFragment extends DialogFragment {
 
         getDialog().setCanceledOnTouchOutside(false);
         Button mLoginButton = (Button) v.findViewById(R.id.LoginButton);
-        EditText userName = (EditText) v.findViewById(R.id.pass_login);
+        EditText password = (EditText) v.findViewById(R.id.pass_login);
         EditText email = (EditText) v.findViewById(R.id.email_login);
         EditText name = (EditText) v.findViewById(R.id.name_login);
         EditText phoneNumber = (EditText) v.findViewById(R.id.phone_number_login);
@@ -56,16 +57,15 @@ public class LoginDialogFragment extends DialogFragment {
 //                startActivity(intent);
 //                startActivity(intent);
 
-                onDestroyView();
-                mListener.onComplete();
-
+                    onDestroyView();
+                    mListener.onComplete();
             });
         } else {
             mLoginButton.setText(R.string.register);
 
             mLoginButton.setOnClickListener(view -> {
                 mSharedPreferences.edit().putString("email", email.getText().toString()).apply();
-                mSharedPreferences.edit().putString("pass", userName.getText().toString()).apply();
+                mSharedPreferences.edit().putString("pass", password.getText().toString()).apply();
                 mSharedPreferences.edit().putString("name", name.getText().toString()).apply();
                 mSharedPreferences.edit().putString("phone_number", phoneNumber.getText().toString()).apply();
 
