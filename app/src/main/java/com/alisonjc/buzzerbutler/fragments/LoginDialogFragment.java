@@ -2,27 +2,20 @@ package com.alisonjc.buzzerbutler.fragments;
 
 import android.app.DialogFragment;
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.provider.MediaStore;
-import android.support.v4.app.FragmentManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Toast;
 
 import com.alisonjc.buzzerbutler.R;
-import com.alisonjc.buzzerbutler.activities.CameraActivity;
-import com.alisonjc.buzzerbutler.activities.MainActivity;
 
 public class LoginDialogFragment extends DialogFragment {
 
     private SharedPreferences mSharedPreferences;
     public static final String PREFS_FILE = "MyPrefsFile";
-    static final int REQUEST_IMAGE_CAPTURE = 1;
     private OnCompleteListener mListener;
 
     public static LoginDialogFragment newInstance() {
@@ -50,13 +43,6 @@ public class LoginDialogFragment extends DialogFragment {
 
             mLoginButton.setOnClickListener(view -> {
 
-                // Start the camera login activity.
-//                Intent intent = new Intent(getActivity(), CameraActivity.class);
-//                Intent cameraIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
-//                Intent intent = new Intent("android.media.action.IMAGE_CAPTURE");
-//                startActivity(intent);
-//                startActivity(intent);
-
                     onDestroyView();
                     mListener.onComplete();
             });
@@ -69,12 +55,8 @@ public class LoginDialogFragment extends DialogFragment {
                 mSharedPreferences.edit().putString("name", name.getText().toString()).apply();
                 mSharedPreferences.edit().putString("phone_number", phoneNumber.getText().toString()).apply();
 
+                onDestroyView();
                 mListener.onComplete();
-                // Start the camera login activity.
-//                Intent intent = new Intent(getActivity(), MainActivity.class);
-//                startActivity(intent);
-
-                 onDestroyView();
 
             });
         }
@@ -105,6 +87,5 @@ public class LoginDialogFragment extends DialogFragment {
     public interface OnCompleteListener {
         void onComplete();
     }
-
 }
 

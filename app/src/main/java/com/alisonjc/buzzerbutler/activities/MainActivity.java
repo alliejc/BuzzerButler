@@ -3,10 +3,8 @@ package com.alisonjc.buzzerbutler.activities;
 
 import android.app.DialogFragment;
 import android.app.FragmentTransaction;
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
@@ -30,7 +28,7 @@ import com.alisonjc.buzzerbutler.fragments.SavedUserFragment;
 import com.alisonjc.buzzerbutler.fragments.LoginDialogFragment;
 import com.alisonjc.buzzerbutler.fragments.ProfileFragment;
 import com.alisonjc.buzzerbutler.R;
-import com.alisonjc.buzzerbutler.helpers.PrefManager;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
@@ -40,30 +38,23 @@ public class MainActivity extends AppCompatActivity
     @BindView(R.id.toolbar)
     Toolbar mToolbar;
 
-    private NavigationView mNavigationView;
     private DrawerLayout mDrawerLayout;
 
-    private TextView name;
-    private TextView email;
-    private ActionBarDrawerToggle mActionBarDrawerToggle;
     private ActionBar mActionBar;
     private static final String TAG = "MainActivity";
     private SavedUserFragment mSavedUserFragment;
     public static final String PREFS_FILE = "MyPrefsFile";
     private static final String BACK_STACK_ROOT_TAG = "root_fragment";
-
-    private PrefManager prefManager;
+    private SharedPreferences mSharedPreferences;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
-        prefManager = PrefManager.getInstance();
+        mSharedPreferences = getApplicationContext().getSharedPreferences(PREFS_FILE, MODE_PRIVATE);
 
-        final String userEmail = prefManager.getString("email", null);
-        Log.d(TAG, "userEmail: " + userEmail);
-        if (userEmail == null) {
+        if (mSharedPreferences.getAll().get("email") == null) {
             userLogin();
         } else {
             // load the saved users list if we already logged in.
@@ -79,9 +70,9 @@ public class MainActivity extends AppCompatActivity
     private void navigationDrawerSetup() {
 
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
-        mNavigationView = (NavigationView) findViewById(R.id.nav_view);
+        NavigationView mNavigationView = (NavigationView) findViewById(R.id.nav_view);
 
-        mActionBarDrawerToggle = new ActionBarDrawerToggle(
+        ActionBarDrawerToggle mActionBarDrawerToggle = new ActionBarDrawerToggle(
                 this, mDrawerLayout, mToolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         mDrawerLayout.addDrawerListener(mActionBarDrawerToggle);
         mActionBarDrawerToggle.syncState();
@@ -89,11 +80,11 @@ public class MainActivity extends AppCompatActivity
         mNavigationView.setNavigationItemSelectedListener(this);
         View header = mNavigationView.getHeaderView(0);
 
-        name = (TextView) header.findViewById(R.id.nav_header_top);
-        email = (TextView) header.findViewById(R.id.nav_header_bottom);
+        TextView userName = (TextView) header.findViewById(R.id.nav_header_top);
+        TextView userEmail = (TextView) header.findViewById(R.id.nav_header_bottom);
 
-//        name.setText(mSharedPreferences.getAll().get("name").toString());
-//        email.setText(mSharedPreferences.getAll().get("email").toString());
+//        userName.setText(mSharedPreferences.getAll().get("name").toString());
+//        userEmail.setText(mSharedPreferences.getAll().get("email").toString());
     }
 
     @Override
@@ -147,10 +138,10 @@ public class MainActivity extends AppCompatActivity
     }
 
     private void removeSharedPreferences(){
-        prefManager.saveString("email", null);
-        prefManager.saveString("pass", null);
-        prefManager.saveString("name", null);
-        prefManager.saveString("phone_number", null);
+      mSharedPreferences.edit().remove("email").apply();
+      mSharedPreferences.edit().remove("pass").apply();
+      mSharedPreferences.edit().remove("name").apply();
+      mSharedPreferences.edit().remove("phone_number").apply();
     }
 
     @SuppressWarnings("StatementWithEmptyBody")
