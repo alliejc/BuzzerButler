@@ -30,7 +30,7 @@ public class LoginDialogFragment extends DialogFragment {
         mSharedPreferences = getContext().getSharedPreferences(PREFS_FILE, Context.MODE_PRIVATE);
 
         getDialog().setCanceledOnTouchOutside(false);
-        Button mLoginButton = (Button) v.findViewById(R.id.LoginButton);
+        Button mLoginButton = (Button) v.findViewById(R.id.button_login);
         EditText password = (EditText) v.findViewById(R.id.pass_login);
         EditText email = (EditText) v.findViewById(R.id.email_login);
         EditText name = (EditText) v.findViewById(R.id.name_login);

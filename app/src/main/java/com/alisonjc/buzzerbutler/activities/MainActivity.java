@@ -60,7 +60,7 @@ public class MainActivity extends AppCompatActivity
             // load the saved users list if we already logged in.
             mSavedUserFragment = SavedUserFragment.newInstance();
             addFragmentOnTop(mSavedUserFragment);
-            mActionBar.setTitle(R.string.saved_drawer);
+//            mActionBar.setTitle(R.string.saved_drawer);
         }
 
         toolbarSetup();
